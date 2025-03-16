@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'superadmin') {
     exit();
 }
 
-require_once __DIR__ . '/../db.php'; // ตรวจสอบเส้นทางให้ถูกต้อง
+require_once __DIR__ . '/../../db.php'; // ตรวจสอบเส้นทางให้ถูกต้อง
 $username = $_SESSION['user'];
 
 // ฟังก์ชันตรวจสอบการเชื่อมต่อฐานข้อมูล

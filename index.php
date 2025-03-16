@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // เช็คบทบาทของผู้ใช้
                 if ($row['ROLE'] == 'superadmin') {
-                    header("Location: dashboard_superadmin/dashboard_superadmin.php");
+                    header("Location: admin/dashboard_superadmin/dashboard_superadmin.php");
                 } else {
-                    header("Location: dashboard_admin/dashboard_admin.php");
+                    header("Location: admin/dashboard_admin/dashboard_admin.php");
                 }
                 exit();
             } else {
