@@ -3,7 +3,7 @@ session_start();
 
 // ตรวจสอบสิทธิ์การเข้าถึง
 if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'superadmin') {
-    header("Location: /melgeeks_admin/index.php");
+    header("Location: /sci-/index.php");
     exit();
 }
 
@@ -25,72 +25,45 @@ checkConnection($conn);
 function fetchProducts($conn, $table)
 {
     $sql = "SELECT * FROM " . $table;
-    $stmt = oci_parse($conn, $sql);
+    $result = $conn->query($sql);
 
-    if (!oci_execute($stmt)) {
+    if (!$result) {
         echo "Error executing query on table: " . $table;
         return [];
     }
 
     $products = [];
-    while ($row = oci_fetch_assoc($stmt)) {
+    while ($row = $result->fetch_assoc()) {
         $products[] = $row;
     }
     return $products;
 }
 
 // ดึงข้อมูลจากหลายๆ ตาราง
-$keyboards = fetchProducts($conn, 'Keyboard');
-$switches = fetchProducts($conn, 'Switches');
-$keycaps = fetchProducts($conn, 'Keycaps');
-$accessories = fetchProducts($conn, 'Accessory');
+$dried_food = fetchProducts($conn, 'dried_food');
+$soft_drink = fetchProducts($conn, 'soft_drink');
+$fresh_food = fetchProducts($conn, 'fresh_food');
 
-// ฟังก์ชันดึงข้อมูลลูกค้า
-// ฟังก์ชันดึงข้อมูลลูกค้า
-function fetchCustomers($conn)
+// ฟังก์ชันดึงข้อมูลพนักงาน
+function fetchUsers($conn)
 {
-    $sql = "SELECT ID_NUMBER, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ADDRESS, PHONE, MEMBERSHIP_LEVEL, TOTAL_SPENT FROM users";
-    $stmt = oci_parse($conn, $sql);
+    $sql = "SELECT ID_NUMBER, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME FROM users";
+    $result = $conn->query($sql);
 
-    if (!oci_execute($stmt)) {
+    if (!$result) {
         echo "Error executing query on users table.";
         return [];
     }
 
-    $customers = [];
-    while ($row = oci_fetch_assoc($stmt)) {
-        unset($row['PASSWORD']); // ลบคอลัมน์ PASSWORD ออกจากแถวข้อมูล
-        // แปลงข้อมูลในแต่ละแถวให้เป็น UTF-8 เพื่อให้รองรับภาษาไทย
-        foreach ($row as $key => $value) {
-            $row[$key] = mb_convert_encoding($value, 'UTF-8', 'auto');
-        }
-        $customers[] = $row;
-    }
-    return $customers;
-}
-
-$customers = fetchCustomers($conn);
-
-// ฟังก์ชันดึงข้อมูลผู้ใช้ที่มี Role เป็น 'admin'
-function fetchAdminUsers($conn)
-{
-    $sql = "SELECT ID, USERNAME, ROLE FROM admins WHERE ROLE = 'admin'";
-    $stmt = oci_parse($conn, $sql);
-
-    if (!oci_execute($stmt)) {
-        echo "Error executing query on admins table.";
-        return [];
-    }
-
     $users = [];
-    while ($row = oci_fetch_assoc($stmt)) {
+    while ($row = $result->fetch_assoc()) {
         $users[] = $row;
     }
     return $users;
 }
 
-// ดึงข้อมูลผู้ใช้ที่มี Role เป็น 'admin'
-$adminUsers = fetchAdminUsers($conn);
+// ดึงข้อมูลผู้ใช้ทั้งหมด
+$users = fetchUsers($conn);
 ?>
 
 <!DOCTYPE html>
@@ -104,6 +77,7 @@ $adminUsers = fetchAdminUsers($conn);
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap');
     </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* รีเซ็ตค่าพื้นฐาน */
@@ -154,53 +128,99 @@ $adminUsers = fetchAdminUsers($conn);
             /* เนื้อหาของคุณที่ต้องการแสดงทับบนพื้นหลัง */
         }
 
-        /* Sidebar */
-        .sidebar {
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000;
+            color: white;
+            padding: 10px 20px;
             position: fixed;
             top: 0;
             left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* ทำให้ hamburger และ logo-name อยู่ชิดกัน */
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .logo-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: auto;
+            margin-right: 10px;
+            /* ถ้าต้องการระยะห่างเล็กน้อยจาก logo กับ site-name */
+        }
+
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-settings {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .mode-switch {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .mode-toggle {
+            font-size: 36px;
+        }
+
+        .moon-icon {
+            display: none;
+        }
+
+        .sun-icon {
+            display: block;
+        }
+
+        .toggled .sun-icon {
+            display: none;
+        }
+
+        .toggled .moon-icon {
+            display: block;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 68px;
+            /* ปรับให้ sidebar ลงมาจาก top */
+            left: 0;
             width: 220px;
-            height: 100vh;
+            height: calc(100vh - 68px);
+            /* ปรับความสูงของ sidebar ให้ไม่ทับกับ navbar */
             padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
             background-color: #000000;
-        }
-
-        .h-text-h3 {
-            font-size: 16px;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* ข้อความต้อนรับ */
-        .h-text {
-            font-size: 26px;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background-color: #000000;
-            width: 100%;
-            box-sizing: border-box;
-            border-bottom-left-radius: 20px;
-            /* ขอบมนด้านซ้าย */
-            border-bottom-right-radius: 20px;
-            /* ขอบมนด้านขวา */
-        }
-
-        /* คอนเทนเนอร์เมนู */
-        .menu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-top: 10px;
+            border-right: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         /* ปุ่มเมนู */
@@ -215,38 +235,21 @@ $adminUsers = fetchAdminUsers($conn);
             align-items: center;
             gap: 8px;
             position: relative;
+            border-radius: 10px;
+            /* ขอบมน */
         }
 
-        /* การแสดงลูกศร */
-        .tab::before {
-            content: '▶';
-            font-size: 12px;
-            color: #6c5ce7;
-            position: absolute;
-            left: 0;
-            opacity: 0;
-            /* ทำให้ลูกศรไม่แสดงเมื่อเริ่มต้น */
-            transition: opacity 0.3s ease;
-        }
-
-        /* เมื่อเมาส์ hover จะแสดงลูกศร */
+        /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
         .tab:hover {
-            transform: translateX(2.5px);
-            /* เลื่อนตัวหนังสือไปขวา */
+            background-color: rgba(211, 211, 211, 0.5);
+            /* สีเทาอ่อนที่จางกว่า */
         }
 
-        .tab:hover::before {
-            opacity: 1;
-            /* ให้ลูกศรค่อยๆ ปรากฏขึ้น */
-            color: #6c5ce7;
-        }
-
-
-
-        .tab:active::before,
-        .tab.selected::before {
-            opacity: 1;
-            color: #d32f2f;
+        /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
+        .tab:active,
+        .tab.selected {
+            background-color: rgba(162, 207, 254, 0.5);
+            /* สีฟ้าอ่อนที่จางกว่า */
         }
 
         /* ปุ่มออกจากระบบ */
@@ -433,6 +436,25 @@ $adminUsers = fetchAdminUsers($conn);
             padding: 5px;
         }
 
+        /* ทำให้ชื่อและนามสกุลอยู่ในแถวเดียวกัน */
+        .name-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            /* ระยะห่างระหว่างช่องกรอกชื่อและนามสกุล */
+        }
+
+        /* ทำให้ช่องกรอกชื่อและนามสกุลมีขนาดเท่ากัน */
+        .half-width {
+            width: 48%;
+            /* กำหนดให้ครึ่งหนึ่งของพื้นที่ */
+        }
+
+        .full-width {
+            width: 100%;
+            /* ครอบคลุมพื้นที่ทั้งหมด */
+        }
+
         .btn-upload {
             background-color: #6c5ce7;
             color: white;
@@ -606,28 +628,84 @@ $adminUsers = fetchAdminUsers($conn);
             /* ทำให้ canvas ยืดตามขนาดของ container */
             height: auto;
         }
+
+        #graph {
+            margin-top: 60px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #upload_prodect {
+            margin-top: 60px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #admin_signup {
+            margin-top: 60px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="navbar">
+        <!-- แฮมเบอร์เกอร์ -->
+        <div class="hamburger" onclick="toggleSidebar()">&#9776;</div>
+
+        <!-- โลโก้และชื่อ -->
+        <div class="logo-name">
+            <img src="\sci-shop-admin\img.content\pachara.jpg" alt="Logo" class="logo">
+            <span class="site-name">SCI ADMIN</span>
+        </div>
+
+        <!-- Avatar และ Mode switch -->
+        <div class="user-settings">
+            <img src="\sci-shop-admin\img.content\pachara.jpg" alt="Avatar" class="avatar">
+            <div class="mode-switch" onclick="toggleMode()">
+                <span class="mode-toggle">
+                    <span class="sun-icon material-icons">wb_sunny</span>
+                    <span class="moon-icon material-icons">nights_stay</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="sidebar">
-        <h2 class="h-text-h3">ยินดีต้อนรับ <?php echo htmlspecialchars($username); ?></h2>
-        <div class="tab" onclick="showTab('graph')">สถิติและกราฟ</div>
-        <div class="tab" onclick="showTab('order')">คำสั่งซื้อสินค้า</div>
-        <div class="tab" onclick="showTab('upload_prodect')">อัพโหลดสินค้าใหม่</div>
-        <div class="tab" onclick="showTab('admin_signup')">การสมัคร Admin</div>
-        <div class="tab" onclick="showTab('keyboards')">คีย์บอร์ด</div>
-        <div class="tab" onclick="showTab('switches')">สวิตช์</div>
-        <div class="tab" onclick="showTab('keycaps')">คีย์แคป</div>
-        <div class="tab" onclick="showTab('accessories')">อุปกรณ์เสริม</div>
-        <div class="tab" onclick="showTab('customers')">ข้อมูลลูกค้า</div>
-        <div class="tab" onclick="showTab('admin')">การจัดการ Admin</div>
-        <a class="tab logout" href="/melgeeks_admin/logout.php">ออกจากระบบ</a>
+        <div class="tab" onclick="showTab('graph')">
+            <span class="material-icons">show_chart</span> สถิติและกราฟ
+        </div>
+        <div class="tab" onclick="showTab('order')">
+            <span class="material-icons">shopping_cart</span> คำสั่งซื้อสินค้า
+        </div>
+        <div class="tab" onclick="showTab('upload_prodect')">
+            <span class="material-icons">file_upload</span> อัพโหลดสินค้าใหม่
+        </div>
+        <div class="tab" onclick="showTab('admin_signup')">
+            <span class="material-icons">person_add</span> การสมัครพนักงาน
+        </div>
+        <div class="tab" onclick="showTab('keyboards')">
+            <span class="material-icons">keyboard</span> คีย์บอร์ด
+        </div>
+        <div class="tab" onclick="showTab('switches')">
+            <span class="material-icons">toggle_on</span> สวิตช์
+        </div>
+        <div class="tab" onclick="showTab('keycaps')">
+            <span class="material-icons">settings_input_component</span> คีย์แคป
+        </div>
+        <div class="tab" onclick="showTab('accessories')">
+            <span class="material-icons">settings_input_component</span> อุปกรณ์เสริม
+        </div>
+        <div class="tab" onclick="showTab('admin')">
+            <span class="material-icons">group</span> การจัดการพนักงาน
+        </div>
+        <a class="tab logout" href="/sci-shop-admin/logout.php">
+            <span class="material-icons">exit_to_app</span> ออกจากระบบ
+        </a>
     </div>
 
     <div id="graph" class="content">
-        <h3 class="h-text">📊 สถิติและกราฟ</h3>
-        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
 
         <div class="chart-container">
             <h4>ยอดขายสินค้า</h4>
@@ -646,14 +724,10 @@ $adminUsers = fetchAdminUsers($conn);
     </div>
 
     <div id="order" class="content">
-        <div>
-            <h3 class="h-text">📦 คำสั่งซื้อสินค้า</h3>
-        </div>
         <p>แสดงข้อมูลสถิติต่าง ๆ</p>
     </div>
 
     <div id="upload_prodect" class="content">
-        <h3 class="h-text">📤 อัพโหลดสินค้าใหม่</h3>
         <!-- ฟอร์มอัปโหลดสินค้า -->
         <form class="form-upload" id="uploadForm" action="../product/upload_product/upload_product.php" method="POST" enctype="multipart/form-data" onsubmit="return handleFormSubmit()">
             <div class="form-group">
@@ -720,7 +794,7 @@ $adminUsers = fetchAdminUsers($conn);
     </div>
 
     <div id="admin_signup" class="content">
-        <h3 class="h-text">🆔 การสมัคร Admin</h3>
+        <h3 class="h-text">🆔 การสมัครสมัครพนักงาน</h3>
         <!-- ข้อความแสดงผลจาก PHP -->
         <?php if (!empty($error)): ?>
             <div style="color: red;"><?php echo $error; ?></div>
@@ -733,6 +807,20 @@ $adminUsers = fetchAdminUsers($conn);
             <div class="form-group">
                 <label for="username">ชื่อผู้ใช้งาน</label>
                 <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+            </div>
+
+            <!-- แถวสำหรับชื่อและนามสกุล -->
+            <div class="form-group full-width">
+                <div class="name-group">
+                    <div class="half-width">
+                        <label for="firstName">ชื่อ</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
+                    </div>
+                    <div class="half-width">
+                        <label for="lastName">นามสกุล</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -1321,6 +1409,10 @@ $adminUsers = fetchAdminUsers($conn);
                 }]
             }
         });
+
+        function toggleMode() {
+            document.querySelector('.mode-switch').classList.toggle('toggled');
+        }
     </script>
 </body>
 
