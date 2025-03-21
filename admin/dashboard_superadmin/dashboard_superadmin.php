@@ -264,7 +264,7 @@ $users = fetchUsers($conn);
             gap: 8px;
             position: relative;
             border-radius: 10px;
-            margin: 1.5px 0px;
+            margin: 2px 0px;
         }
 
         .tab i,
