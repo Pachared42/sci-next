@@ -80,7 +80,6 @@ $users = fetchUsers($conn);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* รีเซ็ตค่าพื้นฐาน */
         * {
             margin: 0;
             padding: 0;
@@ -88,38 +87,24 @@ $users = fetchUsers($conn);
             font-family: "Noto Sans Thai", "Noto Sans", sans-serif;
         }
 
-        /* ปรับเนื้อหาเว็บให้ไม่ซ้อนกับ Sidebar */
         body {
             background-color: #000000;
             margin-left: 220px;
+            /* ค่าเริ่มต้นเมื่อ Sidebar เปิด */
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            /* ให้ ::after อยู่ในตำแหน่งที่ถูกต้อง */
+            transition: margin-left 0.5s ease;
+            /* ทำให้ยุบแบบ Smooth */
         }
 
-        /* การตั้งค่าให้พื้นหลังไม่เลื่อน */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('../img.content/img.content.png');
-            /* ใช้ภาพพื้นหลัง */
-            background-size: cover;
-            /* หรือ 100% 100% */
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: blur(3px);
-            z-index: -1;
-            background-attachment: fixed;
-            background-color: #000;
-            /* เติมสีพื้นหลัง */
+        body.sidebar-collapsed {
+            margin-left: 0;
+            /* ขยายเต็มเมื่อ Sidebar ปิด */
         }
+
 
         /* เนื้อหาภายใน .container จะอยู่ทับพื้นหลัง */
         .container {
@@ -144,10 +129,14 @@ $users = fetchUsers($conn);
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* ทำให้ hamburger และ logo-name อยู่ชิดกัน */
-        .hamburger {
-            font-size: 30px;
+        .hamburger svg {
+            transition: transform 0.3s ease-out, fill 0.3s ease-out;
             cursor: pointer;
+        }
+
+        .hamburger:hover svg {
+            transform: scale(1.1);
+            fill: #FF7043;
         }
 
         .logo-name {
@@ -176,7 +165,6 @@ $users = fetchUsers($conn);
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            margin-right: 20px;
         }
 
         .mode-switch {
@@ -185,49 +173,89 @@ $users = fetchUsers($conn);
             cursor: pointer;
         }
 
-        .mode-toggle {
-            font-size: 36px;
-        }
-
-        .moon-icon {
-            display: none;
-        }
-
-        .sun-icon {
-            display: block;
-        }
-
-        .toggled .sun-icon {
-            display: none;
-        }
-
-        .toggled .moon-icon {
-            display: block;
-        }
-
         /* Sidebar */
         .sidebar {
             position: fixed;
             top: 68px;
-            /* ปรับให้ sidebar ลงมาจาก top */
             left: 0;
             width: 220px;
             height: calc(100vh - 68px);
-            /* ปรับความสูงของ sidebar ให้ไม่ทับกับ navbar */
-            padding: 15px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
             background-color: #000000;
             border-right: 2px solid rgba(255, 255, 255, 0.2);
+            transform: translateX(0);
+            opacity: 1;
+            /* ตั้งค่าความโปร่งใสเป็น 1 */
+            transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease;
+        }
+
+        .sidebar .content {
+            display: block;
+        }
+
+        /* สไตล์สำหรับเมื่อ Sidebar ยุบ */
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+
+        /* สไตล์สำหรับเมื่อ sidebar ถูกยุบ */
+        .sidebar.closed .content {
+            display: none;
+        }
+
+        .main-tabs {
+            margin-bottom: 5px;
+        }
+
+        .main-tabs h3 {
+            font-size: 12px;
+            font-weight: bold;
+            color: #f39c12;
+            /* หรือสีที่เหมาะสม */
+        }
+
+        /* กำหนดลักษณะของเส้น hr */
+        .tab-divider {
+            border: none;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            /* สีของเส้น */
+            margin: 1px;
+            /* ระยะห่างจากหัวข้อ */
+        }
+
+        .main-tabs-upload {
+            margin-bottom: 5px;
+        }
+
+        .main-tabs-upload h3 {
+            margin-top: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #f39c12;
+            /* หรือสีที่เหมาะสม */
+        }
+
+        .main-tabs-products {
+            margin-bottom: 5px;
+        }
+
+        .main-tabs-products h3 {
+            margin-top: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #f39c12;
+            /* หรือสีที่เหมาะสม */
         }
 
         /* ปุ่มเมนู */
         .tab {
             padding: 10px 15px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             transition: 0.3s ease;
@@ -236,26 +264,65 @@ $users = fetchUsers($conn);
             gap: 8px;
             position: relative;
             border-radius: 10px;
-            /* ขอบมน */
+            margin: 1.5px 0px;
         }
 
         .tab i,
         .tab span.material-icons {
             margin-right: 8px;
-            /* เพิ่มระยะห่างระหว่างไอคอนกับข้อความ */
         }
 
         /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
         .tab:hover {
-            background-color: rgba(211, 211, 211, 0.5);
-            /* สีเทาอ่อนที่จางกว่า */
+            background-color: rgba(211, 211, 211, 0.4);
+            /* สีเทาอ่อนที่จางเมื่อ hover */
         }
 
         /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
         .tab:active,
         .tab.selected {
-            background-color: rgba(162, 207, 254, 0.5);
-            /* สีฟ้าอ่อนที่จางกว่า */
+            background-color: #ffffff;
+            /* สีเทาอ่อนที่เข้มขึ้นเมื่อถูกเลือก */
+            color: black;
+            /* เปลี่ยนสีตัวหนังสือเป็นสีดำ */
+            position: relative;
+            /* เพิ่มตำแหน่ง relative เพื่อให้สามารถจัดการกับ pseudo-element */
+        }
+
+        /* เปลี่ยนสีไอคอนเป็นสีส้ม */
+        .tab:active .material-icons,
+        .tab.selected .material-icons {
+            color: #FF7043;
+            /* สีส้ม */
+        }
+
+        .tab.account:active .material-icons,
+        .tab.account.selected .material-icons {
+            color: #2196F3;
+            /* สีฟ้า */
+        }
+
+        /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab */
+        .tab:active::after,
+        .tab.selected::after {
+            content: "";
+            /* ใช้เพื่อสร้าง pseudo-element */
+            position: absolute;
+            /* กำหนดตำแหน่งเป็น absolute */
+            top: 50%;
+            /* แนวตั้งตรงกลาง */
+            right: 10px;
+            /* กำหนดระยะห่างจากขวา */
+            width: 10px;
+            /* ขนาดของจุด */
+            height: 10px;
+            /* ขนาดของจุด */
+            background-color: #4CAF50;
+            /* สีเขียว */
+            border-radius: 50%;
+            /* ทำให้เป็นวงกลม */
+            transform: translateY(-50%);
+            /* ปรับตำแหน่งให้จุดอยู่ตรงกลางแนวตั้ง */
         }
 
         /* ปุ่มออกจากระบบ */
@@ -265,11 +332,11 @@ $users = fetchUsers($conn);
             text-align: center;
             font-weight: 600;
             color: white;
-            border-radius: 5px;
+            border-radius: 10px;
             border: none;
             /* เอาเส้นขอบออก */
             transition: 0.3s ease;
-            margin-top: auto;
+            margin-top: 5px;
             /* ทำให้ปุ่ม logout ไปอยู่ด้านล่าง */
             text-decoration: none;
             /* เอาเส้นใต้ของลิงก์ออก */
@@ -277,6 +344,48 @@ $users = fetchUsers($conn);
 
         .logout:hover {
             background: #ff0000;
+        }
+
+        .account {
+            padding: 10px 15px;
+            background: #3498db;
+            /* เปลี่ยนเป็นสีฟ้าที่สวยงาม */
+            text-align: center;
+            font-weight: 600;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            /* เอาเส้นขอบออก */
+            transition: 0.3s ease;
+            margin-top: 5px;
+            text-decoration: none;
+            /* เอาเส้นใต้ของลิงก์ออก */
+        }
+
+        .account:hover {
+            background: #2980b9;
+            /* สีเมื่อ hover เป็นฟ้าที่เข้มขึ้น */
+        }
+
+        .employee {
+            padding: 10px 15px;
+            background: #f39c12;
+            /* เปลี่ยนเป็นสีส้มที่สวยงาม */
+            text-align: center;
+            font-weight: 600;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            /* เอาเส้นขอบออก */
+            transition: 0.3s ease;
+            margin-top: auto;
+            text-decoration: none;
+            /* เอาเส้นใต้ของลิงก์ออก */
+        }
+
+        .employee:hover {
+            background: #d35400;
+            /* สีเมื่อ hover เป็นส้มที่เข้มขึ้น */
         }
 
         .content {
@@ -609,46 +718,99 @@ $users = fetchUsers($conn);
             margin-top: 8px;
         }
 
-        .chart-container {
+        .summary-grid {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            /* ลดระยะห่างจากส่วนบน */
+            justify-content: space-around;
+            margin-bottom: 20px;
         }
 
-        .chart-container h4 {
-            font-size: 18px;
-            /* ย่อขนาดฟอนต์ลง */
-            color: #444;
-            margin-bottom: 8px;
-            /* ลดระยะห่างจากกราฟ */
+        .summary-card {
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 10px;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .summary-card.daily {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+
+        .summary-card.monthly {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        }
+
+        .summary-card.yearly {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-container.daily-chart {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+
+        .chart-container.monthly-chart {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        }
+
+        .chart-container.yearly-chart {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
         }
 
         canvas {
-            background-color: #fff;
-            border-radius: 6px;
-            /* ลดมุมให้เล็กลง */
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-            max-width: 100%;
-            /* ทำให้ canvas ยืดตามขนาดของ container */
-            height: auto;
+            width: 100% !important;
+            height: 320px !important;
+        }
+
+        h4 {
+            color: #000000;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        #order {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
         }
 
         #graph {
-            margin-top: 60px;
+            margin-top: 68px;
             /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #upload_prodect {
-            margin-top: 60px;
+            margin-top: 68px;
             /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #admin_signup {
-            margin-top: 60px;
+            margin-top: 68px;
             /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
@@ -658,7 +820,11 @@ $users = fetchUsers($conn);
 <body>
     <div class="navbar">
         <!-- แฮมเบอร์เกอร์ -->
-        <div class="hamburger" onclick="toggleSidebar()">&#9776;</div>
+        <div class="hamburger" onclick="toggleSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" viewBox="0 -960 960 960" fill="#e3e3e3">
+                <path d="M120-240v-80h520v80H120Zm664-40L584-480l200-200 56 56-144 144 144 144-56 56ZM120-440v-80h400v80H120Zm0-200v-80h520v80H120Z" />
+            </svg>
+        </div>
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
@@ -669,68 +835,99 @@ $users = fetchUsers($conn);
         <!-- Avatar และ Mode switch -->
         <div class="user-settings">
             <img src="\sci-shop-admin\img.content\pachara.jpg" alt="Avatar" class="avatar">
-            <div class="mode-switch" onclick="toggleMode()">
-                <span class="mode-toggle">
-                    <span class="sun-icon material-icons">wb_sunny</span>
-                    <span class="moon-icon material-icons">nights_stay</span>
-                </span>
-            </div>
         </div>
     </div>
 
+
     <div class="sidebar">
-        <div class="tab" onclick="showTab('graph')">
-            <span class="material-icons">show_chart</span> สถิติและกราฟ
+        <!-- รายการหลัก -->
+        <div class="main-tabs">
+            <h3>รายการหลัก</h3>
+            <div class="tab" id="orderTab" onclick="showTab('order')">
+                <span class="material-icons">shopping_cart</span> รายการขาย
+            </div>
+            <div class="tab" onclick="showTab('graph')">
+                <span class="material-icons">show_chart</span> สถิติการขาย
+            </div>
         </div>
-        <div class="tab" onclick="showTab('order')">
-            <span class="material-icons">shopping_cart</span> คำสั่งซื้อสินค้า
+        <hr class="tab-divider">
+
+        <!-- รายการอัพโหลด -->
+        <div class="main-tabs-upload">
+            <h3>รายการอัพโหลด</h3>
+            <div class="tab" onclick="showTab('upload_prodect')">
+                <span class="material-icons">file_upload</span> อัพโหลดสินค้าใหม่
+            </div>
+            <div class="tab" onclick="showTab('admin_signup')">
+                <span class="material-icons">person_add</span> สมัครพนักงาน
+            </div>
         </div>
-        <div class="tab" onclick="showTab('upload_prodect')">
-            <span class="material-icons">file_upload</span> อัพโหลดสินค้าใหม่
+        <hr class="tab-divider">
+
+        <!-- รายการสินค้า -->
+        <div class="main-tabs-products">
+            <h3>รายการสินค้า</h3>
+            <div class="tab" onclick="showTab('food_bank')">
+                <span class="material-icons">food_bank</span> อาหารแห้ง
+            </div>
+            <div class="tab" onclick="showTab('local_drink')">
+                <span class="material-icons">local_drink</span> น้ำดื่ม
+            </div>
+            <div class="tab" onclick="showTab('fastfood')">
+                <span class="material-icons">fastfood</span> อาหารสด
+            </div>
         </div>
-        <div class="tab" onclick="showTab('admin_signup')">
-            <span class="material-icons">person_add</span> การสมัครพนักงาน
+
+
+        <div class="tab employee" onclick="showTab('employee')">
+            <span class="material-icons">group</span> จัดการพนักงาน
         </div>
-        <div class="tab" onclick="showTab('keyboards')">
-            <span class="material-icons">keyboard</span> คีย์บอร์ด
-        </div>
-        <div class="tab" onclick="showTab('switches')">
-            <span class="material-icons">toggle_on</span> สวิตช์
-        </div>
-        <div class="tab" onclick="showTab('keycaps')">
-            <span class="material-icons">settings_input_component</span> คีย์แคป
-        </div>
-        <div class="tab" onclick="showTab('accessories')">
-            <span class="material-icons">settings_input_component</span> อุปกรณ์เสริม
-        </div>
-        <div class="tab" onclick="showTab('admin')">
-            <span class="material-icons">group</span> การจัดการพนักงาน
+        <div class="tab account" onclick="showTab('account')">
+            <span class="material-icons">account_circle</span> โปรไฟล์แอดมิน
         </div>
         <a class="tab logout" href="/sci-shop-admin/logout.php">
             <span class="material-icons">exit_to_app</span> ออกจากระบบ
         </a>
     </div>
 
+    <div id="order" class="content">
+        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
+    </div>
+
     <div id="graph" class="content">
-
-        <div class="chart-container">
-            <h4>ยอดขายสินค้า</h4>
-            <canvas id="salesChart" width="400" height="200"></canvas>
+        <!-- สรุปยอดขายเป็นตัวเลข -->
+        <div class="summary-grid">
+            <div class="summary-card daily">
+                <h4>ยอดขายรายวัน</h4>
+                <p>฿12,500</p>
+            </div>
+            <div class="summary-card monthly">
+                <h4>ยอดขายรายเดือน</h4>
+                <p>฿350,000</p>
+            </div>
+            <div class="summary-card yearly">
+                <h4>ยอดขายรายปี</h4>
+                <p>฿4,200,000</p>
+            </div>
         </div>
 
-        <div class="chart-container">
-            <h4>สถิติการใช้งาน</h4>
-            <canvas id="usageChart" width="400" height="200"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h4>การเติบโตของผู้ใช้</h4>
-            <canvas id="growthChart" width="400" height="200"></canvas>
+        <!-- กราฟยอดขาย -->
+        <div class="chart-grid">
+            <div class="chart-container daily-chart">
+                <h4>ยอดขายรายวัน</h4>
+                <canvas id="dailySalesChart"></canvas>
+            </div>
+            <div class="chart-container monthly-chart">
+                <h4>ยอดขายรายเดือน</h4>
+                <canvas id="monthlySalesChart"></canvas>
+            </div>
+            <div class="chart-container yearly-chart">
+                <h4>ยอดขายรายปี</h4>
+                <canvas id="yearlySalesChart"></canvas>
+            </div>
         </div>
     </div>
 
-    <div id="order" class="content">
-        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
     </div>
 
     <div id="upload_prodect" class="content">
@@ -846,7 +1043,7 @@ $users = fetchUsers($conn);
     </div>
 
 
-    <div id="keyboards" class="content">
+    <div id="food_bank" class="content">
         <h3 class="h-text">⌨️ คีย์บอร์ด</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -901,7 +1098,7 @@ $users = fetchUsers($conn);
         </table>
     </div>
 
-    <div id="switches" class="content">
+    <div id="local_drink" class="content">
         <h3 class="h-text">🔘 สวิตช์</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -956,7 +1153,7 @@ $users = fetchUsers($conn);
         </table>
     </div>
 
-    <div id="keycaps" class="content">
+    <div id="fastfood" class="content">
         <h3 class="h-text">🎨 คีย์แค็ป</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -1010,110 +1207,7 @@ $users = fetchUsers($conn);
         </table>
     </div>
 
-    <div id="accessories" class="content">
-        <h3 class="h-text">🔧 อุปกรณ์เสริม</h3>
-        <table border="1" cellspacing="0" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($accessories as $item): ?>
-                    <tr>
-                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
-                        <td><?php echo $item['NAME']; ?></td>
-                        <td>฿<?php echo $item['PRICE']; ?></td>
-                        <td><?php echo $item['PRODUCT_TYPE']; ?></td>
-                        <td>
-                            <form action="#" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
-                            </form>
-                            <!-- Popup Form -->
-                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
-                                <div class="popup-content">
-                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <h3>แก้ไขข้อมูลสินค้า</h3>
-                                    <form action="../product/edit_product/edit_product.php" method="POST">
-                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
-                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
-                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
-                                        <input type="hidden" name="productCategory" value="accessories"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
-                                        <input type="text" name="productType" value="<?php echo $item['PRODUCT_TYPE']; ?>" required>
-                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
-                                    </form>
-
-                                </div>
-                            </div>
-
-                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <input type="hidden" name="category" value="accessories"> <!-- หมวดหมู่สินค้านี้ -->
-                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'accessories')">ลบสินค้า</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <div id="customers" class="content">
-        <h3 class="h-text">👤 ข้อมูลลูกค้า</h3>
-
-        <!-- ฟอร์มค้นหาลูกค้าตามอีเมล Gmail -->
-        <form action="/melgeeks_admin/search_email/search_email.php" method="GET" style="margin-bottom: 20px;">
-            <label for="email_search">ค้นหาลูกค้าจาก Gmail:</label>
-            <input type="email" id="email_search" name="email_search" placeholder="กรอก Gmail" required>
-            <button type="submit">ค้นหา</button>
-        </form>
-
-        <table border="1" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>ชื่อ</th>
-                    <th>นามสกุล</th>
-                    <th>อีเมล</th>
-                    <th>ที่อยู่</th>
-                    <th>เบอร์โทรศัพท์</th>
-                    <th>ระดับสมาชิก</th>
-                    <th>ยอดรวมที่ใช้จ่าย</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($customers as $customer): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($customer['ID_NUMBER']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['FIRST_NAME']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['LAST_NAME']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['EMAIL']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['ADDRESS'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?php echo htmlspecialchars($customer['PHONE']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['MEMBERSHIP_LEVEL']); ?></td>
-                        <td><?php echo htmlspecialchars($customer['TOTAL_SPENT']); ?></td>
-                        <td>
-                            <form action="/melgeeks_admin/customer/delete_customer/delete_customer.php" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบลูกค้านี้?');">
-                                <input type="hidden" name="customer_id" value="<?php echo htmlspecialchars($customer['ID_NUMBER']); ?>">
-                                <button type="submit" class="btn-delete">ลบลูกค้า</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-
-    <div id="admin" class="content">
+    <div id="employee" class="content">
         <h3 class="h-text">🛠️ การจัดการ Admin</h3>
         <!-- ตารางข้อมูลผู้ใช้ -->
         <table border="1" cellspacing="0" cellpadding="10">
@@ -1167,7 +1261,7 @@ $users = fetchUsers($conn);
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const activeTab = localStorage.getItem("activeTab") || "graph"; // ใช้แท็บ 'graph' เป็นค่าเริ่มต้น
+            const activeTab = localStorage.getItem("activeTab") || "order";
             showTab(activeTab);
         });
 
@@ -1354,70 +1448,42 @@ $users = fetchUsers($conn);
             });
         });
 
-        // สร้างกราฟยอดขาย
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'line', // ประเภทกราฟ
-            data: {
-                labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน'],
-                datasets: [{
-                    label: 'ยอดขาย (บาท)',
-                    data: [15000, 12000, 18000, 22000],
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        document.addEventListener("DOMContentLoaded", function() {
+            function createChart(ctx, label, labels, data) {
+                return new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff", "#ff9f40", "#c9cbcf"],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
                     }
-                }
+                });
             }
+
+            createChart(document.getElementById("dailySalesChart").getContext("2d"), "ยอดขายรายวัน", ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"], [18750, 21500, 23400, 19800, 26900, 31000, 28500]);
+            createChart(document.getElementById("monthlySalesChart").getContext("2d"), "ยอดขายรายเดือน", ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค."], [480000, 520000, 540000, 495000, 580000, 600000, 625000]);
+            createChart(document.getElementById("yearlySalesChart").getContext("2d"), "ยอดขายรายปี", ["2018", "2019", "2020", "2021", "2022", "2023", "2024"], [5200000, 5500000, 5700000, 5900000, 6200000, 6400000, 6750000]);
         });
 
-        // สร้างกราฟการใช้งาน
-        const usageCtx = document.getElementById('usageChart').getContext('2d');
-        const usageChart = new Chart(usageCtx, {
-            type: 'bar',
-            data: {
-                labels: ['แอป 1', 'แอป 2', 'แอป 3', 'แอป 4'],
-                datasets: [{
-                    label: 'การใช้งาน (ครั้ง)',
-                    data: [200, 150, 300, 250],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const body = document.body;
 
-        // สร้างกราฟการเติบโตของผู้ใช้
-        const growthCtx = document.getElementById('growthChart').getContext('2d');
-        const growthChart = new Chart(growthCtx, {
-            type: 'pie',
-            data: {
-                labels: ['ผู้ใช้ที่เพิ่มขึ้น', 'ผู้ใช้ที่หายไป'],
-                datasets: [{
-                    data: [60, 40],
-                    backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-                    hoverOffset: 4
-                }]
-            }
-        });
-
-        function toggleMode() {
-            document.querySelector('.mode-switch').classList.toggle('toggled');
+            // สลับคลาสเพื่อให้ Sidebar ยุบ/ขยาย
+            sidebar.classList.toggle('closed');
+            body.classList.toggle('sidebar-collapsed');
         }
     </script>
 </body>
