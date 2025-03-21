@@ -239,6 +239,12 @@ $users = fetchUsers($conn);
             /* ขอบมน */
         }
 
+        .tab i,
+        .tab span.material-icons {
+            margin-right: 8px;
+            /* เพิ่มระยะห่างระหว่างไอคอนกับข้อความ */
+        }
+
         /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
         .tab:hover {
             background-color: rgba(211, 211, 211, 0.5);
