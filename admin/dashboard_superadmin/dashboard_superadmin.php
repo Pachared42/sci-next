@@ -814,6 +814,65 @@ $users = fetchUsers($conn);
             /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
+
+        #food_bank {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #local_drink {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #fastfood {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #employee {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        #account {
+            margin-top: 68px;
+            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
+            padding: 20px;
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background-color: #eee;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .category-btn:hover {
+            background-color: #ddd;
+        }
+
+        .category-btn.selected {
+            background-color: #FF7043;
+            /* สีเมื่อเลือก */
+            color: white;
+        }
     </style>
 </head>
 
@@ -821,9 +880,16 @@ $users = fetchUsers($conn);
     <div class="navbar">
         <!-- แฮมเบอร์เกอร์ -->
         <div class="hamburger" onclick="toggleSidebar()">
-            <svg xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" viewBox="0 -960 960 960" fill="#e3e3e3">
-                <path d="M120-240v-80h520v80H120Zm664-40L584-480l200-200 56 56-144 144 144 144-56 56ZM120-440v-80h400v80H120Zm0-200v-80h520v80H120Z" />
-            </svg>
+            <span class="open-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" viewBox="0 -960 960 960" fill="#e3e3e3">
+                    <path d="M120-240v-80h520v80H120Zm664-40L584-480l200-200 56 56-144 144 144 144-56 56ZM120-440v-80h400v80H120Zm0-200v-80h520v80H120Z" />
+                </svg>
+            </span>
+            <span class="close-icon" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" width="40px" viewBox="0 -960 960 960" fill="#e3e3e3">
+                    <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+                </svg>
+            </span>
         </div>
 
         <!-- โลโก้และชื่อ -->
@@ -871,7 +937,7 @@ $users = fetchUsers($conn);
                 <span class="material-icons">food_bank</span> อาหารแห้ง
             </div>
             <div class="tab" onclick="showTab('local_drink')">
-                <span class="material-icons">local_drink</span> น้ำดื่ม
+                <span class="material-icons">local_drink</span> เครื่องดื่ม
             </div>
             <div class="tab" onclick="showTab('fastfood')">
                 <span class="material-icons">fastfood</span> อาหารสด
@@ -928,73 +994,100 @@ $users = fetchUsers($conn);
         </div>
     </div>
 
-    </div>
-
     <div id="upload_prodect" class="content">
+        <h3 class="h-text">🆔 อัพโหลดสินค้าใหม่</h3>
+        <p>อัพโหลดสินค้าใหม่ได้ที่จุดนี้เลยครับ</p>
         <!-- ฟอร์มอัปโหลดสินค้า -->
         <form class="form-upload" id="uploadForm" action="../product/upload_product/upload_product.php" method="POST" enctype="multipart/form-data" onsubmit="return handleFormSubmit()">
+            <div class="form-group category-buttons">
+                <button class="category-btn" data-category="dried_food">
+                    <span class="material-icons">food_bank</span>
+                    อาหารแห้ง
+                </button>
+                <button class="category-btn" data-category="soft_drink">
+                    <span class="material-icons">local_drink</span>
+                    เครื่องดื่ม
+                </button>
+                <button class="category-btn" data-category="fresh_food">
+                    <span class="material-icons">fastfood</span>
+                    อาหารสด
+                </button>
+            </div>
+            <input type="hidden" id="productCategory" name="productCategory">
+
+
             <div class="form-group">
-                <label for="productName">ชื่อสินค้า</label>
+                <label for="productName">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z" />
+                    </svg> ชื่อสินค้า
+                </label>
                 <input type="text" id="productName" name="productName" placeholder="กรอกชื่อสินค้า" required>
             </div>
 
+
             <div class="form-group">
-                <label for="productCategory">หมวดหมู่สินค้า</label>
-                <select id="productCategory" name="productCategory" required onchange="toggleFields()">
-                    <option value="">เลือกหมวดหมู่</option>
-                    <option value="keyboards">คีย์บอร์ด</option>
-                    <option value="switches">สวิตซ์</option>
-                    <option value="keycaps">คีย์แคป</option>
-                    <option value="accessories">อุปกรณ์เสริม</option>
-                </select>
-            </div>
-
-            <!-- ฟิลด์สำหรับคีย์บอร์ด -->
-            <div class="form-group" id="keyboardSizeField" style="display: none;">
-                <label for="keyboardSize">ขนาดคีย์บอร์ด</label>
-                <input type="text" id="keyboardSize" name="keyboardSize" placeholder="กรอกขนาดคีย์บอร์ด">
-            </div>
-
-            <!-- ฟิลด์สำหรับสวิตซ์ -->
-            <div class="form-group" id="switchTypeField" style="display: none;">
-                <label for="switchType">ประเภทสวิตซ์</label>
-                <input type="text" id="switchType" name="switchType" placeholder="กรอกประเภทสวิตซ์">
-            </div>
-
-            <!-- ฟิลด์สำหรับคีย์แคป -->
-            <div class="form-group" id="keycapProfileField" style="display: none;">
-                <label for="keycapProfile">โปรไฟล์คีย์แคป</label>
-                <input type="text" id="keycapProfile" name="keycapProfile" placeholder="กรอกโปรไฟล์คีย์แคป">
-            </div>
-
-            <!-- ฟิลด์สำหรับอุปกรณ์เสริม -->
-            <div class="form-group" id="productTypeField" style="display: none;">
-                <label for="productType">ประเภทอุปกรณ์เสริม</label>
-                <input type="text" id="productType" name="productType" placeholder="กรอกประเภทอุปกรณ์เสริม">
-            </div>
-
-            <div class="form-group-wrapper">
-                <div class="form-group-url">
-                    <label for="productImage">ใส่ URL ของรูปภาพสินค้า</label>
-                    <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required>
-                </div>
-
-                <div class="form-group-url">
-                    <label for="reviewVideoUrl">ใส่ URL รีวิวสินค้า</label>
-                    <input type="text" id="reviewVideoUrl" name="reviewVideoUrl" placeholder="กรอก URL รีวิว (ถ้ามี)">
-                </div>
+                <label for="barcode">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                    </svg>
+                    Barcode
+                </label>
+                <input type="text" id="barcode" name="barcode" placeholder="กรอกบาร์โค้ด" required>
             </div>
 
             <div class="form-group">
-                <label for="productPrice">ราคาสินค้า</label>
+                <label for="productPrice">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z" />
+                    </svg> ราคาสินค้า
+                </label>
                 <input type="number" id="productPrice" name="productPrice" placeholder="กรอกราคาสินค้า" required>
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn-upload">อัปโหลดสินค้า</button>
+                <label for="productCost">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
+                    </svg> ต้นทุน
+                </label>
+                <input type="number" id="productCost" name="productCost" placeholder="กรอกต้นทุนสินค้า" required>
             </div>
-        </form>
+
+            <div class="form-group">
+                <label for="productStock">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z" />
+                    </svg> สต็อก
+                </label>
+                <input type="number" id="productStock" name="productStock" placeholder="กรอกจำนวนสต็อกสินค้า" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productReorderLevel">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
+                    </svg> ระดับการสั่งซื้อใหม่
+                </label>
+                <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกระดับการสั่งซื้อใหม่" required>
+            </div>
+
+            <div class="form-group-wrapper">
+                <div class="form-group-url">
+                    <label for="productImage">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                            <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
+                        </svg> ใส่ URL ของรูปภาพสินค้า
+                    </label>
+                    <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+        <button type="submit" class="btn-upload">อัปโหลดสินค้า</button>
     </div>
+    </div>
+
 
     <div id="admin_signup" class="content">
         <h3 class="h-text">🆔 การสมัครสมัครพนักงาน</h3>
@@ -1480,11 +1573,50 @@ $users = fetchUsers($conn);
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
             const body = document.body;
+            const openIcon = document.querySelector('.open-icon');
+            const closeIcon = document.querySelector('.close-icon');
 
             // สลับคลาสเพื่อให้ Sidebar ยุบ/ขยาย
             sidebar.classList.toggle('closed');
             body.classList.toggle('sidebar-collapsed');
+
+            // เปลี่ยนไอคอนให้แสดง/ซ่อนตามสถานะของ Sidebar
+            if (sidebar.classList.contains('closed')) {
+                openIcon.style.display = "none";
+                closeIcon.style.display = "inline-block";
+            } else {
+                openIcon.style.display = "inline-block";
+                closeIcon.style.display = "none";
+            }
         }
+
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // ลบคลาส selected ออกจากทุกปุ่ม
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('selected'));
+
+                // เพิ่มคลาส selected ให้ปุ่มที่ถูกกด
+                this.classList.add('selected');
+
+                // อัปเดตค่าใน input hidden
+                document.getElementById('productCategory').value = this.getAttribute('data-category');
+            });
+        });
+
+        document.getElementById("barcode").addEventListener("input", function(e) {
+            let value = e.target.value.replace(/\s+/g, ""); // ลบช่องว่างทั้งหมดก่อน
+            let formatted = "";
+
+            // ตัวอย่าง: รองรับ EAN-13 (13 หลัก, เว้นวรรคที่ตำแหน่ง 3, 7, 11)
+            if (/^\d{1,13}$/.test(value)) {
+                formatted = value.replace(/(\d{1})(\d{6})?(\d{6})?/, function(_, g1, g2, g3, g4) {
+                    return [g1, g2, g3, g4].filter(Boolean).join(" ");
+                });
+            }
+
+            // อัปเดตค่ากลับไปที่ input
+            e.target.value = formatted;
+        });
     </script>
 </body>
 
