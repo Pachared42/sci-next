@@ -725,6 +725,87 @@ $users = fetchUsers($conn);
             font-size: 16px;
         }
 
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: sticky;
+            top: 88px;
+            background: #000000;
+            /* เพิ่ม background เพื่อให้ไม่โปร่งใสตอนเลื่อน */
+            z-index: 1000;
+            /* เพิ่ม z-index เพื่อให้ header อยู่เหนือเนื้อหาอื่น */
+        }
+
+        #selected-count {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .btn-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn svg {
+            width: 35px;
+            height: 35px;
+            transition: 0.3s;
+        }
+
+        .btn-addd svg {
+            fill: #4CAF50;
+        }
+
+        .btn-editt svg {
+            fill: #FFA500;
+        }
+
+        .btn-deletee svg {
+            fill: #DC143C;
+        }
+
+        .btn:hover svg {
+            opacity: 0.7;
+        }
+
+        /* Tooltip */
+        .btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 75%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 6px 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            border-radius: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        /* แสดง Tooltip เมื่อ hover */
+        .btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
         /* Submit button */
         .btn-edit-prodect {
             padding: 20px;
@@ -1363,19 +1444,619 @@ $users = fetchUsers($conn);
         </form>
     </div>
 
-    <div id="food_bank_check" class="content show">
-        <h3>กราฟ</h3>
-        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
+    <div id="food_bank_check" class="content">
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                รายละเอียดสินค้าประเภทแห้ง
+                <span id="selected-count"></span> <!-- แสดงจำนวนที่เลือก -->
+            </h3>
+
+            <div class="btn-container">
+                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคา</th>
+                    <th>ต้นทุน</th>
+                    <th>สต็อก</th>
+                    <th>ระดับการสั่งซื้อใหม่</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div id="local_drink_check" class="content show">
-        <h3>กราฟ</h3>
-        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
+        <div class="header-container">
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องดื่ม</h3>
+
+            <div class="btn-container">
+                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคา</th>
+                    <th>ต้นทุน</th>
+                    <th>สต็อก</th>
+                    <th>ระดับการสั่งซื้อใหม่</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div id="fastfood_check" class="content show">
-        <h3>กราฟ</h3>
-        <p>แสดงข้อมูลสถิติต่าง ๆ</p>
+        <div class="header-container">
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทสด</h3>
+
+            <div class="btn-container">
+                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคา</th>
+                    <th>ต้นทุน</th>
+                    <th>สต็อก</th>
+                    <th>ระดับการสั่งซื้อใหม่</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Oreo</td>
+                    <td><img src="oreo.jpg" alt="Oreo"></td>
+                    <td>1234567890123</td>
+                    <td>50 บาท</td>
+                    <td>30 บาท</td>
+                    <td>100 ชิ้น</td>
+                    <td>20 ชิ้น</td>
+                </tr>
+                <tr>
+                    <td>Nougat</td>
+                    <td><img src="nougat.jpg" alt="Nougat"></td>
+                    <td>2345678901234</td>
+                    <td>60 บาท</td>
+                    <td>40 บาท</td>
+                    <td>150 ชิ้น</td>
+                    <td>30 ชิ้น</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
@@ -1849,7 +2530,26 @@ $users = fetchUsers($conn);
         function updateOrderCount(count) {
             document.querySelector(".badge").textContent = count;
         }
-    </script>
+
+        // JavaScript (การคำนวณจำนวนที่เลือก):
+        // ตัวแปรที่เก็บ element ของ checkbox
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        const selectedCountText = document.getElementById('selected-count');
+
+        // ฟังก์ชั่นในการอัพเดทจำนวนที่เลือก
+        function updateSelectedCount() {
+            const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+            selectedCountText.textContent = ` เลือกแล้ว +${selectedCount}`;
+        }
+
+        // เพิ่ม event listener ให้ทุก checkbox
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectedCount);
+        });
+
+        // เรียกใช้ฟังก์ชั่นครั้งแรกเพื่อให้ข้อมูลถูกต้องตอนโหลด
+        updateSelectedCount(); 
+    </script> 
 </body>
 
 </html>
