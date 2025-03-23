@@ -189,8 +189,22 @@ $users = fetchUsers($conn);
             border-right: 2px solid rgba(255, 255, 255, 0.2);
             transform: translateX(0);
             opacity: 1;
-            /* ตั้งค่าความโปร่งใสเป็น 1 */
             transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .sidebar .content {
@@ -253,7 +267,7 @@ $users = fetchUsers($conn);
 
         /* ปุ่มเมนู */
         .tab {
-            padding: 10px 15px;
+            padding: 10px 0 10px 15px;
             color: #ffffff;
             font-size: 16px;
             font-weight: 500;
@@ -873,6 +887,63 @@ $users = fetchUsers($conn);
             /* สีเมื่อเลือก */
             color: white;
         }
+
+        .collapsible-toggle {
+            display: flex;
+            align-items: center;
+            color: white;
+            padding: 10px 20px 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 190px;
+            justify-content: space-between;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        button .material-icons {
+            margin-right: 8px;
+            /* เพิ่ม margin ที่ต้องการ */
+        }
+
+        .collapsible-toggle:hover {
+            background-color: #555;
+            /* เปลี่ยนสีเมื่อ hover */
+        }
+
+        .collapsible-toggle svg {
+            transition: transform 0.3s ease;
+        }
+
+        /* ทำให้ลูกศรหมุนเมื่อเมนูเปิด */
+        .collapsible-toggle[aria-expanded="true"] svg {
+            transform: rotate(180deg);
+        }
+
+        /* ปรับสไตล์ของเมนู */
+        .menu {
+            display: block;
+            /* ปรับให้เมนูแสดง */
+            overflow: hidden;
+            /* ซ่อนเนื้อหาที่เกิน */
+            max-height: 0;
+            /* เริ่มต้นให้ความสูงเป็น 0 */
+            padding: 0 0 0 15px;
+            /* เพิ่ม padding ด้านข้าง */
+            border-radius: 5px;
+            transition: max-height 0.5s ease-out, padding 0.5s ease;
+            /* เลื่อนเมนูนุ่มนวล */
+        }
+
+        /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
+        .menu.active {
+            max-height: 200px;
+            /* ความสูงที่สามารถแสดงได้สูงสุด */
+            padding: 0 0 0 15px;
+            /* เพิ่ม padding เมื่อแสดง */
+        }
     </style>
 </head>
 
@@ -922,10 +993,28 @@ $users = fetchUsers($conn);
         <div class="main-tabs-upload">
             <h3>รายการอัพโหลด</h3>
             <div class="tab" onclick="showTab('upload_prodect')">
-                <span class="material-icons">file_upload</span> อัพโหลดสินค้าใหม่
+                <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
             </div>
             <div class="tab" onclick="showTab('admin_signup')">
                 <span class="material-icons">person_add</span> สมัครพนักงาน
+            </div>
+            <button type="button" is="toggle-button" class="collapsible-toggle text--strong" aria-controls="menu" aria-expanded="false">
+                <span class="material-icons">shopping_cart_checkout</span> ตรวจสอบสินค้า
+                <svg focusable="false" width="12" height="8" class="icon icon--chevron icon--inline" viewBox="0 0 12 8">
+                    <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
+                </svg>
+            </button>
+
+            <div id="menu" class="menu">
+                <div class="tab">
+                    <span class="material-icons">food_bank</span> อาหารแห้ง
+                </div>
+                <div class="tab">
+                    <span class="material-icons">local_drink</span> เครื่องดื่ม
+                </div>
+                <div class="tab">
+                    <span class="material-icons">fastfood</span> อาหารสด
+                </div>
             </div>
         </div>
         <hr class="tab-divider">
@@ -1084,8 +1173,8 @@ $users = fetchUsers($conn);
             </div>
 
             <div class="form-group">
-        <button type="submit" class="btn-upload">อัปโหลดสินค้า</button>
-    </div>
+                <button type="submit" class="btn-upload">อัปโหลดสินค้า</button>
+            </div>
     </div>
 
 
@@ -1616,6 +1705,13 @@ $users = fetchUsers($conn);
 
             // อัปเดตค่ากลับไปที่ input
             e.target.value = formatted;
+        });
+
+        document.querySelector('.collapsible-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active'); // เพิ่มหรือเอาคลาส active ออก
+            const isExpanded = menu.classList.contains('active');
+            this.setAttribute('aria-expanded', isExpanded); // อัพเดตค่า aria-expanded
         });
     </script>
 </body>
