@@ -72,7 +72,7 @@ $users = fetchUsers($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แดชบอร์ด Superadmin</title>
+    <title>SCI ADMIN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap');
@@ -90,54 +90,43 @@ $users = fetchUsers($conn);
         body {
             background-color: #000000;
             margin-left: 220px;
-            /* ค่าเริ่มต้นเมื่อ Sidebar เปิด */
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            transition: margin-left 0.5s ease;
-            /* ทำให้ยุบแบบ Smooth */
         }
 
         body.sidebar-collapsed {
             margin-left: 0;
-            /* ขยายเต็มเมื่อ Sidebar ปิด */
         }
 
         .h-text-upload {
             font-size: 24px;
             font-weight: bold;
             color: #ffffff;
-            /* หรือสีที่เหมาะสม */
         }
 
         .p-text-upload {
             color: #f39c12;
-            /* หรือสีที่เหมาะสม */
         }
 
         .tab-divider-category {
             border: none;
             border-top: 2px solid rgba(255, 255, 255, 0.2);
-            /* สีของเส้น */
             margin: 15px 0px 15px 0px;
-            /* ระยะห่างจากหัวข้อ */
         }
 
         .tab-divider-admin {
             border: none;
             border-top: 2px solid rgba(255, 255, 255, 0.2);
-            /* สีของเส้น */
             margin: 0px 0px 15px 0px;
-            /* ระยะห่างจากหัวข้อ */
         }
 
         /* เนื้อหาภายใน .container จะอยู่ทับพื้นหลัง */
         .container {
             position: relative;
             z-index: 1;
-            /* เนื้อหาของคุณที่ต้องการแสดงทับบนพื้นหลัง */
         }
 
         /* Navbar */
@@ -175,7 +164,6 @@ $users = fetchUsers($conn);
             width: 40px;
             height: auto;
             margin-right: 10px;
-            /* ถ้าต้องการระยะห่างเล็กน้อยจาก logo กับ site-name */
         }
 
         .site-name {
@@ -256,16 +244,13 @@ $users = fetchUsers($conn);
             font-size: 12px;
             font-weight: bold;
             color: #f39c12;
-            /* หรือสีที่เหมาะสม */
         }
 
         /* กำหนดลักษณะของเส้น hr */
         .tab-divider {
             border: none;
             border-top: 2px solid rgba(255, 255, 255, 0.2);
-            /* สีของเส้น */
             margin: 1px;
-            /* ระยะห่างจากหัวข้อ */
         }
 
         .main-tabs-upload {
@@ -277,7 +262,6 @@ $users = fetchUsers($conn);
             font-size: 12px;
             font-weight: bold;
             color: #f39c12;
-            /* หรือสีที่เหมาะสม */
         }
 
         .main-tabs-products {
@@ -289,7 +273,6 @@ $users = fetchUsers($conn);
             font-size: 12px;
             font-weight: bold;
             color: #f39c12;
-            /* หรือสีที่เหมาะสม */
         }
 
         /* ปุ่มเมนู */
@@ -316,54 +299,40 @@ $users = fetchUsers($conn);
         /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
         .tab:hover {
             background-color: rgba(211, 211, 211, 0.4);
-            /* สีเทาอ่อนที่จางเมื่อ hover */
         }
 
         /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
         .tab:active,
         .tab.selected {
             background-color: #ffffff;
-            /* สีเทาอ่อนที่เข้มขึ้นเมื่อถูกเลือก */
             color: black;
-            /* เปลี่ยนสีตัวหนังสือเป็นสีดำ */
             position: relative;
-            /* เพิ่มตำแหน่ง relative เพื่อให้สามารถจัดการกับ pseudo-element */
         }
 
         /* เปลี่ยนสีไอคอนเป็นสีส้ม */
         .tab:active .material-icons,
         .tab.selected .material-icons {
             color: #FF7043;
-            /* สีส้ม */
         }
 
         .tab.account:active .material-icons,
         .tab.account.selected .material-icons {
             color: #2196F3;
-            /* สีฟ้า */
         }
 
         /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab */
         .tab:active::after,
         .tab.selected::after {
             content: "";
-            /* ใช้เพื่อสร้าง pseudo-element */
             position: absolute;
-            /* กำหนดตำแหน่งเป็น absolute */
             top: 50%;
-            /* แนวตั้งตรงกลาง */
             right: 10px;
-            /* กำหนดระยะห่างจากขวา */
             width: 10px;
-            /* ขนาดของจุด */
             height: 10px;
-            /* ขนาดของจุด */
             background-color: #4CAF50;
-            /* สีเขียว */
             border-radius: 50%;
-            /* ทำให้เป็นวงกลม */
             transform: translateY(-50%);
-            /* ปรับตำแหน่งให้จุดอยู่ตรงกลางแนวตั้ง */
+
         }
 
         /* ปุ่มออกจากระบบ */
@@ -375,12 +344,9 @@ $users = fetchUsers($conn);
             color: white;
             border-radius: 10px;
             border: none;
-            /* เอาเส้นขอบออก */
             transition: 0.3s ease;
             margin-top: 5px;
-            /* ทำให้ปุ่ม logout ไปอยู่ด้านล่าง */
             text-decoration: none;
-            /* เอาเส้นใต้ของลิงก์ออก */
         }
 
         .logout:hover {
@@ -390,43 +356,35 @@ $users = fetchUsers($conn);
         .account {
             padding: 10px 15px;
             background: #3498db;
-            /* เปลี่ยนเป็นสีฟ้าที่สวยงาม */
             text-align: center;
             font-weight: 600;
             color: white;
             border-radius: 10px;
             border: none;
-            /* เอาเส้นขอบออก */
             transition: 0.3s ease;
             margin-top: 5px;
             text-decoration: none;
-            /* เอาเส้นใต้ของลิงก์ออก */
         }
 
         .account:hover {
             background: #2980b9;
-            /* สีเมื่อ hover เป็นฟ้าที่เข้มขึ้น */
         }
 
         .employee {
             padding: 10px 15px;
             background: #f39c12;
-            /* เปลี่ยนเป็นสีส้มที่สวยงาม */
             text-align: center;
             font-weight: 600;
             color: white;
             border-radius: 10px;
             border: none;
-            /* เอาเส้นขอบออก */
             transition: 0.3s ease;
             margin-top: auto;
             text-decoration: none;
-            /* เอาเส้นใต้ของลิงก์ออก */
         }
 
         .employee:hover {
             background: #d35400;
-            /* สีเมื่อ hover เป็นส้มที่เข้มขึ้น */
         }
 
         .content {
@@ -475,13 +433,9 @@ $users = fetchUsers($conn);
             font-size: 16px;
             padding: 10px;
             max-width: 200px;
-            /* กำหนดความยาวสูงสุดที่เซลล์จะสามารถแสดงได้ */
             text-overflow: ellipsis;
-            /* ทำให้ข้อความที่ยาวเกินไปแสดงเป็น "..." */
             overflow: hidden;
-            /* ซ่อนข้อความที่เกินขอบเขต */
             white-space: nowrap;
-            /* ห้ามให้ข้อความไปต่อในบรรทัดใหม่ */
         }
 
         /* แถวข้อมูล */
@@ -491,13 +445,9 @@ $users = fetchUsers($conn);
             color: black;
             padding: 10px;
             max-width: 200px;
-            /* กำหนดความยาวสูงสุดที่เซลล์จะสามารถแสดงได้ */
             text-overflow: ellipsis;
-            /* ทำให้ข้อความที่ยาวเกินไปแสดงเป็น "..." */
             overflow: hidden;
-            /* ซ่อนข้อความที่เกินขอบเขต */
             white-space: nowrap;
-            /* ห้ามให้ข้อความไปต่อในบรรทัดใหม่ */
         }
 
         /* ทำให้รูปภาพโค้งมน */
@@ -542,25 +492,13 @@ $users = fetchUsers($conn);
             max-width: 600px;
             margin: auto;
             overflow: hidden;
-            /* ป้องกันการล้นออกจากฟอร์ม */
             box-sizing: border-box;
-            /* ทำให้การตั้งขนาดของฟอร์มไม่ล้น */
         }
 
 
         .form-upload {
             margin-top: 15px;
         }
-
-        .form-group-url input {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            /* ทำให้ input ใช้ความกว้างเต็มของฟิลด์ */
-        }
-
 
         .form-group input,
         .form-group select {
@@ -574,20 +512,14 @@ $users = fetchUsers($conn);
         .form-container {
             display: flex;
             column-gap: 10px;
-            /* ระยะห่างเฉพาะแนวนอน (ซ้าย-ขวา) */
-            /* ระยะห่างระหว่างแต่ละช่องกรอก */
             flex-wrap: wrap;
-            /* ถ้าหน้าจอเล็กให้ขึ้นบรรทัดใหม่ */
             width: 100%;
         }
 
         .from-container-stock {
             display: flex;
             column-gap: 10px;
-            /* ระยะห่างเฉพาะแนวนอน (ซ้าย-ขวา) */
-            /* ระยะห่างระหว่างแต่ละช่องกรอก */
             flex-wrap: wrap;
-            /* ถ้าหน้าจอเล็กให้ขึ้นบรรทัดใหม่ */
             width: 100%;
         }
 
@@ -598,9 +530,7 @@ $users = fetchUsers($conn);
             padding: 8px 12px;
             border-radius: 10px;
             flex: 1;
-            /* ทำให้ขยายเต็มที่แบบสมดุล */
             min-width: 340px;
-            /* ป้องกัน input เล็กเกินไป */
             margin-bottom: 15px;
         }
 
@@ -612,7 +542,6 @@ $users = fetchUsers($conn);
             color: #000000;
             font-weight: bold;
             white-space: nowrap;
-            /* ป้องกัน label ขึ้นบรรทัดใหม่ */
         }
 
         .form-group input {
@@ -621,10 +550,8 @@ $users = fetchUsers($conn);
             padding: 6px 8px 6px 4px;
             font-size: 14px;
             flex: 1;
-            /* ให้ input ขยายเต็มที่ */
             background: transparent;
             min-width: 120px;
-            /* ป้องกัน input เล็กเกินไป */
         }
 
         /* ทำให้ชื่อและนามสกุลอยู่ในแถวเดียวกัน */
@@ -632,18 +559,15 @@ $users = fetchUsers($conn);
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            /* ระยะห่างระหว่างช่องกรอกชื่อและนามสกุล */
         }
 
         /* ทำให้ช่องกรอกชื่อและนามสกุลมีขนาดเท่ากัน */
         .half-width {
             width: 48%;
-            /* กำหนดให้ครึ่งหนึ่งของพื้นที่ */
         }
 
         .full-width {
             width: 100%;
-            /* ครอบคลุมพื้นที่ทั้งหมด */
         }
 
         .btn-upload {
@@ -653,7 +577,6 @@ $users = fetchUsers($conn);
             align-items: center;
             gap: 8px;
             background: #4CAF50;
-            /* สีเขียว */
             color: white;
             border: none;
             padding: 15px 20px;
@@ -666,7 +589,6 @@ $users = fetchUsers($conn);
 
         .btn-upload:hover {
             background: #388E3C;
-            /* สีเขียวเข้มขึ้น */
         }
 
         /* Style for the popup */
@@ -680,7 +602,6 @@ $users = fetchUsers($conn);
             background-color: rgba(0, 0, 0, 0.6);
             z-index: 9999;
             justify-content: flex-start;
-            /* เปลี่ยนจาก center เป็น flex-start */
             align-items: flex-start;
         }
 
@@ -734,9 +655,7 @@ $users = fetchUsers($conn);
             position: sticky;
             top: 88px;
             background: #000000;
-            /* เพิ่ม background เพื่อให้ไม่โปร่งใสตอนเลื่อน */
             z-index: 1000;
-            /* เพิ่ม z-index เพื่อให้ header อยู่เหนือเนื้อหาอื่น */
         }
 
         #selected-count {
@@ -816,10 +735,8 @@ $users = fetchUsers($conn);
             font-size: 16px;
             margin-top: 215px;
             width: 100%;
-            /* ขยายให้เต็มความกว้างของกรอบ */
             transition: background-color 0.3s ease;
             box-sizing: border-box;
-            /* ทำให้ padding ไม่เพิ่มขนาด */
         }
 
         .btn-edit-prodect:hover {
@@ -830,9 +747,7 @@ $users = fetchUsers($conn);
         .btn-close {
             position: absolute;
             top: 10px;
-            /* ชิดขอบบน */
             right: 20px;
-            /* ชิดขอบขวา */
             background: none;
             border: none;
             font-size: 34px;
@@ -874,12 +789,10 @@ $users = fetchUsers($conn);
         /* Make the popup visible */
         .edit-popup.show {
             display: flex;
-            /* Show popup */
         }
 
         .description {
             font-size: 14px;
-            /* ย่อขนาดฟอนต์ลง */
             color: #666;
             margin-top: 8px;
         }
@@ -959,73 +872,61 @@ $users = fetchUsers($conn);
 
         #order {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #graph {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #upload_prodect {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #admin_signup {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #food_bank {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #local_drink {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #fastfood {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #employee {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #account {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #food_bank_check {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #local_drink_check {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
         #fastfood_check {
             margin-top: 68px;
-            /* ขยับลงมาจาก Navbar (ปรับค่าตามความสูงของ Navbar) */
             padding: 20px;
         }
 
@@ -1054,7 +955,6 @@ $users = fetchUsers($conn);
 
         .category-btn.selected {
             background-color: #FF7043;
-            /* สีเมื่อเลือก */
             color: white;
         }
 
@@ -1075,12 +975,10 @@ $users = fetchUsers($conn);
 
         button .material-icons {
             margin-right: 8px;
-            /* เพิ่ม margin ที่ต้องการ */
         }
 
         .collapsible-toggle:hover {
             background-color: #555;
-            /* เปลี่ยนสีเมื่อ hover */
         }
 
         .collapsible-toggle svg {
@@ -1096,24 +994,17 @@ $users = fetchUsers($conn);
         /* ปรับสไตล์ของเมนู */
         .menu {
             display: block;
-            /* ปรับให้เมนูแสดง */
             overflow: hidden;
-            /* ซ่อนเนื้อหาที่เกิน */
             max-height: 0;
-            /* เริ่มต้นให้ความสูงเป็น 0 */
             padding: 0 0 0 15px;
-            /* เพิ่ม padding ด้านข้าง */
             border-radius: 5px;
             transition: max-height 0.5s ease-out, padding 0.5s ease;
-            /* เลื่อนเมนูนุ่มนวล */
         }
 
         /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
         .menu.active {
             max-height: 200px;
-            /* ความสูงที่สามารถแสดงได้สูงสุด */
             padding: 0 0 0 15px;
-            /* เพิ่ม padding เมื่อแสดง */
         }
 
         .badge {
@@ -1130,6 +1021,59 @@ $users = fetchUsers($conn);
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+        }
+
+        /* สไตล์พื้นฐานสำหรับ alert */
+        .alert {
+            font-weight: bold;
+            text-align: left;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            position: fixed;
+            top: 18%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            min-width: 200px;
+            line-height: 24px;
+        }
+
+        /* สไตล์สำหรับ svg ใน alert */
+        .alert svg {
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* สไตล์สำหรับ error */
+        .alert.error {
+            background-color: #ff4b4b;
+        }
+
+        /* สไตล์สำหรับ success */
+        .alert.success {
+            background-color: #4CAF50;
+        }
+
+        /* เส้นขอบสีแดงเมื่อมีข้อผิดพลาด */
+        .error-input {
+            border: 2px solid #ff4b4b transparent;
+            border-radius: 20px;
+            box-shadow: inset 0 0 5px rgba(255, 75, 78, 0.7);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        /* เมื่อ input ถูกโฟกัสหรือมีข้อผิดพลาด */
+        .error-input:focus {
+            border-color: #ff4b4bed !important;
+            box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
+            outline: 2px solid #ff4b4bed;
         }
     </style>
 </head>
@@ -1379,19 +1323,17 @@ $users = fetchUsers($conn);
         </form>
     </div>
 
-
     <div id="admin_signup" class="content">
         <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
         <p class="p-text-upload">เพิ่มพนักงานใหม่ได้ที่นี่เลย!</p>
-        <!-- ข้อความแสดงผลจาก PHP -->
-        <?php if (!empty($error)): ?>
-            <div style="color: red;"><?php echo $error; ?></div>
-        <?php elseif (!empty($success)): ?>
-            <div style="color: green;"><?php echo $success; ?></div>
-        <?php endif; ?>
+
+        <div id="alert" class="alert" style="display: none;">
+            <span id="alert-message"></span>
+        </div>
+
 
         <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
-        <form class="form-upload" id="adminSignupForm" action="../admin/admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
+        <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
 
             <!-- แถวสำหรับชื่อและนามสกุล -->
             <div class="form-container">
@@ -2384,39 +2326,105 @@ $users = fetchUsers($conn);
             return false; // ป้องกันการรีเฟรชหน้าแบบปกติของฟอร์ม
         }
 
-        // ฟังก์ชั่นที่ทำงานเมื่อฟอร์มถูกส่ง
+        // ฟังก์ชั่นที่ทำงานเมื่อฟอร์มถูกส่ง (สำหรับการสร้าง Admin)
         function submitAdminForm() {
             var form = document.getElementById('adminSignupForm');
-
+            var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
+            var isValid = true;
 
+            // ล้างเส้นขอบผิดพลาดจากฟอร์ม
+            clearErrorBorders();
+
+            // ตรวจสอบรหัสผ่านและยืนยันรหัสผ่าน
             if (password !== confirmPassword) {
-                alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+                // ใส่ไอคอน SVG พร้อมข้อความแสดงเตือน
+                showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="M600-240v-120H488q-32 54-87 87t-121 33q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h272v80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47q66 0 106-40.5t48-79.5h246v120h80v80H600ZM280-400q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Zm600 240q-17 0-28.5-11.5T840-280q0-17 11.5-28.5T880-320q17 0 28.5 11.5T920-280q0 17-11.5 28.5T880-240Zm-40-160v-200h80v200h-80Z"/></svg> รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน', "error");
+                addErrorBorder(document.getElementById("confirmPassword")); // เพิ่มเส้นขอบสีแดงให้ที่ input confirmPassword
+                isValid = false;
+            }
+
+            // ถ้าฟอร์มไม่ถูกต้อง ให้ไม่ส่งข้อมูล
+            if (!isValid) {
                 return false;
             }
 
             var formData = new FormData(form);
             var xhr = new XMLHttpRequest();
             xhr.open('POST', form.action, true);
+            xhr.setRequestHeader("Accept", "application/json");
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    var response = xhr.responseText.trim();
-                    if (response === "สมัครสมาชิกสำเร็จแล้ว!") {
-                        alert(response);
-                        form.reset();
-                        location.reload();
-                    } else {
-                        alert('เกิดข้อผิดพลาด: ' + response);
+                    console.log("Raw Server Response:", xhr.responseText); // ดีบักข้อมูลที่ส่งมาจากเซิร์ฟเวอร์
+                    try {
+                        var response = JSON.parse(xhr.responseText); // ✅ แปลง JSON string เป็น Object
+
+                        if (response.status === "success") {
+                            // แจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
+                            showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/></svg> สมัครสมาชิกสำเร็จ', "success");
+                            // รีเฟรชหน้าหลังจากแสดงข้อความแจ้งเตือนแล้ว
+                            setTimeout(function() {
+                                form.reset();
+                                location.reload();
+                            }, 1000); // 3 วินาทีหลังจากแสดง alert
+                        } else if (response.status === "error") {
+                            // ตรวจสอบกรณีเมื่อชื่อผู้ใช้งานมีอยู่แล้วในระบบ
+                            if (response.message === 'ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ') {
+                                // ใส่ไอคอน SVG พร้อมข้อความแสดงเตือน
+                                showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="M800-520q-17 0-28.5-11.5T760-560q0-17 11.5-28.5T800-600q17 0 28.5 11.5T840-560q0 17-11.5 28.5T800-520Zm-40-120v-200h80v200h-80ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/></svg> ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ', "error");
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error parsing JSON:", error);
+                        showAlert("เกิดข้อผิดพลาดในการประมวลผลข้อมูล: " + error.message, "error");
                     }
                 } else {
-                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + xhr.responseText);
+                    showAlert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + xhr.responseText, "error");
                 }
             };
 
             xhr.send(formData);
             return false;
+        }
+
+        // ฟังก์ชันแสดงข้อความแจ้งเตือน
+        function showAlert(message, type) {
+            const alertElement = document.getElementById('alert');
+            const alertMessage = document.getElementById('alert-message');
+
+            // ตั้งค่าข้อความและประเภท (success, error, warning)
+            alertMessage.innerHTML = message; // ใช้ innerHTML เพื่อแทรก HTML โดยตรง
+            alertElement.className = 'alert ' + type; // ตั้งค่าประเภทของ alert เช่น 'success', 'error'
+
+            // แสดง alert
+            alertElement.style.display = 'block';
+            setTimeout(() => {
+                alertElement.style.opacity = 1; // ทำให้ alert ค่อยๆ ปรากฏ
+            }, 10);
+
+            // ซ่อน alert หลังจาก 3 วินาที
+            setTimeout(() => {
+                alertElement.style.opacity = 0; // ทำให้ alert ค่อยๆ หายไป
+                setTimeout(() => {
+                    alertElement.style.display = 'none';
+                }, 500); // รอให้การ fade out เสร็จสิ้น
+            }, 3000);
+        }
+
+
+        // ฟังก์ชันเพิ่มเส้นขอบสีแดงให้กับ input ที่มีข้อผิดพลาด
+        function addErrorBorder(inputElement) {
+            inputElement.classList.add('error-input');
+        }
+
+        // ฟังก์ชันลบเส้นขอบสีแดงออกจาก input
+        function clearErrorBorders() {
+            var inputs = document.querySelectorAll('.error-input');
+            inputs.forEach(function(input) {
+                input.classList.remove('error-input');
+            });
         }
 
         // Function to open the edit popup
@@ -2548,8 +2556,8 @@ $users = fetchUsers($conn);
         });
 
         // เรียกใช้ฟังก์ชั่นครั้งแรกเพื่อให้ข้อมูลถูกต้องตอนโหลด
-        updateSelectedCount(); 
-    </script> 
+        updateSelectedCount();
+    </script>
 </body>
 
 </html>
