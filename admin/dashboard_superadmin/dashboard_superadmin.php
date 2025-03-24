@@ -95,6 +95,7 @@ $users = fetchUsers($conn);
             display: flex;
             flex-direction: column;
             position: relative;
+            transition: margin-left 0.5s ease;
         }
 
         body.sidebar-collapsed {
@@ -1075,6 +1076,82 @@ $users = fetchUsers($conn);
             box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
             outline: 2px solid #ff4b4bed;
         }
+
+        /* Style for the table header checkbox */
+        th input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #4CAF50;
+            /* สีเขียว */
+            border-radius: 5px;
+            background-color: #fff;
+            position: relative;
+            box-sizing: border-box;
+            padding: 0;
+            /* ลบ padding */
+            margin: 0;
+            /* ลบ margin เพื่อไม่ให้ขยับ */
+            outline: none;
+            /* ลบขอบที่เกิดจากการ focus */
+        }
+
+        /* เมื่อ checkbox ถูกเลือกใน header */
+        th input[type="checkbox"]:checked {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            background-image: url('/sci-shop-admin/img.content/done_all.png');
+            background-size: 20px 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Style for the row checkbox */
+        td input[type="checkbox"].row-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #4CAF50;
+            /* สีเขียว */
+            border-radius: 5px;
+            background-color: #fff;
+            position: relative;
+            box-sizing: border-box;
+            padding: 0;
+            /* ลบ padding */
+            margin: 0;
+            /* ลบ margin เพื่อไม่ให้ขยับ */
+            outline: none;
+            /* ลบขอบที่เกิดจากการ focus */
+        }
+
+        /* เมื่อ checkbox ในแถวถูกเลือก */
+        td input[type="checkbox"].row-checkbox:checked {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            background-image: url('/sci-shop-admin/img.content/check.png');
+            background-size: 20px 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Add hover effect on row checkbox */
+        td input[type="checkbox"].row-checkbox:hover {
+            border-color: #45a049;
+            /* สีขอบเขียวเข้มเมื่อ hover */
+        }
+
+        /* Add hover effect on header checkbox */
+        th input[type="checkbox"]:hover {
+            border-color: #45a049;
+            /* สีขอบเขียวเข้มเมื่อ hover */
+        }
     </style>
 </head>
 
@@ -1126,13 +1203,12 @@ $users = fetchUsers($conn);
         <!-- รายการอัพโหลด -->
         <div class="main-tabs-upload">
             <h3>รายการอัพโหลด</h3>
-            <div class="tab" onclick="showTab('upload_prodect')">
-                <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
-            </div>
             <div class="tab" onclick="showTab('admin_signup')">
                 <span class="material-icons">person_add</span> สมัครพนักงาน
             </div>
-
+            <div class="tab" onclick="showTab('upload_prodect')">
+                <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
+            </div>
             <button type="button" is="toggle-button" class="collapsible-toggle text--strong" aria-controls="menu" aria-expanded="false">
                 <span class="material-icons">shopping_cart_checkout</span> ตรวจสอบสินค้า
                 <svg focusable="false" width="12" height="8" class="icon icon--chevron icon--inline" viewBox="0 0 12 8">
@@ -1180,12 +1256,15 @@ $users = fetchUsers($conn);
         </a>
     </div>
 
+    <!-- ^^ ส่วนของ Tabs ^^ -->
+
+    <!-- แสดงข้อมูลสถิติ -->
     <div id="order" class="content">
         <p>แสดงข้อมูลสถิติต่าง ๆ</p>
     </div>
 
+    <!-- สรุปยอดขายเป็นตัวเลข -->
     <div id="graph" class="content">
-        <!-- สรุปยอดขายเป็นตัวเลข -->
         <div class="summary-grid">
             <div class="summary-card daily">
                 <h4>ยอดขายรายวัน</h4>
@@ -1218,25 +1297,27 @@ $users = fetchUsers($conn);
         </div>
     </div>
 
+    <!-- ฟอร์มอัปโหลดสินค้า -->
     <div id="upload_prodect" class="content">
         <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
         <p class="p-text-upload">เพิ่มสินค้าใหม่ได้ที่นี่เลย!</p>
-        <!-- ฟอร์มอัปโหลดสินค้า -->
-        <form class="form-upload" id="uploadForm" action="../product/upload_product/upload_product.php" method="POST" enctype="multipart/form-data" onsubmit="return handleFormSubmit()">
+
+        <form class="form-upload" id="uploadForm" method="POST" action="" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
             <div class="category-buttons">
-                <button class="category-btn" data-category="dried_food">
+                <button type="button" class="category-btn" data-category="dried_food" onclick="selectCategory(event, 'dried_food')">
                     <span class="material-icons">food_bank</span>
                     อาหารแห้ง
                 </button>
-                <button class="category-btn" data-category="soft_drink">
+                <button type="button" class="category-btn" data-category="soft_drink" onclick="selectCategory(event, 'soft_drink')">
                     <span class="material-icons">local_drink</span>
                     เครื่องดื่ม
                 </button>
-                <button class="category-btn" data-category="fresh_food">
+                <button type="button" class="category-btn" data-category="fresh_food" onclick="selectCategory(event, 'fresh_food')">
                     <span class="material-icons">fastfood</span>
                     อาหารสด
                 </button>
             </div>
+
             <input type="hidden" id="productCategory" name="productCategory">
 
             <hr class="tab-divider-category">
@@ -1323,6 +1404,7 @@ $users = fetchUsers($conn);
         </form>
     </div>
 
+    <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
     <div id="admin_signup" class="content">
         <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
         <p class="p-text-upload">เพิ่มพนักงานใหม่ได้ที่นี่เลย!</p>
@@ -1331,8 +1413,6 @@ $users = fetchUsers($conn);
             <span id="alert-message"></span>
         </div>
 
-
-        <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
         <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
 
             <!-- แถวสำหรับชื่อและนามสกุล -->
@@ -1386,11 +1466,12 @@ $users = fetchUsers($conn);
         </form>
     </div>
 
+    <!-- ส่วนของการตรวจสอบเพิ่มสินค้า -->
     <div id="food_bank_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">
                 รายละเอียดสินค้าประเภทแห้ง
-                <span id="selected-count"></span> <!-- แสดงจำนวนที่เลือก -->
+                <span id="selected-count"></span>
             </h3>
 
             <div class="btn-container">
@@ -1417,6 +1498,7 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
@@ -1426,174 +1508,13 @@ $users = fetchUsers($conn);
                     <th>ระดับการสั่งซื้อใหม่</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
+            <tbody id="dried_food_table">
+
             </tbody>
         </table>
     </div>
 
-    <div id="local_drink_check" class="content show">
+    <div id="local_drink_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องดื่ม</h3>
 
@@ -1630,174 +1551,11 @@ $users = fetchUsers($conn);
                     <th>ระดับการสั่งซื้อใหม่</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-            </tbody>
+            <tbody id="soft_drink_table"></tbody>
         </table>
     </div>
 
-    <div id="fastfood_check" class="content show">
+    <div id="fastfood_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทสด</h3>
 
@@ -1834,170 +1592,7 @@ $users = fetchUsers($conn);
                     <th>ระดับการสั่งซื้อใหม่</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Oreo</td>
-                    <td><img src="oreo.jpg" alt="Oreo"></td>
-                    <td>1234567890123</td>
-                    <td>50 บาท</td>
-                    <td>30 บาท</td>
-                    <td>100 ชิ้น</td>
-                    <td>20 ชิ้น</td>
-                </tr>
-                <tr>
-                    <td>Nougat</td>
-                    <td><img src="nougat.jpg" alt="Nougat"></td>
-                    <td>2345678901234</td>
-                    <td>60 บาท</td>
-                    <td>40 บาท</td>
-                    <td>150 ชิ้น</td>
-                    <td>30 ชิ้น</td>
-                </tr>
-            </tbody>
+            <tbody id="fresh_food_table"></tbody>
         </table>
     </div>
 
@@ -2219,6 +1814,151 @@ $users = fetchUsers($conn);
     </div>
 
     <script>
+        let selectedCategory = '';
+
+        function selectCategory(event, category) {
+            selectedCategory = category;
+            console.log("หมวดหมู่ที่เลือก:", selectedCategory);
+
+            // ล้าง class 'active' ออกจากปุ่มทั้งหมด
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // เพิ่ม class 'active' ให้กับปุ่มที่ถูกเลือก
+            event.currentTarget.classList.add('active');
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+
+            if (!selectedCategory) {
+                alert("กรุณาเลือกหมวดหมู่สินค้า");
+                return;
+            }
+
+            const productName = document.getElementById('productName').value;
+            const productImage = document.getElementById('productImage').value;
+            const barcode = document.getElementById('barcode').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productCost = document.getElementById('productCost').value;
+            const productStock = document.getElementById('productStock').value;
+            const productReorderLevel = document.getElementById('productReorderLevel').value;
+
+            if (productName && productImage && barcode && productPrice && productCost && productStock && productReorderLevel) {
+                sendDataToTable(selectedCategory, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel);
+
+                document.getElementById('uploadForm').reset(); // รีเซ็ตฟอร์ม
+                setTimeout(() => {
+                    history.replaceState(null, null, location.href);
+                }, 500); // ลบข้อมูล session หลัง 0.5 วิ
+            } else {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน!");
+            }
+        }
+
+        function sendDataToTable(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel) {
+            const tableBody = document.getElementById(`${category}_table`);
+
+            if (!tableBody) {
+                alert(`ไม่พบตารางที่ตรงกับหมวดหมู่ที่เลือก: ${category}_table`);
+                return;
+            }
+
+            // สร้างแถวใหม่ในตาราง
+            const row = document.createElement('tr');
+            row.innerHTML = `
+        <td><input type="checkbox" class="row-checkbox" data-product="${productName}" onchange="updateCheckboxStatus(event, '${category}')"></td>
+        <td>${productName}</td>
+        <td><img src="${productImage}" alt="${productName}" style="width: 50px; height: auto;"></td>
+        <td>${barcode}</td>
+        <td>${productPrice} บาท</td>
+        <td>${productCost} บาท</td>
+        <td>${productStock} ชิ้น</td>
+        <td>${productReorderLevel} ชิ้น</td>
+    `;
+            tableBody.appendChild(row);
+
+            // บันทึกข้อมูลสินค้าและสถานะ checkbox ลงใน localStorage
+            saveToLocalStorage(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel);
+
+            // รีเซ็ตฟอร์ม
+            document.getElementById('uploadForm').reset();
+        }
+
+        function saveToLocalStorage(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel) {
+            let savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+            const productData = {
+                productName,
+                productImage,
+                barcode,
+                productPrice,
+                productCost,
+                productStock,
+                productReorderLevel,
+                isChecked: false // สถานะของ checkbox
+            };
+
+            savedData.push(productData);
+            localStorage.setItem(category, JSON.stringify(savedData));
+        }
+
+        function loadFromLocalStorage() {
+            const categories = ['dried_food', 'soft_drink', 'fresh_food']; // หมวดหมู่ทั้งหมด
+            categories.forEach(category => {
+                const savedData = JSON.parse(localStorage.getItem(category)) || [];
+                const tableBody = document.getElementById(`${category}_table`);
+
+                savedData.forEach(data => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                <td><input type="checkbox" class="row-checkbox" data-product="${data.productName}" ${data.isChecked ? 'checked' : ''} onchange="updateCheckboxStatus(event, '${category}')"></td>
+                <td>${data.productName}</td>
+                <td><img src="${data.productImage}" alt="${data.productName}" style="width: 50px; height: auto;"></td>
+                <td>${data.barcode}</td>
+                <td>${data.productPrice} บาท</td>
+                <td>${data.productCost} บาท</td>
+                <td>${data.productStock} ชิ้น</td>
+                <td>${data.productReorderLevel} ชิ้น</td>
+            `;
+                    tableBody.appendChild(row);
+                });
+            });
+        }
+
+        // ฟังก์ชันที่ใช้ในการอัปเดตสถานะของ checkbox ใน localStorage
+        function updateCheckboxStatus(event, category) {
+            const checkbox = event.target;
+            const productName = checkbox.getAttribute('data-product');
+
+            // ดึงข้อมูลจาก localStorage
+            const savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+            // อัปเดตสถานะ checkbox ที่เลือก
+            const updatedData = savedData.map(data => {
+                if (data.productName === productName) {
+                    data.isChecked = checkbox.checked; // ถ้าเลือก จะเป็น true, ถ้าไม่เลือก จะเป็น false
+                }
+                return data;
+            });
+
+            // บันทึกข้อมูลกลับลงใน localStorage
+            localStorage.setItem(category, JSON.stringify(updatedData));
+        }
+
+        // เรียกใช้เมื่อโหลดหน้า
+        window.onload = function() {
+            loadFromLocalStorage();
+        };
+
+        function toggleSelectAll(source) {
+            document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
+        // แสดง Tab ที่ถูกเลือก
         document.addEventListener("DOMContentLoaded", function() {
             const activeTab = localStorage.getItem("activeTab") || "order";
             showTab(activeTab);
@@ -2292,38 +2032,6 @@ $users = fetchUsers($conn);
             setTimeout(function() {
                 messageBox.remove();
             }, 500);
-        }
-
-        // ฟังก์ชั่นที่ทำงานเมื่อฟอร์มถูกส่ง
-        function handleFormSubmit() {
-            var form = document.getElementById('uploadForm');
-
-            // ตรวจสอบว่า password และ confirmPassword ตรงกัน
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-
-            if (password !== confirmPassword) {
-                alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
-                return false; // หยุดการส่งฟอร์ม
-            }
-
-            // ส่งข้อมูลฟอร์มผ่าน AJAX
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', form.action, true);
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    alert('อัปโหลดสินค้าสำเร็จ');
-                    form.reset(); // รีเซ็ตฟอร์มหลังจากส่งข้อมูลสำเร็จ
-                    location.reload(); // รีเฟรชหน้าเพื่อล้างข้อมูลที่ถูกกรอก
-                } else {
-                    alert('เกิดข้อผิดพลาด: ' + xhr.responseText);
-                }
-            };
-
-            xhr.send(formData);
-            return false; // ป้องกันการรีเฟรชหน้าแบบปกติของฟอร์ม
         }
 
         // ฟังก์ชั่นที่ทำงานเมื่อฟอร์มถูกส่ง (สำหรับการสร้าง Admin)
