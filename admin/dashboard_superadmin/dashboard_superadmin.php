@@ -426,23 +426,20 @@ $users = fetchUsers($conn);
             margin: 15px 0px 15px 0px;
         }
 
-        /* เฮดเดอร์ของตาราง */
         th {
-            background: linear-gradient(135deg, #2c2c54, #6d44a1);
+            background: linear-gradient(135deg, #111, #222);
             color: white;
             padding: 12px;
             font-size: 16px;
-            padding: 10px;
             max-width: 200px;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
         }
 
-        /* แถวข้อมูล */
         td {
             padding: 12px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
             color: black;
             padding: 10px;
             max-width: 200px;
@@ -451,10 +448,18 @@ $users = fetchUsers($conn);
             white-space: nowrap;
         }
 
-        /* ทำให้รูปภาพโค้งมน */
+        tbody tr {
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
         td img {
             border-radius: 10px;
         }
+
 
         .btn-edit {
             font-size: 18px;
@@ -659,9 +664,12 @@ $users = fetchUsers($conn);
             z-index: 1000;
         }
 
-        #selected-count {
+        #dried-food-selected-count,
+        #soft-drink-selected-count,
+        #fresh-food-selected-count {
             font-weight: bold;
-            color: #4CAF50;
+            color: #4caf50;
+            margin-left: 10px;
         }
 
         .btn {
@@ -686,6 +694,14 @@ $users = fetchUsers($conn);
         }
 
         .btn-addd svg {
+            fill: #4CAF50;
+        }
+
+        .btn-adddd svg {
+            fill: #4CAF50;
+        }
+
+        .btn-addddd svg {
             fill: #4CAF50;
         }
 
@@ -1471,11 +1487,11 @@ $users = fetchUsers($conn);
         <div class="header-container">
             <h3 class="h-text-upload">
                 รายละเอียดสินค้าประเภทแห้ง
-                <span id="selected-count"></span>
+                <span id="dried-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
-                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_dried_food" class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
@@ -1487,40 +1503,41 @@ $users = fetchUsers($conn);
                     </svg>
                 </button>
 
-                <!-- <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
-                </button> -->
-                
+                </button>
+
             </div>
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"></th>
+                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'dried_food_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
                     <th>ราคา</th>
                     <th>ต้นทุน</th>
                     <th>สต็อก</th>
-                    <th>ระดับการสั่งซื้อใหม่</th>
+                    <th>เกณฑ์สั่งซื้อ</th>
                 </tr>
             </thead>
             <tbody id="dried_food_table">
-
             </tbody>
         </table>
     </div>
 
     <div id="local_drink_check" class="content">
         <div class="header-container">
-            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องดื่ม</h3>
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องดื่ม
+                <span id="soft-drink-selected-count">เลือกแล้ว +0</span>
+            </h3>
 
             <div class="btn-container">
-                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_soft_drink" class="btn btn-adddd" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
@@ -1543,13 +1560,14 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'soft_drink_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
                     <th>ราคา</th>
                     <th>ต้นทุน</th>
                     <th>สต็อก</th>
-                    <th>ระดับการสั่งซื้อใหม่</th>
+                    <th>เกณฑ์สั่งซื้อ</th>
                 </tr>
             </thead>
             <tbody id="soft_drink_table"></tbody>
@@ -1558,10 +1576,12 @@ $users = fetchUsers($conn);
 
     <div id="fastfood_check" class="content">
         <div class="header-container">
-            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทสด</h3>
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทสด
+                <span id="fresh-food-selected-count">เลือกแล้ว +0</span>
+            </h3>
 
             <div class="btn-container">
-                <button class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_fresh_food" class="btn btn-addddd" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
@@ -1584,13 +1604,14 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'fresh_food_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
                     <th>ราคา</th>
                     <th>ต้นทุน</th>
                     <th>สต็อก</th>
-                    <th>ระดับการสั่งซื้อใหม่</th>
+                    <th>เกณฑ์สั่งซื้อ</th>
                 </tr>
             </thead>
             <tbody id="fresh_food_table"></tbody>
@@ -1883,9 +1904,13 @@ $users = fetchUsers($conn);
             // บันทึกข้อมูลสินค้าและสถานะ checkbox ลงใน localStorage
             saveToLocalStorage(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel);
 
+            // เรียกใช้ฟังก์ชัน loadFromLocalStorage เพื่อรีเฟรชข้อมูลทันที
+            loadFromLocalStorage();
+
             // รีเซ็ตฟอร์ม
             document.getElementById('uploadForm').reset();
         }
+
 
         function saveToLocalStorage(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel) {
             let savedData = JSON.parse(localStorage.getItem(category)) || [];
@@ -1906,27 +1931,39 @@ $users = fetchUsers($conn);
         }
 
         function loadFromLocalStorage() {
-            const categories = ['dried_food', 'soft_drink', 'fresh_food']; // หมวดหมู่ทั้งหมด
+            const categories = ['dried_food', 'soft_drink', 'fresh_food'];
             categories.forEach(category => {
                 const savedData = JSON.parse(localStorage.getItem(category)) || [];
                 const tableBody = document.getElementById(`${category}_table`);
 
-                savedData.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                <td><input type="checkbox" class="row-checkbox" data-product="${data.productName}" ${data.isChecked ? 'checked' : ''} onchange="updateCheckboxStatus(event, '${category}')"></td>
-                <td>${data.productName}</td>
-                <td><img src="${data.productImage}" alt="${data.productName}" style="width: 50px; height: auto;"></td>
-                <td>${data.barcode}</td>
-                <td>${data.productPrice} บาท</td>
-                <td>${data.productCost} บาท</td>
-                <td>${data.productStock} ชิ้น</td>
-                <td>${data.productReorderLevel} ชิ้น</td>
-            `;
-                    tableBody.appendChild(row);
-                });
+                // ล้างข้อมูลเดิมก่อน
+                tableBody.innerHTML = '';
+
+                if (savedData.length === 0) {
+                    // ถ้าไม่มีข้อมูลให้แสดงข้อความ
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="8" style="text-align: center; color: #000000;">ไม่มีสินค้าที่สามารถบันทึกได้</td>`;
+                    tableBody.appendChild(noDataRow);
+                } else {
+                    // ถ้ามีข้อมูลให้เพิ่มแถวของสินค้า
+                    savedData.forEach(data => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td><input type="checkbox" class="row-checkbox" data-product="${data.productName}" ${data.isChecked ? 'checked' : ''} onchange="updateCheckboxStatus(event, '${category}')"></td>
+                    <td>${data.productName}</td>
+                    <td><img src="${data.productImage}" alt="${data.productName}" style="width: 50px; height: auto;"></td>
+                    <td>${data.barcode}</td>
+                    <td>${data.productPrice} บาท</td>
+                    <td>${data.productCost} บาท</td>
+                    <td>${data.productStock} ชิ้น</td>
+                    <td>${data.productReorderLevel} ชิ้น</td>
+                `;
+                        tableBody.appendChild(row);
+                    });
+                }
             });
         }
+
 
         // ฟังก์ชันที่ใช้ในการอัปเดตสถานะของ checkbox ใน localStorage
         function updateCheckboxStatus(event, category) {
@@ -1953,11 +1990,220 @@ $users = fetchUsers($conn);
             loadFromLocalStorage();
         };
 
-        function toggleSelectAll(source) {
-            document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+        // ฟังก์ชันเลือกสินค้าทั้งหมด tableId
+        function toggleSelectAllForTable(source, tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            table.querySelectorAll('.row-checkbox').forEach(checkbox => {
                 checkbox.checked = source.checked;
             });
         }
+
+        document.querySelectorAll(".btn-addd").forEach(button => {
+            button.addEventListener("click", function() {
+                let selectedProducts = [];
+
+                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
+                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                    let row = checkbox.closest("tr");
+                    let productData = {
+                        productName: row.children[1].textContent.trim(),
+                        productImage: row.children[2].querySelector("img").src,
+                        barcode: row.children[3].textContent.trim(),
+                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
+                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
+                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
+                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
+                    };
+                    selectedProducts.push(productData);
+                });
+
+                if (selectedProducts.length === 0) {
+                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
+                    return;
+                }
+
+                console.log("🛒 Sending data:", JSON.stringify({
+                    products: selectedProducts
+                }));
+
+                // ส่งข้อมูลไปยัง PHP
+                fetch("/sci-shop-admin/product/upload_product/dried_food/add_dried_food.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            products: selectedProducts
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data);
+                        if (data.success) {
+                            alert("เพิ่มสินค้าสำเร็จ!");
+
+                            // ลบแถวที่ถูกเลือกออกจากตาราง
+                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                                let row = checkbox.closest("tr");
+                                row.remove();
+                            });
+
+                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
+                            selectedProducts.forEach(product => {
+                                const category = "dried_food"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
+                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
+
+                                // บันทึกข้อมูลที่อัปเดตลง localStorage
+                                localStorage.setItem(category, JSON.stringify(savedData));
+                            });
+                        } else {
+                            alert("เกิดข้อผิดพลาด: " + data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        });
+
+        document.querySelectorAll(".btn-adddd").forEach(button => {
+            button.addEventListener("click", function() {
+                let selectedProducts = [];
+
+                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
+                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                    let row = checkbox.closest("tr");
+                    let productData = {
+                        productName: row.children[1].textContent.trim(),
+                        productImage: row.children[2].querySelector("img").src,
+                        barcode: row.children[3].textContent.trim(),
+                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
+                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
+                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
+                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
+                    };
+                    selectedProducts.push(productData);
+                });
+
+                if (selectedProducts.length === 0) {
+                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
+                    return;
+                }
+
+                console.log("🛒 Sending data:", JSON.stringify({
+                    products: selectedProducts
+                }));
+
+                // ส่งข้อมูลไปยัง PHP
+                fetch("/sci-shop-admin/product/upload_product/soft_drink/add_soft_drink.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            products: selectedProducts
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data);
+                        if (data.success) {
+                            alert("เพิ่มสินค้าสำเร็จ!");
+
+                            // ลบแถวที่ถูกเลือกออกจากตาราง
+                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                                let row = checkbox.closest("tr");
+                                row.remove();
+                            });
+
+                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
+                            selectedProducts.forEach(product => {
+                                const category = "soft_drink"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
+                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
+
+                                // บันทึกข้อมูลที่อัปเดตลง localStorage
+                                localStorage.setItem(category, JSON.stringify(savedData));
+                            });
+                        } else {
+                            alert("เกิดข้อผิดพลาด: " + data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        });
+
+        document.querySelectorAll(".btn-addddd").forEach(button => {
+            button.addEventListener("click", function() {
+                let selectedProducts = [];
+
+                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
+                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                    let row = checkbox.closest("tr");
+                    let productData = {
+                        productName: row.children[1].textContent.trim(),
+                        productImage: row.children[2].querySelector("img").src,
+                        barcode: row.children[3].textContent.trim(),
+                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
+                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
+                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
+                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
+                    };
+                    selectedProducts.push(productData);
+                });
+
+                if (selectedProducts.length === 0) {
+                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
+                    return;
+                }
+
+                console.log("🛒 Sending data:", JSON.stringify({
+                    products: selectedProducts
+                }));
+
+                // ส่งข้อมูลไปยัง PHP
+                fetch("/sci-shop-admin/product/upload_product/fresh_food/add_fresh_food.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            products: selectedProducts
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data);
+                        if (data.success) {
+                            alert("เพิ่มสินค้าสำเร็จ!");
+
+                            // ลบแถวที่ถูกเลือกออกจากตาราง
+                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                                let row = checkbox.closest("tr");
+                                row.remove();
+                            });
+
+                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
+                            selectedProducts.forEach(product => {
+                                const category = "fresh_food"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
+                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
+
+                                // บันทึกข้อมูลที่อัปเดตลง localStorage
+                                localStorage.setItem(category, JSON.stringify(savedData));
+                            });
+                        } else {
+                            alert("เกิดข้อผิดพลาด: " + data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        });
+
 
         // แสดง Tab ที่ถูกเลือก
         document.addEventListener("DOMContentLoaded", function() {
@@ -2254,9 +2500,11 @@ $users = fetchUsers($conn);
         const selectedCountText = document.getElementById('selected-count');
 
         // ฟังก์ชั่นในการอัพเดทจำนวนที่เลือก
-        function updateSelectedCount() {
-            const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
-            selectedCountText.textContent = ` เลือกแล้ว +${selectedCount}`;
+        function updateSelectedCount(category, count) {
+            const countElement = document.getElementById(`${category}-selected-count`);
+            if (countElement) {
+                countElement.textContent = count;
+            }
         }
 
         // เพิ่ม event listener ให้ทุก checkbox
