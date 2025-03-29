@@ -1161,56 +1161,55 @@ $users = fetchUsers($conn);
         }
 
         .product-preview-box {
-    width: 300px;
-    background: #f4f4f4;
-    color: #000000;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+            width: 300px;
+            height: 510px;
+            background: #f4f4f4;
+            color: #000000;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.product-preview-image img {
-    max-width: 200px; /* ขนาดสูงสุดของรูปภาพ */
-    max-height: 200px; /* ขนาดสูงสุดของรูปภาพ */
-    object-fit: cover;
-    border-radius: 5px;
-}
+        .product-preview-image img {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-.product-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.detail-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
+        .detail-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-.detail-group i {
-    font-size: 24px;
-    margin-bottom: 5px;
-}
+        .detail-group i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
 
-.detail-inline {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 5px 10px;
-}
+        .detail-inline {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 5px 10px;
+        }
 
-.detail-inline p {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-
+        .detail-inline p {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
         .form-container {
             flex: 1;
@@ -1368,7 +1367,7 @@ $users = fetchUsers($conn);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="" alt="รูปภาพสินค้า">
+                <img id="previewImage" src="/sci-shop-admin/img.content/product_food.jpg" alt="รูปภาพสินค้า">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
