@@ -64,7 +64,7 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans:ital,wght@0,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-            background-image: url(img.content/sci_desktop.jpg);
+            background-image: url(img.content/Login_SCi_NEXT.jpg);
             background-size: cover;
             display: flex;
             color: #333;

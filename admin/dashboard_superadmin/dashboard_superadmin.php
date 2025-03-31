@@ -1161,7 +1161,7 @@ $users = fetchUsers($conn);
         }
 
         .product-preview-box {
-            width: 300px;
+            width: 280px;
             height: 510px;
             background: #f4f4f4;
             color: #000000;
@@ -1280,13 +1280,13 @@ $users = fetchUsers($conn);
 
             <div id="menu" class="menu">
                 <div class="tab" onclick="showTab('food_bank_check')">
-                    <span class="material-icons">food_bank</span> อาหารแห้ง
+                    <span class="material-icons">food_bank</span> หมวดแห้ง
                 </div>
                 <div class="tab" onclick="showTab('local_drink_check')">
-                    <span class="material-icons">local_drink</span> เครื่องดื่ม
+                    <span class="material-icons">local_drink</span> หมวดดื่ม
                 </div>
                 <div class="tab" onclick="showTab('fastfood_check')">
-                    <span class="material-icons">fastfood</span> อาหารสด
+                    <span class="material-icons">fastfood</span> หมวดสด
                 </div>
             </div>
         </div>
@@ -1296,13 +1296,13 @@ $users = fetchUsers($conn);
         <div class="main-tabs-products">
             <h3>รายการสินค้า</h3>
             <div class="tab" onclick="showTab('food_bank')">
-                <span class="material-icons">food_bank</span> อาหารแห้ง
+                <span class="material-icons">food_bank</span> ของแห้ง
             </div>
             <div class="tab" onclick="showTab('local_drink')">
                 <span class="material-icons">local_drink</span> เครื่องดื่ม
             </div>
             <div class="tab" onclick="showTab('fastfood')">
-                <span class="material-icons">fastfood</span> อาหารสด
+                <span class="material-icons">fastfood</span> ของสด
             </div>
         </div>
 
@@ -1367,7 +1367,7 @@ $users = fetchUsers($conn);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                <img id="previewImage" src="/sci-shop-admin/img.content/product_food.jpg" alt="รูปภาพสินค้า">
+                    <img id="previewImage" src="/sci-shop-admin/img.content/product_food.png" alt="รูปภาพสินค้า">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -1405,15 +1405,15 @@ $users = fetchUsers($conn);
                     <div class="category-buttons">
                         <button type="button" class="category-btn" data-category="dried_food" onclick="selectCategory(event, 'dried_food')">
                             <span class="material-icons">food_bank</span>
-                            อาหารแห้ง
+                            หมวดของแห้ง
                         </button>
                         <button type="button" class="category-btn" data-category="soft_drink" onclick="selectCategory(event, 'soft_drink')">
                             <span class="material-icons">local_drink</span>
-                            เครื่องดื่ม
+                            หมวดเครื่องดื่ม
                         </button>
                         <button type="button" class="category-btn" data-category="fresh_food" onclick="selectCategory(event, 'fresh_food')">
                             <span class="material-icons">fastfood</span>
-                            อาหารสด
+                            หมวดของสด
                         </button>
                     </div>
 
@@ -2641,7 +2641,14 @@ $users = fetchUsers($conn);
         });
 
         document.getElementById("productImage").addEventListener("input", function() {
-            document.getElementById("previewImage").src = this.value.trim();
+            const previewImage = document.getElementById("previewImage");
+            const imageUrl = this.value.trim();
+
+            if (imageUrl) {
+                previewImage.src = imageUrl;
+            } else {
+                previewImage.src = "/sci-shop-admin/img.content/product_food.png";
+            }
         });
     </script>
 </body>
