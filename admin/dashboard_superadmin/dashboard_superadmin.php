@@ -103,13 +103,9 @@ $users = fetchUsers($conn);
         }
 
         .h-text-upload {
-            font-size: 24px;
+            font-size: 40px;
             font-weight: bold;
-            color: #ffffff;
-        }
-
-        .p-text-upload {
-            color: #f39c12;
+            color: #FF5733;
         }
 
         .tab-divider-category {
@@ -515,7 +511,7 @@ $users = fetchUsers($conn);
             border-radius: 4px;
         }
 
-        .form-container {
+        .form-container-product {
             display: flex;
             column-gap: 10px;
             flex-wrap: wrap;
@@ -559,6 +555,34 @@ $users = fetchUsers($conn);
             background: transparent;
             min-width: 120px;
         }
+
+        label svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px;
+            margin-left: 6px;
+            background-color: #5cb85c;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #4cae4c;
+            /* สีเขียวเข้มเมื่อ hover */
+        }
+
 
         /* ทำให้ชื่อและนามสกุลอยู่ในแถวเดียวกัน */
         .name-group {
@@ -816,36 +840,41 @@ $users = fetchUsers($conn);
 
         .summary-grid {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         .summary-card {
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
             flex: 1;
-            margin: 10px;
-            color: #000000;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
             font-weight: bold;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
         }
 
-        .summary-card.daily {
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .daily {
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
         }
 
-        .summary-card.monthly {
+        .monthly {
             background: linear-gradient(135deg, #a18cd1, #fbc2eb);
         }
 
-        .summary-card.yearly {
+        .yearly {
             background: linear-gradient(135deg, #ff758c, #ff7eb3);
         }
 
         .chart-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
         }
 
@@ -863,25 +892,25 @@ $users = fetchUsers($conn);
             box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
         }
 
-        .chart-container.daily-chart {
+        .daily-chart {
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
         }
 
-        .chart-container.monthly-chart {
+        .monthly-chart {
             background: linear-gradient(135deg, #a18cd1, #fbc2eb);
         }
 
-        .chart-container.yearly-chart {
+        .yearly-chart {
             background: linear-gradient(135deg, #ff758c, #ff7eb3);
         }
 
         canvas {
             width: 100% !important;
-            height: 320px !important;
+            height: 300px !important;
         }
 
         h4 {
-            color: #000000;
+            color: #333;
             font-size: 18px;
             margin-bottom: 15px;
             text-transform: uppercase;
@@ -956,7 +985,7 @@ $users = fetchUsers($conn);
         .category-btn {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
+            padding: 13px 15px;
             background-color: #eee;
             border: none;
             border-radius: 10px;
@@ -1114,7 +1143,7 @@ $users = fetchUsers($conn);
         th input[type="checkbox"]:checked {
             background-color: #4CAF50;
             border-color: #4CAF50;
-            background-image: url('/sci-shop-admin/img.content/done_all.png');
+            background-image: url('/sci-shop-admin/img/done_all.png');
             background-size: 20px 20px;
             background-position: center;
             background-repeat: no-repeat;
@@ -1140,7 +1169,7 @@ $users = fetchUsers($conn);
         td input[type="checkbox"].row-checkbox:checked {
             background-color: #4CAF50;
             border-color: #4CAF50;
-            background-image: url('/sci-shop-admin/img.content/check.png');
+            background-image: url('/sci-shop-admin/img/check.png');
             background-size: 20px 20px;
             background-position: center;
             background-repeat: no-repeat;
@@ -1162,7 +1191,7 @@ $users = fetchUsers($conn);
 
         .product-preview-box {
             width: 280px;
-            height: 510px;
+            height: 540px;
             background: #f4f4f4;
             color: #000000;
             font-size: 16px;
@@ -1214,6 +1243,73 @@ $users = fetchUsers($conn);
         .form-container {
             flex: 1;
         }
+
+        .profile-container {
+        max-width: 450px;
+        margin: auto;
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #f6f9fc, #dceefb);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .profile-card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    .profile-image {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .profile-image img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #3498db;
+    }
+    .profile-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .profile-info {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background: #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        align-items: center;
+    }
+    .profile-info label {
+        font-weight: bold;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .profile-info p {
+        margin: 0;
+        color: #555;
+        font-weight: normal;
+    }
+    .change-password-btn {
+        background: #3498db;
+        color: white;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .change-password-btn:hover {
+        background: #2980b9;
+    }
     </style>
 </head>
 
@@ -1235,13 +1331,13 @@ $users = fetchUsers($conn);
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
-            <img src="\sci-shop-admin\img.content\pachara.jpg" alt="Logo" class="logo">
+            <img src="\sci-shop-admin\img\pachara.jpg" alt="Logo" class="logo">
             <span class="site-name">SCI ADMIN</span>
         </div>
 
         <!-- Avatar และ Mode switch -->
         <div class="user-settings">
-            <img src="\sci-shop-admin\img.content\pachara.jpg" alt="Avatar" class="avatar">
+            <img src="\sci-shop-admin\img\pachara.jpg" alt="Avatar" class="avatar">
         </div>
     </div>
 
@@ -1367,7 +1463,7 @@ $users = fetchUsers($conn);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img.content/product_food.png" alt="รูปภาพสินค้า">
+                    <img id="previewImage" src="/sci-shop-admin/img/product_food.png" alt="รูปภาพสินค้า">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -1397,9 +1493,8 @@ $users = fetchUsers($conn);
             </div>
 
 
-            <div class="form-container">
+            <div class="form-container-product">
                 <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
-                <p class="p-text-upload">เพิ่มสินค้าใหม่ได้ที่นี่เลย!</p>
 
                 <form class="form-upload" id="uploadForm" method="POST" action="" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
                     <div class="category-buttons">
@@ -1431,7 +1526,7 @@ $users = fetchUsers($conn);
                     </div>
 
 
-                    <div class="form-container">
+                    <div class="form-container-product">
                         <div class="form-group">
                             <label for="barcode">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
@@ -1506,69 +1601,115 @@ $users = fetchUsers($conn);
     </div>
 
 
-
-
-
     <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
+
     <div id="admin_signup" class="content">
-        <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
-        <p class="p-text-upload">เพิ่มพนักงานใหม่ได้ที่นี่เลย!</p>
 
-        <div id="alert" class="alert" style="display: none;">
-            <span id="alert-message"></span>
-        </div>
+        <div class="upload-container">
+            <div class="product-preview-box">
+                <div class="product-preview-image">
+                    <img id="previewImage" src="/sci-shop-admin/img/employee.png" alt="รูปภาพพนักงาน">
+                </div>
+                <div class="product-details">
+                    <div class="detail-group">
+                        <i class="fas fa-tag"></i>
+                        <div>
+                            <span id="previewName"></span>
+                        </div>
+                    </div>
 
-        <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
+                    <div class="detail-group">
+                        <i class="fas fa-barcode"></i>
+                        <div>
+                            <span id="previewBarcode"></span>
+                        </div>
+                    </div>
 
-            <!-- แถวสำหรับชื่อและนามสกุล -->
+                    <div class="detail-inline">
+                        <p><i class="fas fa-coins"></i> <span id="previewPrice"></span> บาท</p>
+                        <p><i class="fas fa-money-bill-wave"></i> <span id="previewCost"></span> บาท</p>
+                    </div>
+
+                    <div class="detail-inline">
+                        <p><i class="fas fa-box"></i> <span id="previewStock"></span> ชิ้น</p>
+                        <p><i class="fas fa-exclamation-circle"></i> ต่ำกว่า <span id="previewReorderLevel"></span> ชิ้น</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alert" class="alert" style="display: none;">
+                <span id="alert-message"></span>
+            </div>
+
+
             <div class="form-container">
-                <div class="form-group">
-                    <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                            <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
-                        </svg>ชื่อ :</label>
-                    <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                            <path d="M0-240v-63q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H0Zm240 0v-65q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v65H240Zm540 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v63H780Zm-455-80h311q-10-20-55.5-35T480-370q-55 0-100.5 15T325-320ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-80q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560Zm1 240Zm-1-280Z" />
-                        </svg>นามสกุล :</label>
-                    <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
-                </div>
-            </div>
 
-            <hr class="tab-divider-admin">
+                <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
 
-            <div class="form-group">
-                <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                        <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
-                    </svg>ชื่อผู้ใช้งาน :</label>
-                <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
-            </div>
+                <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
 
-            <div class="form-group">
-                <label for="password">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                        <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
-                    </svg>รหัสผ่าน :</label>
-                <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
-            </div>
+                    <!-- แถวสำหรับชื่อและนามสกุล -->
+                    <div class="from-container-stock">
+                        <div class="form-group">
+                            <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                    <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
+                                </svg>ชื่อ :</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                    <path d="M0-240v-63q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H0Zm240 0v-65q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v65H240Zm540 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v63H780Zm-455-80h311q-10-20-55.5-35T480-370q-55 0-100.5 15T325-320ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-80q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560Zm1 240Zm-1-280Z" />
+                                </svg>นามสกุล :</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label for="confirmPassword">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                        <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
-                    </svg>ยืนยันรหัสผ่าน :</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
-            </div>
+                    <hr class="tab-divider-admin">
 
-            <div>
-                <button type="submit" class="btn-upload">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3" stroke="#e3e3e3" stroke-width="20">
-                        <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
-                    </svg>สมัครพนักงาน</button>
+                    <div class="form-group">
+                        <label for="upload-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
+                            </svg>
+                            รูปพนักงาน :
+                        </label>
+                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
+                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
+                            </svg>ชื่อผู้ใช้งาน :</label>
+                        <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
+                            </svg>รหัสผ่าน :</label>
+                        <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
+                            </svg>ยืนยันรหัสผ่าน :</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn-upload">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3" stroke="#e3e3e3" stroke-width="20">
+                                <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
+                            </svg>สมัครพนักงาน</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 
     <!-- ส่วนของการตรวจสอบเพิ่มสินค้า -->
@@ -1923,6 +2064,36 @@ $users = fetchUsers($conn);
             </tbody>
         </table>
     </div>
+
+    
+    <div id="account" class="content">
+    <div class="profile-container">
+        <h2>โปรไฟล์แอดมิน</h2>
+        <div class="profile-card">
+            <div class="profile-image">
+                <img src="\sci-shop-admin\img\pachara.jpg" alt="Admin Profile">
+            </div>
+            <div class="profile-details">
+                <div class="profile-info">
+                    <label><span class="material-icons">person</span> ชื่อ - นามสกุล:</label>
+                    <p>สมชาย ใจดี</p>
+                </div>
+                <div class="profile-info">
+                    <label><span class="material-icons">account_circle</span> Username:</label>
+                    <p>admin123</p>
+                </div>
+                <div class="profile-info">
+                    <label><span class="material-icons">verified_user</span> Role:</label>
+                    <p>Super Admin</p>
+                </div>
+                <div class="profile-info">
+                    <label><span class="material-icons">lock</span> Password:</label>
+                    <button class="change-password-btn">เปลี่ยนรหัสผ่าน</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
         let selectedCategory = '';
@@ -2647,7 +2818,7 @@ $users = fetchUsers($conn);
             if (imageUrl) {
                 previewImage.src = imageUrl;
             } else {
-                previewImage.src = "/sci-shop-admin/img.content/product_food.png";
+                previewImage.src = "/sci-shop-admin/img/product_food.png";
             }
         });
     </script>

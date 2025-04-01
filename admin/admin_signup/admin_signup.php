@@ -2,7 +2,7 @@
 session_start();
 require_once '../../db.php'; 
 
-header('Content-Type: application/json; charset=UTF-8'); // กำหนด Content-Type ให้ส่งเป็น JSON
+header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ตรวจสอบว่ามีค่าที่ต้องการหรือไม่
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // รับค่าจาก form
+
     $user = $_POST['username'];
     $pass = $_POST['password'];
     $confirmPass = $_POST['confirmPassword'];
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // ตรวจสอบชื่อผู้ใช้ในฐานข้อมูล
+
     $check_sql = "SELECT * FROM users WHERE USERNAME = ?";
     if ($check_stmt = $conn->prepare($check_sql)) {
         $check_stmt->bind_param("s", $user);
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows > 0) {
             echo json_encode(["status" => "error", "message" => "ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ"], JSON_UNESCAPED_UNICODE);
-            $check_stmt->close(); // ปิดการเชื่อมต่อ check_stmt
+            $check_stmt->close();
             exit;
         }
     } else {
@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // เข้ารหัสรหัสผ่าน
+
     $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
 
-    // แทรกข้อมูลผู้ใช้ใหม่
+
     $sql = "INSERT INTO users (USERNAME, PASSWORD, FIRST_NAME, LAST_NAME) VALUES (?, ?, ?, ?)";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("ssss", $user, $hashed_pass, $firstName, $lastName);
@@ -54,12 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo json_encode(["status" => "error", "message" => "เกิดข้อผิดพลาดในการสมัครสมาชิก"], JSON_UNESCAPED_UNICODE);
         }
-        $stmt->close(); // ปิดการเชื่อมต่อ stmt
+        $stmt->close();
     } else {
         echo json_encode(["status" => "error", "message" => "ไม่สามารถเชื่อมต่อฐานข้อมูลเพื่อสมัครสมาชิกได้"], JSON_UNESCAPED_UNICODE);
     }
 
-    // ปิดการเชื่อมต่อฐานข้อมูล
     $conn->close();
 }
 exit;

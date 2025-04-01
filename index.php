@@ -1,26 +1,21 @@
 <?php
 session_start();
 
-// เชื่อมต่อฐานข้อมูล MySQL
 require 'db.php';
 
-// ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
     die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
 }
 
-// ตรวจสอบว่าเป็นการร้องขอ POST หรือไม่
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-    // ตรวจสอบว่ามีการกรอกข้อมูลหรือไม่
     if (empty($username) || empty($password)) {
         $_SESSION['error'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
         header("Location: login.php");
         exit();
     } else {
-        // ใช้ Prepared Statement เพื่อป้องกัน SQL Injection
         $sql = "SELECT * FROM admins WHERE username = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
@@ -29,21 +24,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $stmt->close();
 
-        // ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
         if ($row && password_verify($password, $row['PASSWORD'])) {
+            session_regenerate_id(true);
             $_SESSION['admin_id'] = $row['ID'];
             $_SESSION['user'] = $row['USERNAME'];
             $_SESSION['role'] = $row['ROLE'];
-
+        
             ob_start();
-
-            // เช็คบทบาทของผู้ใช้
+        
             if ($row['ROLE'] == 'superadmin') {
-                header("Location: admin/dashboard_superadmin/dashboard_superadmin.php");
+                header("Location: video_logo_sci_next.php?t=" . time());
+                exit();
             } else {
                 header("Location: admin/dashboard_admin/dashboard_admin.php");
+                exit();
             }
-            exit();
         } else {
             $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
             header("Location: index.php");
@@ -60,11 +55,11 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ ADMIN</title>
+    <title>LOGIN ADMIN</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans:ital,wght@0,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-            background-image: url(img.content/Login_SCi_NEXT.jpg);
+            background-image: url(img/Login_SCi_NEXT.jpg);
             background-size: cover;
             display: flex;
             color: #333;
@@ -85,7 +80,7 @@ $conn->close();
             padding: 30px;
             max-width: 400px;
             width: 100%;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
         }
 
         h2 {
