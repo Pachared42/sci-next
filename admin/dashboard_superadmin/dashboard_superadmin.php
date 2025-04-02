@@ -72,7 +72,7 @@ $users = fetchUsers($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCI ADMIN</title>
+    <title>SCi_ADMIN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap');
@@ -411,19 +411,18 @@ $users = fetchUsers($conn);
             height: auto;
         }
 
-        /* ตั้งค่าสไตล์ของตาราง */
+        /* สไตล์ของตาราง */
         table {
             width: 100%;
             border-collapse: collapse;
-            border-radius: 20px;
+            border-radius: 10px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.8);
             text-align: center;
             margin: 15px 0px 15px 0px;
         }
 
         th {
-            background: linear-gradient(135deg, #111, #222);
+            background: #222222;
             color: white;
             padding: 12px;
             font-size: 16px;
@@ -436,6 +435,7 @@ $users = fetchUsers($conn);
         td {
             padding: 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.8);
             color: black;
             padding: 10px;
             max-width: 200px;
@@ -456,6 +456,47 @@ $users = fetchUsers($conn);
             border-radius: 10px;
         }
 
+        .center-checkbox {
+            text-align: center;
+            padding: 12px 0 12px 0;
+        }
+
+        .center-checkbox input {
+            transform: scale(1);
+            vertical-align: middle;
+        }
+
+        td input[type="checkbox"].checkbox-select-item {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            background-color: #fff;
+            position: relative;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        td input[type="checkbox"].checkbox-select-item:checked {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            background-image: url('/sci-shop-admin/img/check.png');
+            background-size: 20px 20px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        td input[type="checkbox"].checkbox-select-item:hover {
+            border-color: #45a049;
+        }
 
         .btn-edit {
             font-size: 18px;
@@ -736,6 +777,15 @@ $users = fetchUsers($conn);
         .btn-deletee svg {
             fill: #DC143C;
         }
+
+        .btn-grid svg {
+            fill: #1E90FF;
+        }
+
+        .btn-table svg {
+            fill: #4B0082;
+        }
+
 
         .btn:hover svg {
             opacity: 0.7;
@@ -1164,6 +1214,8 @@ $users = fetchUsers($conn);
             padding: 0;
             margin: 0;
             outline: none;
+            vertical-align: middle;
+            text-align: center;
         }
 
         td input[type="checkbox"].row-checkbox:checked {
@@ -1245,71 +1297,171 @@ $users = fetchUsers($conn);
         }
 
         .profile-container {
-        max-width: 450px;
-        margin: auto;
-        text-align: center;
-        padding: 20px;
-        background: linear-gradient(135deg, #f6f9fc, #dceefb);
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .profile-card {
-        background: #fff;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-    .profile-image {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    .profile-image img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid #3498db;
-    }
-    .profile-details {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .profile-info {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        background: #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-        align-items: center;
-    }
-    .profile-info label {
-        font-weight: bold;
-        color: #333;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .profile-info p {
-        margin: 0;
-        color: #555;
-        font-weight: normal;
-    }
-    .change-password-btn {
-        background: #3498db;
-        color: white;
-        padding: 12px 18px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: background 0.3s, transform 0.2s;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    .change-password-btn:hover {
-        background: #2980b9;
-    }
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2, #a855f7, #d946ef);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .cover {
+            padding: 50px;
+        }
+
+        .profile-card {
+            background: #111111;
+            padding: 90px 15px 15px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            align-items: center;
+        }
+
+        .profile-image {
+            position: absolute;
+            top: -85px;
+            left: 40px;
+        }
+
+        .profile-image img {
+            width: 160px;
+            height: 160px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 8px solid #111111;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #111111;
+            color: white;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #222222;
+        }
+
+        .upload-btn i {
+            font-size: 22px;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .profile-details {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .profile-title::after {
+            content: "";
+            width: 50px;
+            height: 4px;
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .profile-row {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 45%;
+        }
+
+        .profile-info label {
+            display: flex;
+            font-weight: bold;
+            color: #333333;
+            gap: 8px;
+        }
+
+        .profile-info label .material-icons {
+            font-size: 24px;
+            color: #000000;
+        }
+
+        .profile-info input {
+            padding: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 14px;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .profile-info input:focus {
+            border-color: #111111;
+            outline: none;
+        }
+
+        .confirm-btn {
+            margin-top: 5px;
+            width: auto;
+            padding: 10px 15px;
+            background: #6a0dad;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background: #5a0ba5;
+        }
+
+        .confirm-btn .material-icons {
+            font-size: 24px;
+        }
     </style>
 </head>
 
@@ -1332,7 +1484,7 @@ $users = fetchUsers($conn);
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
             <img src="\sci-shop-admin\img\pachara.jpg" alt="Logo" class="logo">
-            <span class="site-name">SCI ADMIN</span>
+            <span class="site-name">SCi_ADMIN</span>
         </div>
 
         <!-- Avatar และ Mode switch -->
@@ -1368,7 +1520,7 @@ $users = fetchUsers($conn);
                 <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
             </div>
             <button type="button" is="toggle-button" class="collapsible-toggle text--strong" aria-controls="menu" aria-expanded="false">
-                <span class="material-icons">shopping_cart_checkout</span> ตรวจสอบสินค้า
+                <span class="material-icons">checklist</span> ตรวจสอบสินค้า
                 <svg focusable="false" width="12" height="8" class="icon icon--chevron icon--inline" viewBox="0 0 12 8">
                     <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
                 </svg>
@@ -1518,7 +1670,7 @@ $users = fetchUsers($conn);
 
                     <div class="form-group">
                         <label for="productName">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z" />
                             </svg> ชื่อสินค้า :
                         </label>
@@ -1529,7 +1681,7 @@ $users = fetchUsers($conn);
                     <div class="form-container-product">
                         <div class="form-group">
                             <label for="barcode">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                                 </svg>
                                 บาร์โค้ด :
@@ -1539,7 +1691,7 @@ $users = fetchUsers($conn);
 
                         <div class="form-group">
                             <label for="productPrice">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z" />
                                 </svg> ราคาสินค้า :
                             </label>
@@ -1548,7 +1700,7 @@ $users = fetchUsers($conn);
 
                         <div class="form-group">
                             <label for="productCost">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
                                 </svg> ต้นทุน :
                             </label>
@@ -1560,7 +1712,7 @@ $users = fetchUsers($conn);
                     <div class="from-container-stock">
                         <div class="form-group">
                             <label for="productStock">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z" />
                                 </svg> สต็อก :
                             </label>
@@ -1569,7 +1721,7 @@ $users = fetchUsers($conn);
 
                         <div class="form-group">
                             <label for="productReorderLevel">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
                                 </svg> ระดับการสั่งซื้อใหม่ :
                             </label>
@@ -1580,7 +1732,7 @@ $users = fetchUsers($conn);
 
                     <div class="form-group">
                         <label for="productImage">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
                             </svg> รูปภาพสินค้า :
                         </label>
@@ -1651,15 +1803,15 @@ $users = fetchUsers($conn);
                     <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
                         <div class="form-group">
-                            <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
                                 </svg>ชื่อ :</label>
                             <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
                         </div>
                         <div class="form-group">
                             <label for="lastName">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
-                                    <path d="M0-240v-63q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H0Zm240 0v-65q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v65H240Zm540 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v63H780Zm-455-80h311q-10-20-55.5-35T480-370q-55 0-100.5 15T325-320ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-80q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560Zm1 240Zm-1-280Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
+                                    <path d="M481-781q106 0 200 45.5T838-604q7 9 4.5 16t-8.5 12q-6 5-14 4.5t-14-8.5q-55-78-141.5-119.5T481-741q-97 0-182 41.5T158-580q-6 9-14 10t-14-4q-7-5-8.5-12.5T126-602q62-85 155.5-132T481-781Zm0 94q135 0 232 90t97 223q0 50-35.5 83.5T688-257q-51 0-87.5-33.5T564-374q0-33-24.5-55.5T481-452q-34 0-58.5 22.5T398-374q0 97 57.5 162T604-121q9 3 12 10t1 15q-2 7-8 12t-15 3q-104-26-170-103.5T358-374q0-50 36-84t87-34q51 0 87 34t36 84q0 33 25 55.5t59 22.5q34 0 58-22.5t24-55.5q0-116-85-195t-203-79q-118 0-203 79t-85 194q0 24 4.5 60t21.5 84q3 9-.5 16T208-205q-8 3-15.5-.5T182-217q-15-39-21.5-77.5T154-374q0-133 96.5-223T481-687Zm0-192q64 0 125 15.5T724-819q9 5 10.5 12t-1.5 14q-3 7-10 11t-17-1q-53-27-109.5-41.5T481-839q-58 0-114 13.5T260-783q-8 5-16 2.5T232-791q-4-8-2-14.5t10-11.5q56-30 117-46t124-16Zm0 289q93 0 160 62.5T708-374q0 9-5.5 14.5T688-354q-8 0-14-5.5t-6-14.5q0-75-55.5-125.5T481-550q-76 0-130.5 50.5T296-374q0 81 28 137.5T406-123q6 6 6 14t-6 14q-6 6-14 6t-14-6q-59-62-90.5-126.5T256-374q0-91 66-153.5T481-590Zm-1 196q9 0 14.5 6t5.5 14q0 75 54 123t126 48q6 0 17-1t23-3q9-2 15.5 2.5T744-191q2 8-3 14t-13 8q-18 5-31.5 5.5t-16.5.5q-89 0-154.5-60T460-374q0-8 5.5-14t14.5-6Z" />
                                 </svg>นามสกุล :</label>
                             <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
                         </div>
@@ -1669,7 +1821,7 @@ $users = fetchUsers($conn);
 
                     <div class="form-group">
                         <label for="upload-img">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
                             </svg>
                             รูปพนักงาน :
@@ -1679,7 +1831,7 @@ $users = fetchUsers($conn);
                     </div>
 
                     <div class="form-group">
-                        <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                        <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
                             </svg>ชื่อผู้ใช้งาน :</label>
                         <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
@@ -1687,7 +1839,7 @@ $users = fetchUsers($conn);
 
                     <div class="form-group">
                         <label for="password">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
                             </svg>รหัสผ่าน :</label>
                         <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
@@ -1695,7 +1847,7 @@ $users = fetchUsers($conn);
 
                     <div class="form-group">
                         <label for="confirmPassword">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3498db">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                 <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
                             </svg>ยืนยันรหัสผ่าน :</label>
                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
@@ -1745,7 +1897,7 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'dried_food_table')"></th>
+                    <th class="center-checkbox"><input type="checkbox" onclick="toggleSelectAllForTable(this, 'dried_food_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
@@ -1790,7 +1942,7 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'soft_drink_table')"></th>
+                    <th class="center-checkbox"><input type="checkbox" onclick="toggleSelectAllForTable(this, 'soft_drink_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
@@ -1834,7 +1986,7 @@ $users = fetchUsers($conn);
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" onclick="toggleSelectAllForTable(this, 'fresh_food_table')"></th>
+                    <th class="center-checkbox"><input type="checkbox" onclick="toggleSelectAllForTable(this, 'fresh_food_table')"></th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
@@ -1850,54 +2002,67 @@ $users = fetchUsers($conn);
 
 
     <div id="food_bank" class="content">
-        <h3 class="h-text">⌨️ คีย์บอร์ด</h3>
-        <table border="1" cellspacing="0" cellpadding="10">
+        <div class="header-container">
+            <h3 class="h-text-upload">สินค้าประเภทแห้ง
+            </h3>
+
+            <div class="btn-container">
+
+                <button class="btn btn-table" data-tooltip="แสดง Table">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z"/></svg>
+                </button>
+
+                <button class="btn btn-grid" data-tooltip="แสดง Grid">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <table>
             <thead>
                 <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Size</th>
-                    <th>Actions</th>
+                    <th class="center-checkbox">
+                        <input type="checkbox" id="select-all">
+                    </th>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคา</th>
+                    <th>ต้นทุน</th>
+                    <th>สต็อก</th>
+                    <th>เกณฑ์สั่งซื้อ</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($keyboards as $item): ?>
+                <?php foreach ($dried_food as $item): ?>
                     <tr>
-                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
-                        <td><?php echo $item['NAME']; ?></td>
-                        <td>฿<?php echo $item['PRICE']; ?></td>
-                        <td><?php echo $item['KEYBOARD_SIZE']; ?></td>
                         <td>
-                            <form action="#" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
-                            </form>
-
-                            <!-- Popup Form -->
-                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
-                                <div class="popup-content">
-                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <h3>แก้ไขข้อมูลสินค้า</h3>
-                                    <form action="../product/edit_product/edit_product.php" method="POST">
-                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
-                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
-                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
-                                        <input type="hidden" name="productCategory" value="keyboards"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
-                                        <input type="text" name="keyboardSize" value="<?php echo $item['KEYBOARD_SIZE']; ?>" required>
-                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <input type="hidden" name="category" value="keyboards"> <!-- หมวดหมู่สินค้านี้ -->
-                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'keyboards')">ลบสินค้า</button>
-                            </form>
+                            <input type="checkbox" class="checkbox-select-item" value="<?php echo $item['barcode']; ?>">
                         </td>
+                        <td><?php echo $item['product_name']; ?></td>
+                        <td>
+                            <img src="<?php echo $item['image_url']; ?>"
+                                alt="<?php echo $item['product_name']; ?>"
+                                width="50" height="auto">
+                        </td>
+                        <td><?php echo $item['barcode']; ?></td>
+                        <td><?php echo number_format($item['price'],); ?> บาท</td>
+                        <td><?php echo number_format($item['cost'],); ?> บาท</td>
+                        <td><?php echo $item['stock']; ?> ชิ้น</td>
+                        <td><?php echo $item['reorder_level']; ?> ชิ้น</td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -2065,37 +2230,93 @@ $users = fetchUsers($conn);
         </table>
     </div>
 
-    
+
     <div id="account" class="content">
-    <div class="profile-container">
-        <h2>โปรไฟล์แอดมิน</h2>
-        <div class="profile-card">
-            <div class="profile-image">
-                <img src="\sci-shop-admin\img\pachara.jpg" alt="Admin Profile">
-            </div>
-            <div class="profile-details">
-                <div class="profile-info">
-                    <label><span class="material-icons">person</span> ชื่อ - นามสกุล:</label>
-                    <p>สมชาย ใจดี</p>
+        <div class="profile-container">
+            <div class="cover"></div>
+            <div class="profile-card">
+                <div class="profile-image">
+                    <img id="profile-pic" src="\sci-shop-admin\img\pachara.jpg" alt="Admin Profile">
+                    <label for="file-input" class="upload-btn">
+                        <i class="material-icons">photo_camera</i>
+                    </label>
+                    <input id="file-input" type="file" accept="image/*" onchange="previewImage(event)">
                 </div>
-                <div class="profile-info">
-                    <label><span class="material-icons">account_circle</span> Username:</label>
-                    <p>admin123</p>
-                </div>
-                <div class="profile-info">
-                    <label><span class="material-icons">verified_user</span> Role:</label>
-                    <p>Super Admin</p>
-                </div>
-                <div class="profile-info">
-                    <label><span class="material-icons">lock</span> Password:</label>
-                    <button class="change-password-btn">เปลี่ยนรหัสผ่าน</button>
+
+                <div class="profile-details">
+                    <form id="profile-form">
+                        <h2 class="profile-title">ข้อมูลโปรไฟล์</h2>
+                        <div class="profile-row">
+                            <div class="profile-info">
+                                <label><span class="material-icons">badge</span> ชื่อ</label>
+                                <input type="text" id="first-name" value="Pachara">
+                            </div>
+                            <div class="profile-info">
+                                <label><span class="material-icons">fingerprint</span> นามสกุล</label>
+                                <input type="text" id="last-name" value="Kalapakdee">
+                            </div>
+                        </div>
+
+                        <div class="profile-row">
+                            <div class="profile-info">
+                                <label><span class="material-icons">person_outline</span> ชื่อผู้ใช้</label>
+                                <input type="text" id="username" value="pachara">
+                            </div>
+                            <div class="profile-info">
+                                <label><span class="material-icons">password</span> รหัสผ่าน</label>
+                                <input type="password" id="password" placeholder="********">
+                            </div>
+                        </div>
+
+                        <div class="profile-row">
+                            <button type="submit" class="confirm-btn">
+                                <span class="material-icons">done_outline</span> ยืนยันการแก้ไข
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <script>
+        function previewImage(event) {
+            const input = event.target;
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const imgElement = document.getElementById('profile-pic');
+                imgElement.src = reader.result;
+            };
+
+            if (input.files.length > 0) {
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+
+        document.getElementById("profile-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // ป้องกันการรีโหลดหน้า
+
+            const firstName = document.getElementById("first-name").value;
+            const lastName = document.getElementById("last-name").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // ส่งข้อมูลไปบันทึก (เช่น ส่งไป API หรืออัปเดตฐานข้อมูล)
+            alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
+        });
+
+
+
+
+
+
+
+
+
+
         let selectedCategory = '';
 
         function selectCategory(event, category) {
