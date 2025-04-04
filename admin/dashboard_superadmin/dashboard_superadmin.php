@@ -14,7 +14,7 @@ $username = $_SESSION['user'];
 function checkConnection($conn)
 {
     if (!$conn) {
-        die("ไม่สามารถเชื่อมต่อฐานข้อมูล Oracle: " . oci_error());
+        die("ไม่สามารถเชื่อมต่อฐานข้อมูลได้" . oci_error());
     }
 }
 
@@ -28,7 +28,7 @@ function fetchProducts($conn, $table)
     $result = $conn->query($sql);
 
     if (!$result) {
-        echo "Error executing query on table: " . $table;
+        echo "เกิดข้อผิดพลาดในการดำเนินการคำสั่ง SQL บนตาราง: " . $table;
         return [];
     }
 
@@ -1462,6 +1462,133 @@ $users = fetchUsers($conn);
         .confirm-btn .material-icons {
             font-size: 24px;
         }
+
+        .action-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .action-dropdown button {
+            background-color: #eeeeee;
+            border: none;
+            font-size: 20px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .action-dropdown button:hover {
+            background-color: #dddddd;
+        }
+
+        .dropdown-content {
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            right: -37px;
+            top: calc(-60% + 5px);
+            background-color: white;
+            min-width: 100px;
+            z-index: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            transform: translateY(-5px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropdown-content a {
+            color: #000000;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .action-dropdown.show .dropdown-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .barcode-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .barcode-cell svg {
+            width: 45px;
+            height: 45px;
+            fill: #000000;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 1000;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 100%;
+            background: #333333;
+            z-index: 1001;
+            overflow-y: auto;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            pointer-events: none;
+        }
+
+        /* แสดง panel */
+        .side-panel.show {
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .side-panel-content {
+            padding: 20px;
+            position: relative;
+        }
+
+        .side-panel-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+
+        .side-panel-close-btn:hover {
+            transform: scale(1.2);
+        }
     </style>
 </head>
 
@@ -2009,7 +2136,9 @@ $users = fetchUsers($conn);
             <div class="btn-container">
 
                 <button class="btn btn-table" data-tooltip="แสดง Table">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                    </svg>
                 </button>
 
                 <button class="btn btn-grid" data-tooltip="แสดง Grid">
@@ -2017,26 +2146,11 @@ $users = fetchUsers($conn);
                         <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
                     </svg>
                 </button>
-
-                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
-                    </svg>
-                </button>
-
-                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                    </svg>
-                </button>
             </div>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th class="center-checkbox">
-                        <input type="checkbox" id="select-all">
-                    </th>
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
@@ -2044,29 +2158,80 @@ $users = fetchUsers($conn);
                     <th>ต้นทุน</th>
                     <th>สต็อก</th>
                     <th>เกณฑ์สั่งซื้อ</th>
+                    <th>จัดการสินค้า</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($dried_food as $item): ?>
                     <tr>
-                        <td>
-                            <input type="checkbox" class="checkbox-select-item" value="<?php echo $item['barcode']; ?>">
-                        </td>
                         <td><?php echo $item['product_name']; ?></td>
                         <td>
                             <img src="<?php echo $item['image_url']; ?>"
                                 alt="<?php echo $item['product_name']; ?>"
-                                width="50" height="auto">
+                                width="60" height="auto">
                         </td>
-                        <td><?php echo $item['barcode']; ?></td>
-                        <td><?php echo number_format($item['price'],); ?> บาท</td>
-                        <td><?php echo number_format($item['cost'],); ?> บาท</td>
+                        <td style="text-align: center;">
+                            <div class="barcode-cell">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                                <span><?php echo $item['barcode']; ?></span>
+                            </div>
+                        </td>
+
+                        <td><?php echo number_format($item['price']); ?> บาท</td>
+                        <td><?php echo number_format($item['cost']); ?> บาท</td>
                         <td><?php echo $item['stock']; ?> ชิ้น</td>
                         <td><?php echo $item['reorder_level']; ?> ชิ้น</td>
+                        <td>
+                            <div class="action-dropdown">
+                                <button onclick="toggleDropdown(this)">⋮</button>
+                                <div class="dropdown-content">
+                                    <a onclick="openEditPanel(<?php echo $item['id']; ?>); return false;">แก้ไข</a>
+                                    <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')">ลบ</a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+
+        <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
+
+        <div id="editPanel" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
+                <div id="side-panel-form-content">
+                    <!-- ฟอร์มการแก้ไขจะแสดงที่นี่ -->
+                    <form id="editProductForm" method="POST" action="../../product/edit_product/edit_dried_food/edit_dried_food.php?id=<?php echo $item['id']; ?>">
+                        <label for="product_name">ชื่อสินค้า</label>
+                        <input type="text" id="product_name" name="product_name" value="<?php echo htmlspecialchars($item['product_name']); ?>" required>
+
+                        <label for="barcode">บาร์โค้ด</label>
+                        <input type="text" id="barcode" name="barcode" value="<?php echo htmlspecialchars($item['barcode']); ?>" required>
+
+                        <label for="price">ราคา</label>
+                        <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($item['price']); ?>" required>
+
+                        <label for="cost">ต้นทุน</label>
+                        <input type="number" id="cost" name="cost" value="<?php echo htmlspecialchars($item['cost']); ?>" required>
+
+                        <label for="stock">สต็อก</label>
+                        <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($item['stock']); ?>" required>
+
+                        <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
+                        <input type="number" id="reorder_level" name="reorder_level" value="<?php echo htmlspecialchars($item['reorder_level']); ?>" required>
+
+                        <label for="image_url">URL รูปภาพ</label>
+                        <input type="text" id="image_url" name="image_url" value="<?php echo htmlspecialchars($item['image_url']); ?>" required>
+
+                        <button type="submit">อัปเดตข้อมูล</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div id="local_drink" class="content">
@@ -2309,6 +2474,52 @@ $users = fetchUsers($conn);
         });
 
 
+        function toggleDropdown(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        // ปิด dropdown เมื่อคลิกนอก
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown button')) {
+                document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        function openEditPanel(id) {
+            const panel = document.getElementById('editPanel');
+            const content = document.getElementById('side-panel-form-content');
+
+            panel.classList.add('show'); // แสดง side-panel
+        }
+
+        function closeEditPanel() {
+            document.getElementById('editPanel').classList.remove('show');
+        }
+
+        function openEditPanel(id) {
+            document.getElementById('editPanel').classList.add('show');
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeEditPanel() {
+            document.getElementById('editPanel').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+
+
+
+
 
 
 
@@ -2373,7 +2584,7 @@ $users = fetchUsers($conn);
             row.innerHTML = `
         <td><input type="checkbox" class="row-checkbox" data-product="${productName}" onchange="updateCheckboxStatus(event, '${category}')"></td>
         <td>${productName}</td>
-        <td><img src="${productImage}" alt="${productName}" style="width: 50px; height: auto;"></td>
+        <td><img src="${productImage}" alt="${productName}" style="width: 60px; height: auto;"></td>
         <td>${barcode}</td>
         <td>${productPrice} บาท</td>
         <td>${productCost} บาท</td>
@@ -2432,7 +2643,7 @@ $users = fetchUsers($conn);
                         row.innerHTML = `
                     <td><input type="checkbox" class="row-checkbox" data-product="${data.productName}" ${data.isChecked ? 'checked' : ''} onchange="updateCheckboxStatus(event, '${category}')"></td>
                     <td>${data.productName}</td>
-                    <td><img src="${data.productImage}" alt="${data.productName}" style="width: 50px; height: auto;"></td>
+                    <td><img src="${data.productImage}" alt="${data.productName}" style="width: 60px; height: auto;"></td>
                     <td>${data.barcode}</td>
                     <td>${data.productPrice} บาท</td>
                     <td>${data.productCost} บาท</td>
@@ -2861,16 +3072,6 @@ $users = fetchUsers($conn);
             inputs.forEach(function(input) {
                 input.classList.remove('error-input');
             });
-        }
-
-        // Function to open the edit popup
-        function openEditPopup(id) {
-            document.getElementById('editPopup-' + id).style.display = 'flex';
-        }
-
-        // Function to close the edit popup
-        function closeEditPopup(id) {
-            document.getElementById('editPopup-' + id).style.display = 'none';
         }
 
         // ค้นหาเมนูทั้งหมดที่มีคลาส .tab
