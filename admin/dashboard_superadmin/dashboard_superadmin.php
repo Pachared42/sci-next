@@ -538,6 +538,9 @@ $users = fetchUsers($conn);
             box-sizing: border-box;
         }
 
+        .form-container {
+            flex: 1;
+        }
 
         .form-upload {
             margin-top: 15px;
@@ -1262,39 +1265,68 @@ $users = fetchUsers($conn);
         }
 
         .product-details {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-top: 10px;
+            max-width: 500px;
+            color: #333;
         }
 
         .detail-group {
             display: flex;
-            flex-direction: column;
             align-items: center;
             margin-bottom: 10px;
+            padding: 10px 14px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px #ddd;
+            transition: background 0.3s;
         }
 
-        .detail-group i {
-            font-size: 24px;
-            margin-bottom: 5px;
+        .detail-group svg {
+            margin-right: 12px;
+            fill: #000000;
+            flex-shrink: 0;
+        }
+
+        .detail-group div {
+            flex: 1;
+            font-size: 16px;
+            color: #222;
         }
 
         .detail-inline {
             display: flex;
             justify-content: space-between;
-            width: 100%;
-            padding: 5px 10px;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .detail-inline p {
+            flex: 1 1 48%;
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            box-shadow: inset 0 0 0 1px #ddd;
+            transition: background 0.3s;
         }
 
-        .form-container {
-            flex: 1;
+        .detail-inline .material-icons {
+            margin-right: 10px;
+            font-size: 24px;
+            color: #000000;
         }
+
+        #previewName,
+        #previewBarcode,
+        #previewPrice,
+        #previewCost,
+        #previewStock,
+        #previewReorderLevel {
+            color: #222;
+        }
+
 
         .profile-container {
             width: 100%;
@@ -1689,7 +1721,7 @@ $users = fetchUsers($conn);
             <span class="material-icons">account_circle</span> โปรไฟล์แอดมิน
         </div>
         <a class="tab logout" href="/sci-shop-admin/logout.php">
-            <span class="material-icons">exit_to_app</span> ออกจากระบบ
+            <span class="material-icons">logout</span> ออกจากระบบ
         </a>
     </div>
 
@@ -1746,33 +1778,49 @@ $users = fetchUsers($conn);
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
-                        <i class="fas fa-tag"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <path d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Z" />
+                        </svg>
                         <div>
                             <span id="previewName"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <i class="fas fa-barcode"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                        </svg>
                         <div>
                             <span id="previewBarcode"></span>
                         </div>
                     </div>
 
                     <div class="detail-inline">
-                        <p><i class="fas fa-coins"></i> <span id="previewPrice"></span> บาท</p>
-                        <p><i class="fas fa-money-bill-wave"></i> <span id="previewCost"></span> บาท</p>
+                        <p>
+                            <span class="material-icons">paid</span>
+                            <span id="previewPrice"></span>
+                        </p>
+                        <p>
+                            <span class="material-icons">savings</span>
+                            <span id="previewCost"></span>
+                        </p>
                     </div>
 
                     <div class="detail-inline">
-                        <p><i class="fas fa-box"></i> <span id="previewStock"></span> ชิ้น</p>
-                        <p><i class="fas fa-exclamation-circle"></i> ต่ำกว่า <span id="previewReorderLevel"></span> ชิ้น</p>
+                        <p>
+                            <span class="material-icons">inventory_2</span>
+                            <span id="previewStock"></span>
+                        </p>
+                        <p>
+                            <span class="material-icons">notification_important</span>
+                            <span id="previewReorderLevel"></span>
+                        </p>
                     </div>
                 </div>
             </div>
 
 
-            <div class="form-container-product">
+            <div class="form-container">
                 <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
 
                 <form class="form-upload" id="uploadForm" method="POST" action="" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
@@ -1891,30 +1939,35 @@ $users = fetchUsers($conn);
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
-                        <i class="fas fa-tag"></i>
+                        <span class="material-icons">sell</span>
                         <div>
                             <span id="previewName"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <i class="fas fa-barcode"></i>
+                        <span class="material-icons">qr_code</span>
                         <div>
                             <span id="previewBarcode"></span>
                         </div>
                     </div>
 
-                    <div class="detail-inline">
-                        <p><i class="fas fa-coins"></i> <span id="previewPrice"></span> บาท</p>
-                        <p><i class="fas fa-money-bill-wave"></i> <span id="previewCost"></span> บาท</p>
+                    <div class="detail-group">
+                        <span class="material-icons">qr_code</span>
+                        <div>
+                            <span id="previewBarcode"></span>
+                        </div>
                     </div>
 
-                    <div class="detail-inline">
-                        <p><i class="fas fa-box"></i> <span id="previewStock"></span> ชิ้น</p>
-                        <p><i class="fas fa-exclamation-circle"></i> ต่ำกว่า <span id="previewReorderLevel"></span> ชิ้น</p>
+                    <div class="detail-group">
+                        <span class="material-icons">qr_code</span>
+                        <div>
+                            <span id="previewBarcode"></span>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <div id="alert" class="alert" style="display: none;">
                 <span id="alert-message"></span>

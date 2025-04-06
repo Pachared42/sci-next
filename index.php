@@ -29,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_id'] = $row['ID'];
             $_SESSION['user'] = $row['USERNAME'];
             $_SESSION['role'] = $row['ROLE'];
-        
+
             ob_start();
-        
+
             if ($row['ROLE'] == 'superadmin') {
                 header("Location: video_logo_sci_next.php?t=" . time());
                 exit();
@@ -52,17 +52,19 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOGIN ADMIN</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans:ital,wght@0,100..900&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            background-image: url(img/Login_SCi_NEXT.jpg);
+            background-image: url(img/Login_SCi_NEXT.webp);
             background-size: cover;
             display: flex;
-            color: #333;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -93,7 +95,6 @@ $conn->close();
             color: red;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 20px;
         }
 
         .input-group {
@@ -101,48 +102,63 @@ $conn->close();
             margin: 20px 0;
         }
 
+        .input-group .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #000000;
+            font-size: 24px;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            padding-left: 45px;
+        }
+
+
         input {
             width: 100%;
             padding: 12px;
             border: 1px solid rgb(30, 30, 30);
-            border-radius: 50px;
+            border-radius: 10px;
             font-size: 20px;
             padding-left: 20px;
             transition: all 0.3s ease-in-out;
         }
 
         input:focus {
-            outline: 2px solid rgb(30, 30, 30);
+            border: 1px solid #ffffff;
         }
 
         label {
             position: absolute;
-            left: 20px;
+            left: 45px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 18px;
-            color: #888;
+            color: #888888;
             transition: 0.3s;
             pointer-events: none;
             transition: all 0.3s ease-in-out;
         }
 
-        input:focus + label,
-        input:not(:placeholder-shown) + label {
-            top: -1px;
-            left: 20px;
+        input:focus+label,
+        input:not(:placeholder-shown)+label {
+            top: 0px;
+            left: 45px;
             font-size: 14px;
-            color: black;
-            background: white;
+            color: #000000;
+            background: #ffffff;
             padding: 0 5px;
         }
 
         button {
-            background: black;
+            background: #000000;
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 20px;
             width: 100%;
@@ -152,10 +168,17 @@ $conn->close();
         }
 
         button:hover {
-            background: #333;
+            background: #333333;
+        }
+
+        button span.material-icons {
+            vertical-align: middle;
+            margin-right: 5px;
+            font-size: 24px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>ยินดีต้อนรับสู่ระบบ ADMIN</h2>
@@ -167,17 +190,23 @@ $conn->close();
 
         <form method="POST">
             <div class="input-group">
+                <span class="material-icons input-icon">person</span>
                 <input type="text" name="username" id="username" placeholder=" " required>
                 <label for="username">ชื่อผู้ใช้</label>
             </div>
 
             <div class="input-group">
+                <span class="material-icons input-icon">lock</span>
                 <input type="password" name="password" id="password" placeholder=" " required>
                 <label for="password">รหัสผ่าน</label>
             </div>
 
-            <button type="submit">เข้าสู่ระบบ</button>
+            <button type="submit">
+                <span class="material-icons">login</span>
+                เข้าสู่ระบบ
+            </button>
         </form>
     </div>
 </body>
+
 </html>
