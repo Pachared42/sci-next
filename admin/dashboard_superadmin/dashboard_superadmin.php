@@ -64,6 +64,28 @@ function fetchUsers($conn)
 
 // ดึงข้อมูลผู้ใช้ทั้งหมด
 $users = fetchUsers($conn);
+
+// จำนวนสินค้าต่อหน้า
+$limit = 4;
+
+// หน้าปัจจุบัน (ถ้าไม่มีตั้งค่าให้เริ่มที่หน้า 1)
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// หาตำแหน่งเริ่มดึงข้อมูล
+$offset = ($page - 1) * $limit;
+
+// ดึงข้อมูลจากฐานข้อมูลแบบแบ่งหน้า
+$result = $conn->query("SELECT * FROM dried_food LIMIT $limit OFFSET $offset");
+$dried_food = $result->fetch_all(MYSQLI_ASSOC);
+
+// นับจำนวนสินค้าทั้งหมด
+$total_result = $conn->query("SELECT COUNT(*) as total FROM dried_food");
+$total_row = $total_result->fetch_assoc();
+$total_items = $total_row['total'];
+
+// หาจำนวนหน้าทั้งหมด
+$total_pages = ceil($total_items / $limit);
 ?>
 
 <!DOCTYPE html>
@@ -103,9 +125,22 @@ $users = fetchUsers($conn);
         }
 
         .h-text-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 40px;
             font-weight: bold;
-            color: #FF5733;
+            color: #ff006e;
+        }
+
+        .h2-text-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff006e;
+            margin-bottom: 15px;
         }
 
         .tab-divider-category {
@@ -211,24 +246,22 @@ $users = fetchUsers($conn);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50px;
         }
 
         .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .sidebar .content {
             display: block;
         }
 
-        /* สไตล์สำหรับเมื่อ Sidebar ยุบ */
         .sidebar.closed {
             transform: translateX(-100%);
         }
 
-        /* สไตล์สำหรับเมื่อ sidebar ถูกยุบ */
         .sidebar.closed .content {
             display: none;
         }
@@ -309,7 +342,7 @@ $users = fetchUsers($conn);
         /* เปลี่ยนสีไอคอนเป็นสีส้ม */
         .tab:active .material-icons,
         .tab.selected .material-icons {
-            color: #FF7043;
+            color: #000000;
         }
 
         .tab.account:active .material-icons,
@@ -317,7 +350,12 @@ $users = fetchUsers($conn);
             color: #2196F3;
         }
 
-        /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab */
+        .tab.employee:active .material-icons,
+        .tab.employee.selected .material-icons {
+            color: #FF9800;
+        }
+
+        /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab 
         .tab:active::after,
         .tab.selected::after {
             content: "";
@@ -330,7 +368,7 @@ $users = fetchUsers($conn);
             border-radius: 50%;
             transform: translateY(-50%);
 
-        }
+        } */
 
         /* ปุ่มออกจากระบบ */
         .logout {
@@ -411,6 +449,55 @@ $users = fetchUsers($conn);
             height: auto;
         }
 
+        /* ปุ่มเปลี่ยนหน้าสินค้า */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin: 20px 0 0 0;
+            flex-wrap: wrap;
+        }
+
+        .pagination a {
+            color: #000000;
+            padding: 6px 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 10px;
+            background: #ffffff;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #444444;
+            color: white;
+        }
+
+        .pagination span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 37px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            cursor: default;
+            transition: background 0.2s ease;
+        }
+
+        .pagination span svg {
+            width: 20px;
+            height: 20px;
+            fill: #000000;
+        }
+
+        .pagination a[style*="font-weight:bold;"] {
+            background-color: #444444;
+            color: #ffffff;
+        }
+
         /* สไตล์ของตาราง */
         table {
             width: 100%;
@@ -418,12 +505,11 @@ $users = fetchUsers($conn);
             border-radius: 10px;
             overflow: hidden;
             text-align: center;
-            margin: 15px 0px 15px 0px;
         }
 
         th {
             background: #222222;
-            color: white;
+            color: #ffffff;
             padding: 12px;
             font-size: 16px;
             max-width: 200px;
@@ -433,15 +519,13 @@ $users = fetchUsers($conn);
         }
 
         td {
-            padding: 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
             background: rgba(255, 255, 255, 0.8);
             color: black;
-            padding: 10px;
+            padding: 12px;
             max-width: 200px;
             text-overflow: ellipsis;
             overflow: hidden;
-            white-space: nowrap;
         }
 
         tbody tr {
@@ -727,9 +811,57 @@ $users = fetchUsers($conn);
             align-items: center;
             width: 100%;
             position: sticky;
-            top: 88px;
+            top: 69px;
             background: #000000;
             z-index: 1000;
+            padding: 8px 0 8px 0;
+        }
+
+        .search-container {
+            width: 55%;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 4px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .search-container:focus-within {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            border-color: #007bff;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            flex: 1;
+            background: transparent;
+        }
+
+        .search-button {
+            background: #000000;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .search-button:hover {
+            background: #333333;
+        }
+
+        .search-button svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
         }
 
         #dried-food-selected-count,
@@ -749,7 +881,7 @@ $users = fetchUsers($conn);
         }
 
         .btn-container {
-            margin-top: 10px;
+            margin-top: 5px;
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -786,7 +918,7 @@ $users = fetchUsers($conn);
         }
 
         .btn-table svg {
-            fill: #4B0082;
+            fill: #f72585;
         }
 
 
@@ -989,19 +1121,19 @@ $users = fetchUsers($conn);
             padding: 20px;
         }
 
-        #food_bank {
-            margin-top: 68px;
-            padding: 20px;
+        #dried_food {
+            margin-top: 69px;
+            padding: 0 20px 20px 20px;
         }
 
-        #local_drink {
-            margin-top: 68px;
-            padding: 20px;
+        #soft_drink {
+            margin-top: 69px;
+            padding: 0 20px 20px 20px;
         }
 
-        #fastfood {
-            margin-top: 68px;
-            padding: 20px;
+        #fresh_food {
+            margin-top: 69px;
+            padding: 0 20px 20px 20px;
         }
 
         #employee {
@@ -1087,7 +1219,7 @@ $users = fetchUsers($conn);
         /* ทำให้ลูกศรหมุนเมื่อเมนูเปิด */
         .collapsible-toggle[aria-expanded="true"] svg {
             transform: rotate(180deg);
-            transition: transform 0.5s ease;
+            transition: transform 0.3s ease;
         }
 
         /* ปรับสไตล์ของเมนู */
@@ -1097,7 +1229,7 @@ $users = fetchUsers($conn);
             max-height: 0;
             padding: 0 0 0 15px;
             border-radius: 5px;
-            transition: max-height 0.5s ease-out, padding 0.5s ease;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
         }
 
         /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
@@ -1296,7 +1428,7 @@ $users = fetchUsers($conn);
         .detail-inline {
             display: flex;
             justify-content: space-between;
-            gap: 8px;
+            gap: 10px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
@@ -1399,7 +1531,7 @@ $users = fetchUsers($conn);
             flex-direction: column;
             gap: 20px;
             background: #f4f4f4;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -1503,8 +1635,8 @@ $users = fetchUsers($conn);
         .action-dropdown button {
             background-color: #eeeeee;
             border: none;
-            font-size: 20px;
-            padding: 6px 10px;
+            font-size: 25px;
+            padding: 5px 15px;
             border-radius: 10px;
             cursor: pointer;
             transition: background 0.2s ease;
@@ -1519,20 +1651,20 @@ $users = fetchUsers($conn);
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            right: -37px;
-            top: calc(-60% + 5px);
+            right: -34px;
+            top: calc(-68% + 5px);
             background-color: white;
-            min-width: 100px;
+            min-width: 105px;
             z-index: 1;
             border-radius: 10px;
             overflow: hidden;
-            transform: translateY(-5px);
+            transform: translateY(-10px);
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         .dropdown-content a {
             color: #000000;
-            padding: 10px;
+            padding: 15px 10px 15px 10px;
             text-decoration: none;
             display: block;
             font-size: 14px;
@@ -1604,22 +1736,106 @@ $users = fetchUsers($conn);
         }
 
         .side-panel-content {
-            padding: 20px;
+            padding: 15px;
             position: relative;
         }
 
         .side-panel-close-btn {
             position: absolute;
-            top: 10px;
+            top: 15px;
             right: 15px;
-            font-size: 24px;
+            font-size: 40px;
             cursor: pointer;
-            color: white;
-            transition: transform 0.2s ease;
+            color: #ffffff;
+            background-color: #444444;
+            border: none;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
         }
 
         .side-panel-close-btn:hover {
-            transform: scale(1.2);
+            background-color: #555555;
+            color: #ffffff;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            border-radius: 10px;
+        }
+
+        body.side-panel-open {
+            overflow: hidden;
+        }
+
+        #editProductForm {
+            max-width: 500px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        #editProductForm label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        #editProductForm input[type="text"],
+        #editProductForm input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        #editProductForm input[type="text"]:focus,
+        #editProductForm input[type="number"]:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group-row .group-item {
+            flex: 1;
+        }
+
+        #editProductForm button {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editProductForm button:hover {
+            background-color: #222222;
+        }
+
+
+        #editProductForm button svg {
+            width: 28px;
+            height: 28px;
+            fill: #e3e3e3;
         }
     </style>
 </head>
@@ -1642,7 +1858,7 @@ $users = fetchUsers($conn);
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
-            <img src="\sci-shop-admin\img\pachara.jpg" alt="Logo" class="logo">
+            <img src="\sci-shop-admin\img\SCi_NEXT.jpg" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
 
@@ -1702,13 +1918,13 @@ $users = fetchUsers($conn);
         <!-- รายการสินค้า -->
         <div class="main-tabs-products">
             <h3>รายการสินค้า</h3>
-            <div class="tab" onclick="showTab('food_bank')">
+            <div class="tab" onclick="showTab('dried_food')">
                 <span class="material-icons">food_bank</span> ของแห้ง
             </div>
-            <div class="tab" onclick="showTab('local_drink')">
+            <div class="tab" onclick="showTab('soft_drink')">
                 <span class="material-icons">local_drink</span> เครื่องดื่ม
             </div>
-            <div class="tab" onclick="showTab('fastfood')">
+            <div class="tab" onclick="showTab('fresh_food')">
                 <span class="material-icons">fastfood</span> ของสด
             </div>
         </div>
@@ -1898,9 +2114,9 @@ $users = fetchUsers($conn);
                             <label for="productReorderLevel">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#007bff">
                                     <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
-                                </svg> ระดับการสั่งซื้อใหม่ :
+                                </svg> สต็อกต่ำสุด :
                             </label>
-                            <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกระดับการสั่งซื้อใหม่" required>
+                            <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกจำนวนสต็อกสินค้าต่ำสุด" required>
                         </div>
                     </div>
 
@@ -2180,13 +2396,25 @@ $users = fetchUsers($conn);
     </div>
 
 
-    <div id="food_bank" class="content">
+    <div id="dried_food" class="content">
         <div class="header-container">
-            <h3 class="h-text-upload">สินค้าประเภทแห้ง
+            <h3 class="h-text-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ffffff">
+                    <path d="M400-240h40v-160q25 0 42.5-17.5T500-460v-120h-40v120h-20v-120h-40v120h-20v-120h-40v120q0 25 17.5 42.5T400-400v160Zm160 0h40v-340q-33 0-56.5 23.5T520-500v120h40v140ZM160-120v-480l320-240 320 240v480H160Z" />
+                </svg>
+                สินค้าประเภทแห้ง
             </h3>
 
-            <div class="btn-container">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า...">
+                <button class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
 
+            <div class="btn-container">
                 <button class="btn btn-table" data-tooltip="แสดง Table">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
@@ -2200,6 +2428,7 @@ $users = fetchUsers($conn);
                 </button>
             </div>
         </div>
+
         <table>
             <thead>
                 <tr>
@@ -2216,11 +2445,11 @@ $users = fetchUsers($conn);
             <tbody>
                 <?php foreach ($dried_food as $item): ?>
                     <tr>
-                        <td><?php echo $item['product_name']; ?></td>
+                        <td style="text-align: left;"><?php echo $item['product_name']; ?></td>
                         <td>
                             <img src="<?php echo $item['image_url']; ?>"
                                 alt="<?php echo $item['product_name']; ?>"
-                                width="60" height="auto">
+                                width="100" height="auto">
                         </td>
                         <td style="text-align: center;">
                             <div class="barcode-cell">
@@ -2249,36 +2478,79 @@ $users = fetchUsers($conn);
             </tbody>
         </table>
 
+        <div class="pagination" id="pagination">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
+            <?php endif; ?>
+
+            <?php
+            $start = max(1, $page - 2);
+            $end = min($total_pages, $page + 2);
+
+            for ($i = $start; $i <= $end; $i++):
+            ?>
+                <a href="?page=<?php echo $i; ?>" <?php if ($i == $page) echo 'style="font-weight:bold;"'; ?>>
+                    <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+
+            <?php if ($end < $total_pages): ?>
+                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-360q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm280 80q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm280 80q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Z" />
+                    </svg></span>
+            <?php endif; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?php echo $page + 1; ?>">ถัดไป</a>
+            <?php endif; ?>
+        </div>
+
         <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
 
         <div id="editPanel" class="side-panel">
             <div class="side-panel-content">
+                <h2 class="h2-text-upload"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff">
+                        <path d="M360-600v-80h360v80H360Zm0 120v-80h360v80H360ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm263-224 37-39-37-37-38 38 38 38ZM240-80q-50 0-85-35t-35-85v-120h120v-560h600v361q-20-2-40.5 1.5T760-505v-295H320v480h240l-80 80v160H240Z" />
+                    </svg>แก้ไขข้อมูลสินค้า</h2>
                 <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
                 <div id="side-panel-form-content">
                     <!-- ฟอร์มการแก้ไขจะแสดงที่นี่ -->
                     <form id="editProductForm" method="POST" action="../../product/edit_product/edit_dried_food/edit_dried_food.php?id=<?php echo $item['id']; ?>">
+
                         <label for="product_name">ชื่อสินค้า</label>
                         <input type="text" id="product_name" name="product_name" value="<?php echo htmlspecialchars($item['product_name']); ?>" required>
 
                         <label for="barcode">บาร์โค้ด</label>
                         <input type="text" id="barcode" name="barcode" value="<?php echo htmlspecialchars($item['barcode']); ?>" required>
 
-                        <label for="price">ราคา</label>
-                        <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($item['price']); ?>" required>
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price">ราคา</label>
+                                <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($item['price']); ?>" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost">ต้นทุน</label>
+                                <input type="number" id="cost" name="cost" value="<?php echo htmlspecialchars($item['cost']); ?>" required>
+                            </div>
+                        </div>
 
-                        <label for="cost">ต้นทุน</label>
-                        <input type="number" id="cost" name="cost" value="<?php echo htmlspecialchars($item['cost']); ?>" required>
-
-                        <label for="stock">สต็อก</label>
-                        <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($item['stock']); ?>" required>
-
-                        <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
-                        <input type="number" id="reorder_level" name="reorder_level" value="<?php echo htmlspecialchars($item['reorder_level']); ?>" required>
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock">สต็อก</label>
+                                <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($item['stock']); ?>" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
+                                <input type="number" id="reorder_level" name="reorder_level" value="<?php echo htmlspecialchars($item['reorder_level']); ?>" required>
+                            </div>
+                        </div>
 
                         <label for="image_url">URL รูปภาพ</label>
                         <input type="text" id="image_url" name="image_url" value="<?php echo htmlspecialchars($item['image_url']); ?>" required>
 
-                        <button type="submit">อัปเดตข้อมูล</button>
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path d="M268-240 42-466l57-56 170 170 56 56-57 56Zm226 0L268-466l56-57 170 170 368-368 56 57-424 424Zm0-226-57-56 198-198 57 56-198 198Z" />
+                            </svg>อัปเดตข้อมูลสินค้า</button>
                     </form>
                 </div>
             </div>
@@ -2286,7 +2558,7 @@ $users = fetchUsers($conn);
 
     </div>
 
-    <div id="local_drink" class="content">
+    <div id="soft_drink" class="content">
         <h3 class="h-text">🔘 สวิตช์</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -2341,7 +2613,7 @@ $users = fetchUsers($conn);
         </table>
     </div>
 
-    <div id="fastfood" class="content">
+    <div id="fresh_food" class="content">
         <h3 class="h-text">🎨 คีย์แค็ป</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -2548,25 +2820,18 @@ $users = fetchUsers($conn);
         });
 
         function openEditPanel(id) {
-            const panel = document.getElementById('editPanel');
-            const content = document.getElementById('side-panel-form-content');
-
-            panel.classList.add('show'); // แสดง side-panel
-        }
-
-        function closeEditPanel() {
-            document.getElementById('editPanel').classList.remove('show');
-        }
-
-        function openEditPanel(id) {
             document.getElementById('editPanel').classList.add('show');
             document.getElementById('overlay').classList.add('show');
+            document.body.classList.add('side-panel-open');
         }
 
         function closeEditPanel() {
             document.getElementById('editPanel').classList.remove('show');
             document.getElementById('overlay').classList.remove('show');
+            document.body.classList.remove('side-panel-open');
         }
+
+
 
 
 
