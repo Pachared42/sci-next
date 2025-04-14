@@ -138,9 +138,9 @@ $conn->close();
             transform: translateY(-50%);
             font-size: 18px;
             color: #888888;
-            transition: 0.3s;
+            transition: 0.2s;
             pointer-events: none;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.2s ease-in-out;
         }
 
         input:focus+label,
