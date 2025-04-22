@@ -273,7 +273,7 @@ $total_pages = ceil($total_items / $limit);
         .main-tabs h3 {
             font-size: 12px;
             font-weight: bold;
-            color: #ff006e;
+            color: #F79824;
         }
 
         /* กำหนดลักษณะของเส้น hr */
@@ -291,7 +291,7 @@ $total_pages = ceil($total_items / $limit);
             margin-top: 5px;
             font-size: 12px;
             font-weight: bold;
-            color: #ff006e;
+            color: #F79824;
         }
 
         .main-tabs-products {
@@ -302,7 +302,7 @@ $total_pages = ceil($total_items / $limit);
             margin-top: 5px;
             font-size: 12px;
             font-weight: bold;
-            color: #ff006e;
+            color: #F79824;
         }
 
         /* ปุ่มเมนู */
@@ -351,7 +351,7 @@ $total_pages = ceil($total_items / $limit);
 
         .tab.sci_admin:hover:active .material-icons,
         .tab.sci_admin.selected:hover .material-icons {
-            color: #e0aaff;
+            color: #000000;
         }
 
         .tab.employee:hover:active,
@@ -361,7 +361,7 @@ $total_pages = ceil($total_items / $limit);
 
         .tab.employee:hover:active .material-icons,
         .tab.employee.selected:hover .material-icons {
-            color: #ffc971;
+            color: #000000;
         }
 
         .tab.account:hover:active,
@@ -371,7 +371,7 @@ $total_pages = ceil($total_items / $limit);
 
         .tab.account:hover:active .material-icons,
         .tab.account.selected:hover .material-icons {
-            color: #add7f6;
+            color: #000000;
         }
 
         /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab 
@@ -409,7 +409,7 @@ $total_pages = ceil($total_items / $limit);
 
         .sci_admin {
             padding: 10px 15px;
-            background: #6f42c1;
+            background: #2176FF;
             text-align: center;
             font-weight: 600;
             color: white;
@@ -421,12 +421,12 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .sci_admin:hover {
-            background: #5936a6;
+            background: #5B9BFF;
         }
 
         .employee {
             padding: 10px 15px;
-            background: #f39c12;
+            background: #33A1FD;
             text-align: center;
             font-weight: 600;
             color: white;
@@ -438,12 +438,12 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .employee:hover {
-            background: #d35400;
+            background: #6BBEFE;
         }
 
         .account {
             padding: 10px 15px;
-            background: #3498db;
+            background: #FDCA40;
             text-align: center;
             font-weight: 600;
             color: white;
@@ -455,7 +455,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .account:hover {
-            background: #2980b9;
+            background: #FFE07C;
         }
 
         .content {
@@ -770,7 +770,7 @@ $total_pages = ceil($total_items / $limit);
             justify-content: center;
             align-items: center;
             gap: 8px;
-            background: #4CAF50;
+            background: linear-gradient(45deg, #2176FF, #F79824);
             color: white;
             border: none;
             padding: 15px 20px;
@@ -782,8 +782,9 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .btn-upload:hover {
-            background: #388E3C;
+            background: linear-gradient(45deg, #2156c7, #e37b06);
         }
+
 
         /* Style for the popup */
         .edit-popup {
@@ -1231,7 +1232,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .category-btn.selected {
-            background-color: #FF7043;
+            background-color: #F79824;
             color: white;
         }
 
@@ -1957,7 +1958,7 @@ $total_pages = ceil($total_items / $limit);
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
-            <img src="\sci-shop-admin\img\SCi_NEXT.jpg" alt="Logo" class="logo">
+            <img src="\sci-shop-admin\img\NEXT.png" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
 
@@ -2055,7 +2056,7 @@ $total_pages = ceil($total_items / $limit);
     <!-- แสดงหน้าของ Tabs -->
     <!-- แสดงข้อมูลสถิติ -->
     <div id="order" class="content">
-        <div style="max-width: 1000px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <div style="max-width: 1000px; margin: 30px auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             <h2 style="text-align:center; margin-bottom:20px; color:#333;">ตารางรายการขายสินค้า</h2>
 
             <table style="width: 100%; border-collapse: collapse;">
@@ -2064,7 +2065,7 @@ $total_pages = ceil($total_items / $limit);
                         <th style="padding: 12px;">ชื่อสินค้า</th>
                         <th style="padding: 12px;">รูปสินค้า</th>
                         <th style="padding: 12px;">ราคา</th>
-                        <th style="padding: 12px;">คนขาย</th>
+                        <th style="padding: 12px;">คนซื้อ</th>
                         <th style="padding: 12px;">เวลา</th>
                         <th style="padding: 12px;">วันที่/เดือน/ปี</th>
                     </tr>
@@ -2072,7 +2073,7 @@ $total_pages = ceil($total_items / $limit);
                 <tbody>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
                         <td style="padding: 10px;">ข้าวสารหอมมะลิ</td>
-                        <td style="padding: 10px;"><img src="https://via.placeholder.com/60" alt="รูปสินค้า" style="border-radius: 5px;"></td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
                         <td style="padding: 10px;">฿650</td>
                         <td style="padding: 10px;">คุณสมชาย</td>
                         <td style="padding: 10px;">14:30</td>
@@ -2080,25 +2081,95 @@ $total_pages = ceil($total_items / $limit);
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
                         <td style="padding: 10px;">น้ำดื่มเพียว</td>
-                        <td style="padding: 10px;"><img src="https://via.placeholder.com/60" alt="รูปสินค้า" style="border-radius: 5px;"></td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
                         <td style="padding: 10px;">฿12</td>
                         <td style="padding: 10px;">คุณมณี</td>
                         <td style="padding: 10px;">10:15</td>
                         <td style="padding: 10px;">13 เมษายน 2025</td>
                     </tr>
-                    <tr style="text-align: center;">
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
                         <td style="padding: 10px;">มาม่าคัพ</td>
-                        <td style="padding: 10px;"><img src="https://via.placeholder.com/60" alt="รูปสินค้า" style="border-radius: 5px;"></td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
                         <td style="padding: 10px;">฿20</td>
                         <td style="padding: 10px;">คุณวิชัย</td>
                         <td style="padding: 10px;">09:00</td>
                         <td style="padding: 10px;">12 เมษายน 2025</td>
                     </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">น้ำปลาแท้ตราปลาหมึก</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿25</td>
+                        <td style="padding: 10px;">คุณสายชล</td>
+                        <td style="padding: 10px;">15:40</td>
+                        <td style="padding: 10px;">11 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">ปลากระป๋องสามแม่ครัว</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿35</td>
+                        <td style="padding: 10px;">คุณสมปอง</td>
+                        <td style="padding: 10px;">17:20</td>
+                        <td style="padding: 10px;">10 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center;">
+                        <td style="padding: 10px;">น้ำมันพืชองุ่น</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿65</td>
+                        <td style="padding: 10px;">คุณปิ่น</td>
+                        <td style="padding: 10px;">08:45</td>
+                        <td style="padding: 10px;">9 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">ข้าวสารหอมมะลิ</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿650</td>
+                        <td style="padding: 10px;">คุณสมชาย</td>
+                        <td style="padding: 10px;">14:30</td>
+                        <td style="padding: 10px;">14 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">น้ำดื่มเพียว</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿12</td>
+                        <td style="padding: 10px;">คุณมณี</td>
+                        <td style="padding: 10px;">10:15</td>
+                        <td style="padding: 10px;">13 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">มาม่าคัพ</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿20</td>
+                        <td style="padding: 10px;">คุณวิชัย</td>
+                        <td style="padding: 10px;">09:00</td>
+                        <td style="padding: 10px;">12 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">น้ำปลาแท้ตราปลาหมึก</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿25</td>
+                        <td style="padding: 10px;">คุณสายชล</td>
+                        <td style="padding: 10px;">15:40</td>
+                        <td style="padding: 10px;">11 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">ปลากระป๋องสามแม่ครัว</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿35</td>
+                        <td style="padding: 10px;">คุณสมปอง</td>
+                        <td style="padding: 10px;">17:20</td>
+                        <td style="padding: 10px;">10 เมษายน 2025</td>
+                    </tr>
+                    <tr style="text-align: center;">
+                        <td style="padding: 10px;">น้ำมันพืชองุ่น</td>
+                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td style="padding: 10px;">฿65</td>
+                        <td style="padding: 10px;">คุณปิ่น</td>
+                        <td style="padding: 10px;">08:45</td>
+                        <td style="padding: 10px;">9 เมษายน 2025</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
-
-
     </div>
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
@@ -2116,6 +2187,18 @@ $total_pages = ceil($total_items / $limit);
                 <h4>ยอดขายรายปี</h4>
                 <p>฿4,200,000</p>
             </div>
+            <div class="summary-card orders">
+                <h4>จำนวนคำสั่งซื้อวันนี้</h4>
+                <p>128 รายการ</p>
+            </div>
+            <div class="summary-card customers">
+                <h4>ลูกค้าใหม่ในเดือนนี้</h4>
+                <p>42 คน</p>
+            </div>
+            <div class="summary-card stock">
+                <h4>สินค้าคงเหลือ</h4>
+                <p>2,540 ชิ้น</p>
+            </div>
         </div>
 
         <!-- กราฟยอดขาย -->
@@ -2132,7 +2215,20 @@ $total_pages = ceil($total_items / $limit);
                 <h4>ยอดขายรายปี</h4>
                 <canvas id="yearlySalesChart"></canvas>
             </div>
+            <div class="chart-container orders-chart">
+                <h4>คำสั่งซื้อแยกตามหมวดหมู่</h4>
+                <canvas id="categoryOrdersChart"></canvas>
+            </div>
+            <div class="chart-container customer-chart">
+                <h4>ลูกค้าใหม่ในไตรมาส</h4>
+                <canvas id="newCustomersChart"></canvas>
+            </div>
+            <div class="chart-container stock-chart">
+                <h4>ระดับสินค้าคงคลัง</h4>
+                <canvas id="stockLevelChart"></canvas>
+            </div>
         </div>
+
     </div>
 
     <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
@@ -2142,7 +2238,7 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/employee.png" alt="รูปภาพพนักงาน">
+                    <img id="previewImage" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2257,7 +2353,7 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/employee.png" alt="รูปภาพพนักงาน">
+                    <img id="previewImage" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2363,7 +2459,7 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/product_food.png" alt="รูปภาพสินค้า">
+                    <img id="previewImage" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพสินค้า">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -3914,49 +4010,30 @@ $total_pages = ceil($total_items / $limit);
         updateSelectedCount();
 
 
-        const fields = [{
-                input: "productName",
-                preview: "previewName"
-            },
-            {
-                input: "barcode",
-                preview: "previewBarcode"
-            },
-            {
-                input: "productPrice",
-                preview: "previewPrice"
-            },
-            {
-                input: "productCost",
-                preview: "previewCost"
-            },
-            {
-                input: "productStock",
-                preview: "previewStock"
-            },
-            {
-                input: "productReorderLevel",
-                preview: "previewReorderLevel"
-            }
-        ];
+        document.addEventListener("DOMContentLoaded", () => {
+            const pairs = [
+                ["productName", "previewName"],
+                ["barcode", "previewBarcode"],
+                ["productPrice", "previewPrice"],
+                ["productCost", "previewCost"],
+                ["productStock", "previewStock"],
+                ["productReorderLevel", "previewReorderLevel"]
+            ];
 
-        fields.forEach(({
-            input,
-            preview
-        }) => {
-            document.getElementById(input).addEventListener("input", function() {
-                document.getElementById(preview).textContent = this.value;
+            pairs.forEach(([inputId, previewId]) => {
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+                if (input && preview) {
+                    input.addEventListener("input", () => preview.textContent = input.value);
+                }
             });
-        });
 
-        document.getElementById("productImage").addEventListener("input", function() {
-            const previewImage = document.getElementById("previewImage");
-            const imageUrl = this.value.trim();
-
-            if (imageUrl) {
-                previewImage.src = imageUrl;
-            } else {
-                previewImage.src = "/sci-shop-admin/img/product_food.png";
+            const imageInput = document.getElementById("productImage");
+            const imagePreview = document.getElementById("previewImage");
+            if (imageInput && imagePreview) {
+                imageInput.addEventListener("input", () => {
+                    imagePreview.src = imageInput.value.trim() || "/sci-shop-admin/img/product_food1.png";
+                });
             }
         });
     </script>
