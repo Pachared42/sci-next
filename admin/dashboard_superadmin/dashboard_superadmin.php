@@ -421,7 +421,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .sci_admin:hover {
-            background: #5B9BFF;
+            background: #1056CC;
         }
 
         .employee {
@@ -438,7 +438,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .employee:hover {
-            background: #6BBEFE;
+            background: #1980C6;
         }
 
         .account {
@@ -455,7 +455,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .account:hover {
-            background: #FFE07C;
+            background: #D88A00;
         }
 
         .content {
@@ -770,7 +770,7 @@ $total_pages = ceil($total_items / $limit);
             justify-content: center;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(45deg, #2176FF, #F79824);
+            background: #2176FF;
             color: white;
             border: none;
             padding: 15px 20px;
@@ -782,7 +782,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .btn-upload:hover {
-            background: linear-gradient(45deg, #2156c7, #e37b06);
+            background: #1056CC;
         }
 
 
@@ -1153,6 +1153,11 @@ $total_pages = ceil($total_items / $limit);
             padding: 20px;
         }
 
+        #upload_file_excal {
+            margin-top: 68px;
+            padding: 20px;
+        }
+
         #admin_signup {
             margin-top: 68px;
             padding: 20px;
@@ -1489,7 +1494,7 @@ $total_pages = ceil($total_items / $limit);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .product-preview-image img {
+        .product-preview-image svg {
             max-width: 250px;
             max-height: 250px;
             object-fit: cover;
@@ -1937,6 +1942,64 @@ $total_pages = ceil($total_items / $limit);
             height: 28px;
             fill: #e3e3e3;
         }
+
+        .excel-grid-upload {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .excel-upload-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .excel-type-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .excel-upload-group {
+            margin-bottom: 1rem;
+        }
+
+        .excel-upload-input {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.95rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            display: block !important;
+            z-index: 999 !important;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .file-name-text {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
+        }
+
+        .excel-upload-button {
+            width: 100%;
+            background-color: #6a5acd;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .excel-upload-button:hover {
+            background-color: #5b4db0;
+        }
     </style>
 </head>
 
@@ -1998,6 +2061,10 @@ $total_pages = ceil($total_items / $limit);
 
             <div class="tab" onclick="showTab('upload_prodect')">
                 <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
+            </div>
+
+            <div class="tab" onclick="showTab('upload_file_excal')">
+                <span class="material-icons">upload_file</span> อัปโหลดไฟล์สินค้า
             </div>
 
             <button type="button" is="toggle-button" class="collapsible-toggle text--strong" aria-controls="menu" aria-expanded="false">
@@ -2238,7 +2305,9 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
+                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
+                        <path d="M480-440q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-46q-54-53-125.5-83.5T480-360q-83 0-154.5 30.5T200-246v46Z" />
+                    </svg>
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2353,7 +2422,9 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
+                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
+                        <path d="M480-440q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-46q-54-53-125.5-83.5T480-360q-83 0-154.5 30.5T200-246v46Z" />
+                    </svg>
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2459,8 +2530,11 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImage" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพสินค้า">
+                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360q-20 26-30 57t-10 63q0 83 58.5 141.5T720-520q32 0 63-10t57-30v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80 v80h80v80h-80v80h-80Z" />
+                    </svg>
                 </div>
+
                 <div class="product-details">
                     <div class="detail-group">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
@@ -2609,6 +2683,62 @@ $total_pages = ceil($total_items / $limit);
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- ฟอร์มอัปโหลดไฟล์ Excel -->
+
+    <div id="upload_file_excal" class="content">
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                เพิ่มสินค้าใหม่ผ่านไฟล์ Excel
+            </h3>
+
+            <div class="btn-container">
+                <a href="../../assets/templates/template_dried_food.xlsx" download class="btn btn-addd" data-tooltip="ฟอร์ม Excel">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="excel-grid-upload">
+            <!-- ประเภทแห้ง -->
+            <form action="upload_excel_handler_dried.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title">ประเภทแห้ง</h4>
+                <div class="excel-upload-group">
+                    <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
+                    <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
+                </div>
+                <div class="excel-upload-group">
+                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                </div>
+            </form>
+
+            <!-- ประเภทเครื่องดื่ม -->
+            <form action="upload_excel_handler_drink.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title">ประเภทเครื่องดื่ม</h4>
+                <div class="excel-upload-group">
+                    <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
+                    <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
+                </div>
+                <div class="excel-upload-group">
+                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                </div>
+            </form>
+
+            <!-- ประเภทสด -->
+            <form action="upload_excel_handler_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title">ประเภทสด</h4>
+                <div class="excel-upload-group">
+                    <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
+                    <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
+                </div>
+                <div class="excel-upload-group">
+                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -3235,6 +3365,15 @@ $total_pages = ceil($total_items / $limit);
             document.getElementById('editPanel').classList.remove('show');
             document.getElementById('overlay').classList.remove('show');
             document.body.classList.remove('side-panel-open');
+        }
+
+        function showFileName(input) {
+            const fileNameText = input.nextElementSibling;
+            if (input.files.length > 0) {
+                fileNameText.textContent = input.files[0].name;
+            } else {
+                fileNameText.textContent = "ยังไม่ได้เลือกไฟล์";
+            }
         }
 
 
@@ -4028,11 +4167,27 @@ $total_pages = ceil($total_items / $limit);
                 }
             });
 
+            // การแสดงรูปภาพที่เลือกจาก input type="file"
             const imageInput = document.getElementById("productImage");
             const imagePreview = document.getElementById("previewImage");
+
             if (imageInput && imagePreview) {
-                imageInput.addEventListener("input", () => {
-                    imagePreview.src = imageInput.value.trim() || "/sci-shop-admin/img/product_food1.png";
+                imageInput.addEventListener("change", () => {
+                    const file = imageInput.files[0]; // รับไฟล์แรกที่เลือก
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            imagePreview.innerHTML = `<img src="${event.target.result}" alt="Product Image" style="max-width: 100%; max-height: 100%;">`;
+                        };
+                        reader.readAsDataURL(file); // อ่านไฟล์เป็น URL
+                    } else {
+                        // ถ้าไม่มีไฟล์ให้แสดงภาพเริ่มต้น (SVG)
+                        imagePreview.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360q-20 26-30 57t-10 63q0 83 58.5 141.5T720-520q32 0 63-10t57-30v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80 v80h80v80h-80v80h-80Z" />
+                    </svg>
+                `;
+                    }
                 });
             }
         });
