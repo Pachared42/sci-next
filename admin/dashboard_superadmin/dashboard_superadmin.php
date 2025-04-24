@@ -130,7 +130,7 @@ $total_pages = ceil($total_items / $limit);
             gap: 12px;
             font-size: 40px;
             font-weight: bold;
-            color: #ff006e;
+            color: #F79824;
         }
 
         .h2-text-upload {
@@ -139,7 +139,7 @@ $total_pages = ceil($total_items / $limit);
             gap: 12px;
             font-size: 28px;
             font-weight: bold;
-            color: #ff006e;
+            color: #F79824;
             margin-bottom: 15px;
         }
 
@@ -164,8 +164,8 @@ $total_pages = ceil($total_items / $limit);
         /* Navbar */
         .navbar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
             background-color: #000000;
             color: #ffffff;
             padding: 10px 20px;
@@ -175,6 +175,13 @@ $total_pages = ceil($total_items / $limit);
             width: 100%;
             z-index: 1000;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger {
+            position: absolute;
+            left: 20px;
+            display: flex;
+            align-items: center;
         }
 
         .hamburger svg {
@@ -190,6 +197,7 @@ $total_pages = ceil($total_items / $limit);
         .logo-name {
             display: flex;
             align-items: center;
+            justify-content: center;
         }
 
         .logo {
@@ -198,26 +206,40 @@ $total_pages = ceil($total_items / $limit);
             margin-right: 10px;
         }
 
+
         .site-name {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
         }
 
         .user-settings {
             display: flex;
             align-items: center;
+            justify-content: center;
+            margin: 15px 0 20px 0;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #222222;
         }
 
-        .mode-switch {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+        .online-status {
+            position: absolute;
+            bottom: 20px;
+            right: 14px;
+            width: 22px;
+            height: 22px;
+            background-color: #00ff00;
+            border-radius: 50%;
         }
 
         /* Sidebar */
@@ -541,6 +563,7 @@ $total_pages = ceil($total_items / $limit);
             border-radius: 10px;
             overflow: hidden;
             text-align: center;
+            margin-top: 10px;
         }
 
         th {
@@ -848,7 +871,7 @@ $total_pages = ceil($total_items / $limit);
             align-items: center;
             width: 100%;
             position: sticky;
-            top: 69px;
+            top: 64px;
             background: #000000;
             z-index: 1000;
             padding: 8px 0 8px 0;
@@ -1169,17 +1192,17 @@ $total_pages = ceil($total_items / $limit);
         }
 
         #dried_food {
-            margin-top: 69px;
+            margin-top: 60px;
             padding: 0 20px 20px 20px;
         }
 
         #soft_drink {
-            margin-top: 69px;
+            margin-top: 60px;
             padding: 0 20px 20px 20px;
         }
 
         #fresh_food {
-            margin-top: 69px;
+            margin-top: 60px;
             padding: 0 20px 20px 20px;
         }
 
@@ -2025,14 +2048,20 @@ $total_pages = ceil($total_items / $limit);
             <span class="site-name">SCi_ADMIN</span>
         </div>
 
-        <!-- Avatar และ Mode switch -->
-        <div class="user-settings">
-            <img src="\sci-shop-admin\img\pachara.jpg" alt="Avatar" class="avatar">
-        </div>
+
     </div>
 
 
     <div class="sidebar">
+
+        <!-- Avatar -->
+        <div class="user-settings">
+            <div class="avatar-wrapper">
+                <img src="\sci-shop-admin\img\pachara.jpg" alt="Avatar" class="avatar">
+                <span class="online-status"></span>
+            </div>
+        </div>
+
         <!-- รายการหลัก -->
         <div class="main-tabs">
             <h3>รายการหลัก</h3>
@@ -2123,8 +2152,8 @@ $total_pages = ceil($total_items / $limit);
     <!-- แสดงหน้าของ Tabs -->
     <!-- แสดงข้อมูลสถิติ -->
     <div id="order" class="content">
-        <div style="max-width: 1000px; margin: 30px auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <h2 style="text-align:center; margin-bottom:20px; color:#333;">ตารางรายการขายสินค้า</h2>
+        <div style="border-radius: 10px;">
+            <h2 style="text-align:center; margin-bottom:20px; color:#ffffff;">ตารางรายการขายสินค้า</h2>
 
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -2139,97 +2168,97 @@ $total_pages = ceil($total_items / $limit);
                 </thead>
                 <tbody>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">ข้าวสารหอมมะลิ</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿650</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสมชาย</td>
                         <td style="padding: 10px;">14:30</td>
                         <td style="padding: 10px;">14 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">น้ำดื่มเพียว</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿12</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณมณี</td>
                         <td style="padding: 10px;">10:15</td>
                         <td style="padding: 10px;">13 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">มาม่าคัพ</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿20</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณวิชัย</td>
                         <td style="padding: 10px;">09:00</td>
                         <td style="padding: 10px;">12 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">น้ำปลาแท้ตราปลาหมึก</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿25</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสายชล</td>
                         <td style="padding: 10px;">15:40</td>
                         <td style="padding: 10px;">11 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">ปลากระป๋องสามแม่ครัว</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿35</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสมปอง</td>
                         <td style="padding: 10px;">17:20</td>
                         <td style="padding: 10px;">10 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center;">
-                        <td style="padding: 10px;">น้ำมันพืชองุ่น</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿65</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณปิ่น</td>
                         <td style="padding: 10px;">08:45</td>
                         <td style="padding: 10px;">9 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">ข้าวสารหอมมะลิ</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿650</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสมชาย</td>
                         <td style="padding: 10px;">14:30</td>
                         <td style="padding: 10px;">14 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">น้ำดื่มเพียว</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿12</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณมณี</td>
                         <td style="padding: 10px;">10:15</td>
                         <td style="padding: 10px;">13 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">มาม่าคัพ</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿20</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณวิชัย</td>
                         <td style="padding: 10px;">09:00</td>
                         <td style="padding: 10px;">12 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">น้ำปลาแท้ตราปลาหมึก</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿25</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสายชล</td>
                         <td style="padding: 10px;">15:40</td>
                         <td style="padding: 10px;">11 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">ปลากระป๋องสามแม่ครัว</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿35</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณสมปอง</td>
                         <td style="padding: 10px;">17:20</td>
                         <td style="padding: 10px;">10 เมษายน 2025</td>
                     </tr>
                     <tr style="text-align: center;">
-                        <td style="padding: 10px;">น้ำมันพืชองุ่น</td>
+                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
                         <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">฿65</td>
+                        <td style="padding: 10px;">20฿</td>
                         <td style="padding: 10px;">คุณปิ่น</td>
                         <td style="padding: 10px;">08:45</td>
                         <td style="padding: 10px;">9 เมษายน 2025</td>
