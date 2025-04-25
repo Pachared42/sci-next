@@ -7,3 +7,8 @@
 #D88A00 (เข้มกว่าสี #FDCA40)
 
 #E57300 (เข้มกว่าสี #F79824)
+
+food_bank
+local_drink
+fastfood
+cookie

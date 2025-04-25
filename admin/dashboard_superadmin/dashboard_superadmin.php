@@ -43,6 +43,7 @@ function fetchProducts($conn, $table)
 $dried_food = fetchProducts($conn, 'dried_food');
 $soft_drink = fetchProducts($conn, 'soft_drink');
 $fresh_food = fetchProducts($conn, 'fresh_food');
+$snack = fetchProducts($conn, 'snack');
 
 // ฟังก์ชันดึงข้อมูลพนักงาน
 function fetchUsers($conn)
@@ -110,7 +111,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         body {
-            background-color: #000000;
+            background-color: #111111;
             margin-left: 220px;
             color: white;
             min-height: 100vh;
@@ -175,6 +176,7 @@ $total_pages = ceil($total_items / $limit);
             width: 100%;
             z-index: 1000;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
         }
 
         .hamburger {
@@ -245,7 +247,7 @@ $total_pages = ceil($total_items / $limit);
         /* Sidebar */
         .sidebar {
             position: fixed;
-            top: 68px;
+            top: 64px;
             left: 0;
             width: 220px;
             height: calc(100vh - 68px);
@@ -567,7 +569,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         th {
-            background: #222222;
+            background: #333333;
             color: #ffffff;
             padding: 12px;
             font-size: 16px;
@@ -872,7 +874,7 @@ $total_pages = ceil($total_items / $limit);
             width: 100%;
             position: sticky;
             top: 64px;
-            background: #000000;
+            background: #111111;
             z-index: 1000;
             padding: 8px 0 8px 0;
         }
@@ -962,6 +964,10 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .btn-addddd svg {
+            fill: #4CAF50;
+        }
+
+        .btn-adddddd svg {
             fill: #4CAF50;
         }
 
@@ -1083,83 +1089,105 @@ $total_pages = ceil($total_items / $limit);
             margin-top: 8px;
         }
 
-        .summary-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .summary-card {
-            flex: 1;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .daily {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        }
-
-        .monthly {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-        }
-
-        .yearly {
-            background: linear-gradient(135deg, #ff758c, #ff7eb3);
-        }
-
-        .chart-grid {
+        /* โครงสร้าง Grid หลัก */
+        .parent {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 16px;
+            padding: 20px;
         }
 
+        /* กำหนดตำแหน่ง */
+        .div1 {
+            grid-area: 1 / 1 / 2 / 2;
+        }
+
+        .div2 {
+            grid-area: 1 / 2 / 2 / 3;
+        }
+
+        .div3 {
+            grid-area: 1 / 3 / 2 / 4;
+        }
+
+        .div4 {
+            grid-area: 1 / 4 / 2 / 5;
+        }
+
+        .div5 {
+            grid-area: 2 / 1 / 5 / 4;
+        }
+
+        .div6 {
+            grid-area: 2 / 4 / 5 / 5;
+        }
+
+        /* Card ยอดขายแต่ละช่อง */
+        .stat-card {
+            background-color: #fff;
+            border-left: 8px solid var(--accent);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* ไอคอน */
+        .stat-card .icon {
+            background-color: var(--accent);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 18px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card .icon i {
+            font-size: 20px;
+        }
+
+        /* ข้อมูล */
+        .stat-card .info h5 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-card .info p {
+            margin: 4px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Container ของกราฟ */
         .chart-container {
             background: #fff;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
         }
 
-        .chart-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
-        }
-
-        .daily-chart {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        }
-
-        .monthly-chart {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-        }
-
-        .yearly-chart {
-            background: linear-gradient(135deg, #ff758c, #ff7eb3);
-        }
-
-        canvas {
-            width: 100% !important;
-            height: 300px !important;
-        }
-
-        h4 {
+        .chart-container h4 {
+            font-size: 16px;
             color: #333;
-            font-size: 18px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            margin-bottom: 12px;
         }
+
+
+
+
+
 
         #order {
             margin-top: 68px;
@@ -1206,6 +1234,11 @@ $total_pages = ceil($total_items / $limit);
             padding: 0 20px 20px 20px;
         }
 
+        #snack_food {
+            margin-top: 60px;
+            padding: 0 20px 20px 20px;
+        }
+
         #sci_admin {
             margin-top: 68px;
             padding: 20px;
@@ -1232,6 +1265,11 @@ $total_pages = ceil($total_items / $limit);
         }
 
         #fastfood_check {
+            margin-top: 68px;
+            padding: 20px;
+        }
+
+        #snack {
             margin-top: 68px;
             padding: 20px;
         }
@@ -1316,7 +1354,7 @@ $total_pages = ceil($total_items / $limit);
         .badge {
             position: absolute;
             top: 2px;
-            right: 140px;
+            right: 138px;
             background-color: #ff4b4b;
             color: white;
             font-size: 12px;
@@ -1517,7 +1555,7 @@ $total_pages = ceil($total_items / $limit);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .product-preview-image svg {
+        .product-preview-image img {
             max-width: 250px;
             max-height: 250px;
             object-fit: cover;
@@ -1968,33 +2006,54 @@ $total_pages = ceil($total_items / $limit);
 
         .excel-grid-upload {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 2rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .excel-grid-upload {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .excel-grid-upload {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .excel-grid-upload {
+                grid-template-columns: 1fr;
+            }
         }
 
         .excel-upload-form {
             background: #f8f9fa;
-            padding: 1.5rem;
+            padding: 24px;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .excel-type-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #333333;
         }
 
         .excel-upload-group {
-            margin-bottom: 1rem;
+            margin-bottom: 16px;
         }
 
         .excel-upload-input {
             width: 100%;
-            padding: 0.5rem;
-            font-size: 0.95rem;
-            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #cccccc;
             border-radius: 10px;
             display: block !important;
             z-index: 999 !important;
@@ -2003,25 +2062,31 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .file-name-text {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #555;
+            margin-top: 15px;
+            font-size: 15px;
+            color: #555555;
             text-align: center;
         }
 
         .excel-upload-button {
             width: 100%;
-            background-color: #6a5acd;
-            color: white;
-            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #33A1FD;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 24px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.25s ease, transform 0.2s ease;
         }
 
         .excel-upload-button:hover {
-            background-color: #5b4db0;
+            background-color: #1980C6;
         }
     </style>
 </head>
@@ -2108,10 +2173,13 @@ $total_pages = ceil($total_items / $limit);
                     <span class="material-icons">food_bank</span> หมวดแห้ง
                 </div>
                 <div class="tab" onclick="showTab('local_drink_check')">
-                    <span class="material-icons">local_drink</span> หมวดดื่ม
+                    <span class="material-icons">local_drink</span> หมวดเครื่องดื่ม
                 </div>
                 <div class="tab" onclick="showTab('fastfood_check')">
-                    <span class="material-icons">fastfood</span> หมวดสด
+                    <span class="material-icons">fastfood</span> หมวดแช่แข็ง
+                </div>
+                <div class="tab" onclick="showTab('snack')">
+                    <span class="material-icons">cookie</span> หมวดขนม
                 </div>
             </div>
         </div>
@@ -2121,13 +2189,16 @@ $total_pages = ceil($total_items / $limit);
         <div class="main-tabs-products">
             <h3>รายการสินค้า</h3>
             <div class="tab" onclick="showTab('dried_food')">
-                <span class="material-icons">food_bank</span> ของแห้ง
+                <span class="material-icons">food_bank</span> ประเภทแห้ง
             </div>
             <div class="tab" onclick="showTab('soft_drink')">
-                <span class="material-icons">local_drink</span> เครื่องดื่ม
+                <span class="material-icons">local_drink</span> ประเภทเครื่องดื่ม
             </div>
             <div class="tab" onclick="showTab('fresh_food')">
-                <span class="material-icons">fastfood</span> ของสด
+                <span class="material-icons">fastfood</span> ประเภทแช่แข็ง
+            </div>
+            <div class="tab" onclick="showTab('snack_food')">
+                <span class="material-icons">cookie</span> ประเภทขนม
             </div>
         </div>
 
@@ -2269,63 +2340,57 @@ $total_pages = ceil($total_items / $limit);
     </div>
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
-    <div id="graph" class="content">
-        <div class="summary-grid">
-            <div class="summary-card daily">
-                <h4>ยอดขายรายวัน</h4>
+    <div id="graph" class="parent">
+        <!-- สรุปยอดขายรายวัน -->
+        <div class="div1 stat-card" style="--accent: #6c5ce7;">
+            <div class="icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="info">
+                <h5>รายวัน</h5>
                 <p>฿12,500</p>
             </div>
-            <div class="summary-card monthly">
-                <h4>ยอดขายรายเดือน</h4>
+        </div>
+
+        <!-- สรุปยอดขายรายเดือน -->
+        <div class="div2 stat-card" style="--accent: #00b894;">
+            <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="info">
+                <h5>รายเดือน</h5>
                 <p>฿350,000</p>
             </div>
-            <div class="summary-card yearly">
-                <h4>ยอดขายรายปี</h4>
+        </div>
+
+        <!-- รายปี -->
+        <div class="div3 stat-card" style="--accent: #fdcb6e;">
+            <div class="icon"><i class="fas fa-chart-line"></i></div>
+            <div class="info">
+                <h5>รายปี</h5>
                 <p>฿4,200,000</p>
             </div>
-            <div class="summary-card orders">
-                <h4>จำนวนคำสั่งซื้อวันนี้</h4>
+        </div>
+
+        <!-- จำนวนคำสั่งซื้อ -->
+        <div class="div4 stat-card" style="--accent: #d63031;">
+            <div class="icon"><i class="fas fa-receipt"></i></div>
+            <div class="info">
+                <h5>คำสั่งซื้อ</h5>
                 <p>128 รายการ</p>
             </div>
-            <div class="summary-card customers">
-                <h4>ลูกค้าใหม่ในเดือนนี้</h4>
-                <p>42 คน</p>
-            </div>
-            <div class="summary-card stock">
-                <h4>สินค้าคงเหลือ</h4>
-                <p>2,540 ชิ้น</p>
-            </div>
         </div>
 
-        <!-- กราฟยอดขาย -->
-        <div class="chart-grid">
-            <div class="chart-container daily-chart">
-                <h4>ยอดขายรายวัน</h4>
-                <canvas id="dailySalesChart"></canvas>
-            </div>
-            <div class="chart-container monthly-chart">
-                <h4>ยอดขายรายเดือน</h4>
-                <canvas id="monthlySalesChart"></canvas>
-            </div>
-            <div class="chart-container yearly-chart">
-                <h4>ยอดขายรายปี</h4>
-                <canvas id="yearlySalesChart"></canvas>
-            </div>
-            <div class="chart-container orders-chart">
-                <h4>คำสั่งซื้อแยกตามหมวดหมู่</h4>
-                <canvas id="categoryOrdersChart"></canvas>
-            </div>
-            <div class="chart-container customer-chart">
-                <h4>ลูกค้าใหม่ในไตรมาส</h4>
-                <canvas id="newCustomersChart"></canvas>
-            </div>
-            <div class="chart-container stock-chart">
-                <h4>ระดับสินค้าคงคลัง</h4>
-                <canvas id="stockLevelChart"></canvas>
-            </div>
+        <!-- กราฟซ้าย -->
+        <div class="div5 chart-container">
+            <h4>กราฟภาพรวมยอดขาย</h4>
+            <canvas id="mainSalesChart"></canvas>
         </div>
 
+        <!-- กราฟขวา -->
+        <div class="div6 chart-container">
+            <h4>ลูกค้าใหม่</h4>
+            <canvas id="newCustomerChart"></canvas>
+        </div>
     </div>
+
+
 
     <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
 
@@ -2342,28 +2407,28 @@ $total_pages = ceil($total_items / $limit);
                     <div class="detail-group">
                         <span class="material-icons">sell</span>
                         <div>
-                            <span id="previewName"></span>
+                            <span id="previewNamee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodee"></span>
                         </div>
                     </div>
                 </div>
@@ -2459,28 +2524,28 @@ $total_pages = ceil($total_items / $limit);
                     <div class="detail-group">
                         <span class="material-icons">sell</span>
                         <div>
-                            <span id="previewName"></span>
+                            <span id="previewNameee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodeee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodeee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
                         <span class="material-icons">qr_code</span>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodeee"></span>
                         </div>
                     </div>
                 </div>
@@ -2559,9 +2624,7 @@ $total_pages = ceil($total_items / $limit);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
-                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360q-20 26-30 57t-10 63q0 83 58.5 141.5T720-520q32 0 63-10t57-30v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80 v80h80v80h-80v80h-80Z" />
-                    </svg>
+                    <img id="previewImageProduct" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพสินค้า">
                 </div>
 
                 <div class="product-details">
@@ -2570,7 +2633,7 @@ $total_pages = ceil($total_items / $limit);
                             <path d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Z" />
                         </svg>
                         <div>
-                            <span id="previewName"></span>
+                            <span id="previewNameProduct"></span>
                         </div>
                     </div>
 
@@ -2579,29 +2642,29 @@ $total_pages = ceil($total_items / $limit);
                             <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                         </svg>
                         <div>
-                            <span id="previewBarcode"></span>
+                            <span id="previewBarcodeProduct"></span>
                         </div>
                     </div>
 
                     <div class="detail-inline">
                         <p>
                             <span class="material-icons">paid</span>
-                            <span id="previewPrice"></span>
+                            <span id="previewPriceProduct"></span>
                         </p>
                         <p>
                             <span class="material-icons">savings</span>
-                            <span id="previewCost"></span>
+                            <span id="previewCostProduct"></span>
                         </p>
                     </div>
 
                     <div class="detail-inline">
                         <p>
                             <span class="material-icons">inventory_2</span>
-                            <span id="previewStock"></span>
+                            <span id="previewStockProduct"></span>
                         </p>
                         <p>
                             <span class="material-icons">notification_important</span>
-                            <span id="previewReorderLevel"></span>
+                            <span id="previewReorderLevelProduct"></span>
                         </p>
                     </div>
                 </div>
@@ -2617,13 +2680,20 @@ $total_pages = ceil($total_items / $limit);
                             <span class="material-icons">food_bank</span>
                             หมวดของแห้ง
                         </button>
+
                         <button type="button" class="category-btn" data-category="soft_drink" onclick="selectCategory(event, 'soft_drink')">
                             <span class="material-icons">local_drink</span>
                             หมวดเครื่องดื่ม
                         </button>
+
                         <button type="button" class="category-btn" data-category="fresh_food" onclick="selectCategory(event, 'fresh_food')">
                             <span class="material-icons">fastfood</span>
-                            หมวดของสด
+                            หมวดของแช่แข็ง
+                        </button>
+
+                        <button type="button" class="category-btn" data-category="snack" onclick="selectCategory(event, 'snack')">
+                            <span class="material-icons">cookie</span>
+                            หมวดขนม
                         </button>
                     </div>
 
@@ -2735,37 +2805,57 @@ $total_pages = ceil($total_items / $limit);
         <div class="excel-grid-upload">
             <!-- ประเภทแห้ง -->
             <form action="upload_excel_handler_dried.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title">ประเภทแห้ง</h4>
+                <h4 class="excel-type-title"><span class="material-icons">food_bank</span>ประเภทแห้ง</h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                        </svg>อัปโหลดไฟล์</button>
                 </div>
             </form>
 
             <!-- ประเภทเครื่องดื่ม -->
             <form action="upload_excel_handler_drink.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title">ประเภทเครื่องดื่ม</h4>
+                <h4 class="excel-type-title"><span class="material-icons">local_drink</span>ประเภทเครื่องดื่ม</h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                        </svg>อัปโหลดไฟล์</button>
                 </div>
             </form>
 
-            <!-- ประเภทสด -->
+            <!-- ประเภทแช่แข็ง -->
             <form action="upload_excel_handler_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title">ประเภทสด</h4>
+                <h4 class="excel-type-title"><span class="material-icons">fastfood</span>ประเภทแช่แข็ง</h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button">อัปโหลด</button>
+                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                        </svg>อัปโหลดไฟล์</button>
+                </div>
+            </form>
+
+            <!-- ประเภทขนม -->
+            <form action="upload_excel_handler_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">cookie</span>ประเภทขนม</h4>
+                <div class="excel-upload-group">
+                    <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
+                    <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
+                </div>
+                <div class="excel-upload-group">
+                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                        </svg>อัปโหลดไฟล์</button>
                 </div>
             </form>
         </div>
@@ -2865,7 +2955,7 @@ $total_pages = ceil($total_items / $limit);
 
     <div id="fastfood_check" class="content">
         <div class="header-container">
-            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทสด
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทแช่แข็ง
                 <span id="fresh-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
@@ -2904,6 +2994,50 @@ $total_pages = ceil($total_items / $limit);
                 </tr>
             </thead>
             <tbody id="fresh_food_table"></tbody>
+        </table>
+    </div>
+
+    <div id="snack" class="content">
+        <div class="header-container">
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทขนมขบเคี้ยว
+                <span id="fresh-food-selected-count">เลือกแล้ว +0</span>
+            </h3>
+
+            <div class="btn-container">
+                <button id="add_snack" class="btn btn-adddddd" data-tooltip="เพิ่มสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="center-checkbox"><input type="checkbox" onclick="toggleSelectAllForTable(this, 'snack_table')"></th>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคา</th>
+                    <th>ต้นทุน</th>
+                    <th>สต็อก</th>
+                    <th>เกณฑ์สั่งซื้อ</th>
+                </tr>
+            </thead>
+            <tbody id="snack_table"></tbody>
         </table>
     </div>
 
@@ -3405,6 +3539,59 @@ $total_pages = ceil($total_items / $limit);
             }
         }
 
+        // กราฟภาพรวมยอดขาย (bar chart)
+    const mainSalesCtx = document.getElementById('mainSalesChart').getContext('2d');
+    const mainSalesChart = new Chart(mainSalesCtx, {
+        type: 'bar',
+        data: {
+            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+            datasets: [{
+                label: 'ยอดขาย (บาท)',
+                data: [120000, 135000, 110000, 150000, 175000, 160000],
+                backgroundColor: '#4A90E2',
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => '฿' + value.toLocaleString()
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // กราฟลูกค้าใหม่ (doughnut chart)
+    const customerCtx = document.getElementById('newCustomerChart').getContext('2d');
+    const newCustomerChart = new Chart(customerCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['ใหม่', 'เก่า'],
+            datasets: [{
+                label: 'ลูกค้า',
+                data: [42, 128],
+                backgroundColor: ['#50E3C2', '#E0E0E0'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
 
 
 
@@ -3514,7 +3701,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         function loadFromLocalStorage() {
-            const categories = ['dried_food', 'soft_drink', 'fresh_food'];
+            const categories = ['dried_food', 'soft_drink', 'fresh_food', 'snack'];
             categories.forEach(category => {
                 const savedData = JSON.parse(localStorage.getItem(category)) || [];
                 const tableBody = document.getElementById(`${category}_table`);
@@ -3772,6 +3959,74 @@ $total_pages = ceil($total_items / $limit);
                             // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
                             selectedProducts.forEach(product => {
                                 const category = "fresh_food"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
+                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
+
+                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
+
+                                // บันทึกข้อมูลที่อัปเดตลง localStorage
+                                localStorage.setItem(category, JSON.stringify(savedData));
+                            });
+                        } else {
+                            alert("เกิดข้อผิดพลาด: " + data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        });
+
+        document.querySelectorAll(".btn-adddddd").forEach(button => {
+            button.addEventListener("click", function() {
+                let selectedProducts = [];
+
+                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
+                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                    let row = checkbox.closest("tr");
+                    let productData = {
+                        productName: row.children[1].textContent.trim(),
+                        productImage: row.children[2].querySelector("img").src,
+                        barcode: row.children[3].textContent.trim(),
+                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
+                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
+                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
+                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
+                    };
+                    selectedProducts.push(productData);
+                });
+
+                if (selectedProducts.length === 0) {
+                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
+                    return;
+                }
+
+                console.log("🛒 Sending data:", JSON.stringify({
+                    products: selectedProducts
+                }));
+
+                // ส่งข้อมูลไปยัง PHP
+                fetch("/sci-shop-admin/product/upload_product/snack/add_snack.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            products: selectedProducts
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response from server:", data);
+                        if (data.success) {
+                            alert("เพิ่มสินค้าสำเร็จ!");
+
+                            // ลบแถวที่ถูกเลือกออกจากตาราง
+                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                                let row = checkbox.closest("tr");
+                                row.remove();
+                            });
+
+                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
+                            selectedProducts.forEach(product => {
+                                const category = "snack"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
                                 let savedData = JSON.parse(localStorage.getItem(category)) || [];
 
                                 savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
@@ -4067,35 +4322,6 @@ $total_pages = ceil($total_items / $limit);
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-            function createChart(ctx, label, labels, data) {
-                return new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: label,
-                            data: data,
-                            backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff", "#ff9f40", "#c9cbcf"],
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
-            createChart(document.getElementById("dailySalesChart").getContext("2d"), "ยอดขายรายวัน", ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"], [18750, 21500, 23400, 19800, 26900, 31000, 28500]);
-            createChart(document.getElementById("monthlySalesChart").getContext("2d"), "ยอดขายรายเดือน", ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค."], [480000, 520000, 540000, 495000, 580000, 600000, 625000]);
-            createChart(document.getElementById("yearlySalesChart").getContext("2d"), "ยอดขายรายปี", ["2018", "2019", "2020", "2021", "2022", "2023", "2024"], [5200000, 5500000, 5700000, 5900000, 6200000, 6400000, 6750000]);
-        });
-
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
             const body = document.body;
@@ -4179,43 +4405,38 @@ $total_pages = ceil($total_items / $limit);
 
 
         document.addEventListener("DOMContentLoaded", () => {
-            const pairs = [
-                ["productName", "previewName"],
-                ["barcode", "previewBarcode"],
-                ["productPrice", "previewPrice"],
-                ["productCost", "previewCost"],
-                ["productStock", "previewStock"],
-                ["productReorderLevel", "previewReorderLevel"]
-            ];
-
-            pairs.forEach(([inputId, previewId]) => {
+            // จับคู่ input กับ preview แล้วอัปเดตค่าทันทีเมื่อพิมพ์
+            [
+                ["productName", "previewNameProduct"],
+                ["barcode", "previewBarcodeProduct"],
+                ["productPrice", "previewPriceProduct"],
+                ["productCost", "previewCostProduct"],
+                ["productStock", "previewStockProduct"],
+                ["productReorderLevel", "previewReorderLevelProduct"]
+            ].forEach(([inputId, previewId]) => {
                 const input = document.getElementById(inputId);
                 const preview = document.getElementById(previewId);
                 if (input && preview) {
-                    input.addEventListener("input", () => preview.textContent = input.value);
+                    input.addEventListener("input", () => {
+                        preview.textContent = input.value;
+                    });
                 }
             });
 
-            // การแสดงรูปภาพที่เลือกจาก input type="file"
+            // โหลดภาพตัวอย่างจาก URL ที่กรอก
             const imageInput = document.getElementById("productImage");
-            const imagePreview = document.getElementById("previewImage");
+            const imagePreview = document.getElementById("previewImageProduct");
 
             if (imageInput && imagePreview) {
-                imageInput.addEventListener("change", () => {
-                    const file = imageInput.files[0]; // รับไฟล์แรกที่เลือก
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(event) {
-                            imagePreview.innerHTML = `<img src="${event.target.result}" alt="Product Image" style="max-width: 100%; max-height: 100%;">`;
-                        };
-                        reader.readAsDataURL(file); // อ่านไฟล์เป็น URL
+                imageInput.addEventListener("input", () => {
+                    const url = imageInput.value.trim();
+
+                    // เช็คว่าเป็น URL ที่น่าจะใช้ได้ไหม
+                    if (url && (url.startsWith("http") || url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"))) {
+                        // เพิ่ม timestamp เพื่อป้องกัน cache
+                        imagePreview.src = `${url}?t=${new Date().getTime()}`;
                     } else {
-                        // ถ้าไม่มีไฟล์ให้แสดงภาพเริ่มต้น (SVG)
-                        imagePreview.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
-                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360q-20 26-30 57t-10 63q0 83 58.5 141.5T720-520q32 0 63-10t57-30v360q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80 v80h80v80h-80v80h-80Z" />
-                    </svg>
-                `;
+                        imagePreview.src = "/sci-shop-admin/img/product_food1.png";
                     }
                 });
             }
