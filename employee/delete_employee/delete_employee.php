@@ -1,7 +1,7 @@
 <?php
 session_start(); // เริ่มต้น session
 
-require_once '../../db.php'; // เชื่อมต่อฐานข้อมูล
+require_once '../../config/db.php'; // เชื่อมต่อฐานข้อมูล
 
 if (!$conn) {
     $e = oci_error();

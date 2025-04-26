@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require 'db.php';
+require 'config/db.php';
 
 if ($conn->connect_error) {
     die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);

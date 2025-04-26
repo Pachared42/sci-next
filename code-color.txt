@@ -12,3 +12,4 @@ food_bank
 local_drink
 fastfood
 cookie
+

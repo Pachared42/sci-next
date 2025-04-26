@@ -1,6 +1,6 @@
 <?php
 // เชื่อมต่อกับฐานข้อมูล Oracle
-require __DIR__ . '/../db.php';  // path นี้ถูกต้องเมื่อไฟล์ db.php อยู่ในโฟลเดอร์หลัก
+require __DIR__ . '/../config/db.php';  // path นี้ถูกต้องเมื่อไฟล์ db.php อยู่ในโฟลเดอร์หลัก
 
 if (!$conn) {
     $e = oci_error();

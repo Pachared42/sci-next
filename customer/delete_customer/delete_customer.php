@@ -1,5 +1,5 @@
 <?php
-require '../../db.php'; // ไฟล์เชื่อมต่อฐานข้อมูล
+require '../../config/db.php'; // ไฟล์เชื่อมต่อฐานข้อมูล
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['customer_id'])) {
     $customer_id = intval($_POST['customer_id']);

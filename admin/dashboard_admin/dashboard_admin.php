@@ -6,7 +6,7 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-require __DIR__ . '/../db.php';
+require __DIR__ . '/../config/db.php';
 
 $username = $_SESSION['user'];
 ?>

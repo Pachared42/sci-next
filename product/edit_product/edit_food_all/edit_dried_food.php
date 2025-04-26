@@ -1,6 +1,6 @@
 <?php
 // เชื่อมต่อฐานข้อมูล
-require __DIR__ . '/../../../db.php';
+require __DIR__ . '/../../../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // รับค่า id จาก URL

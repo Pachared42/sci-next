@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'superadmin') {
     exit();
 }
 
-require_once __DIR__ . '/../../db.php'; // ตรวจสอบเส้นทางให้ถูกต้อง
+require_once __DIR__ . '/../../config/db.php'; // ตรวจสอบเส้นทางให้ถูกต้อง
 $username = $_SESSION['user'];
 
 // ฟังก์ชันตรวจสอบการเชื่อมต่อฐานข้อมูล
@@ -66,8 +66,9 @@ function fetchUsers($conn)
 // ดึงข้อมูลผู้ใช้ทั้งหมด
 $users = fetchUsers($conn);
 
+
 // จำนวนสินค้าต่อหน้า
-$limit = 4;
+$limit = 9;
 
 // หน้าปัจจุบัน (ถ้าไม่มีตั้งค่าให้เริ่มที่หน้า 1)
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -594,7 +595,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         tbody tr:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         td img {
@@ -620,7 +621,7 @@ $total_pages = ceil($total_items / $limit);
             appearance: none;
             border: 2px solid #4CAF50;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #ffffff;
             position: relative;
             box-sizing: border-box;
             padding: 0;
@@ -643,33 +644,111 @@ $total_pages = ceil($total_items / $limit);
             border-color: #45a049;
         }
 
-        .btn-edit {
-            font-size: 18px;
-            padding: 6px 12px;
-            background-color: #03c9a0;
-            color: white;
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0 20px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+
+            .label {
+                font-weight: bold;
+                font-size: 16px;
+                color: #000000;
+            }
+
+            p {
+                font-size: 16px;
+                color: #000000;
+                margin-top: 8px;
+            }
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .product-image {
+            width: 50%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: #000000;
+
+            h3 {
+                text-align: center;
+            }
+        }
+
+        .barcode {
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+
+            svg {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        .card-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-actions button,
+        .card-actions a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 8px;
             border: none;
-            border-radius: 4px;
+            background: #2176FF;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
             cursor: pointer;
-            margin-right: 5px;
+            font-weight: bold;
+            gap: 8px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                fill: #ffffff;
+            }
         }
 
-        .btn-delete {
-            font-size: 18px;
-            padding: 6px 12px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .card-actions a {
+            background: #F79824;
         }
 
-        .btn-edit:hover {
-            background-color: #45a049;
-        }
-
-        .btn-delete:hover {
-            background-color: #c0392b;
+        .card-actions button:hover,
+        .card-actions a:hover {
+            opacity: 0.9;
         }
 
         #uplord_prodect {
@@ -1126,20 +1205,13 @@ $total_pages = ceil($total_items / $limit);
         /* Card ยอดขายแต่ละช่อง */
         .stat-card {
             background-color: #fff;
-            border-left: 8px solid var(--accent);
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 16px;
             display: flex;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-
-        /* ไอคอน */
         .stat-card .icon {
             background-color: var(--accent);
             color: #fff;
@@ -1156,7 +1228,6 @@ $total_pages = ceil($total_items / $limit);
             font-size: 20px;
         }
 
-        /* ข้อมูล */
         .stat-card .info h5 {
             margin: 0;
             font-size: 14px;
@@ -1170,7 +1241,6 @@ $total_pages = ceil($total_items / $limit);
             color: #333;
         }
 
-        /* Container ของกราฟ */
         .chart-container {
             background: #fff;
             border-radius: 12px;
@@ -1322,7 +1392,7 @@ $total_pages = ceil($total_items / $limit);
         }
 
         .collapsible-toggle:hover {
-            background-color: #555;
+            background-color: #555555;
         }
 
         .collapsible-toggle svg {
@@ -1483,7 +1553,7 @@ $total_pages = ceil($total_items / $limit);
             border: 2px solid #4CAF50;
             /* สีเขียว */
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #ffffff;
             position: relative;
             box-sizing: border-box;
             padding: 0;
@@ -1509,7 +1579,7 @@ $total_pages = ceil($total_items / $limit);
             appearance: none;
             border: 2px solid #4CAF50;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #ffffff;
             position: relative;
             box-sizing: border-box;
             padding: 0;
@@ -1575,7 +1645,7 @@ $total_pages = ceil($total_items / $limit);
             padding: 10px 14px;
             background: #ffffff;
             border-radius: 10px;
-            box-shadow: inset 0 0 0 1px #ddd;
+            box-shadow: inset 0 0 0 1px #dddddd;
             transition: background 0.3s;
         }
 
@@ -1588,7 +1658,7 @@ $total_pages = ceil($total_items / $limit);
         .detail-group div {
             flex: 1;
             font-size: 16px;
-            color: #222;
+            color: #222222;
         }
 
         .detail-inline {
@@ -1818,8 +1888,8 @@ $total_pages = ceil($total_items / $limit);
             opacity: 0;
             position: absolute;
             right: -34px;
-            top: calc(-68% + 5px);
-            background-color: white;
+            top: calc(-75% + 5px);
+            background-color: #ffffff;
             min-width: 105px;
             z-index: 1;
             border-radius: 10px;
@@ -1832,10 +1902,21 @@ $total_pages = ceil($total_items / $limit);
             color: #000000;
             padding: 15px 10px 15px 10px;
             text-decoration: none;
-            display: block;
-            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
             transition: background 0.2s;
             white-space: nowrap;
+            gap: 8px;
+            font-weight: bold;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                fill: #000000;
+
+            }
         }
 
         .dropdown-content a:hover {
@@ -1861,18 +1942,20 @@ $total_pages = ceil($total_items / $limit);
             fill: #000000;
         }
 
-        .overlay {
+        #overlay {
             position: fixed;
+            display: none;
+            /* เริ่มต้นซ่อนไว้ */
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* สีเทาโปร่ง ๆ */
             z-index: 1000;
+            /* ต้องน้อยกว่า side-panel เล็กน้อย */
         }
+
 
         .overlay.show {
             opacity: 1;
@@ -1882,18 +1965,16 @@ $total_pages = ceil($total_items / $limit);
         .side-panel {
             position: fixed;
             top: 0;
-            right: 0;
+            right: -500px;
             width: 500px;
             height: 100%;
-            background: #333333;
+            background-color: #ffffff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
             z-index: 1001;
-            overflow-y: auto;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-            transform: translateX(100%);
-            transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-            pointer-events: none;
+            display: none;
         }
+
 
         /* แสดง panel */
         .side-panel.show {
@@ -2340,53 +2421,55 @@ $total_pages = ceil($total_items / $limit);
     </div>
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
-    <div id="graph" class="parent">
+    <div id="graph" class="content">
         <!-- สรุปยอดขายรายวัน -->
-        <div class="div1 stat-card" style="--accent: #6c5ce7;">
-            <div class="icon"><i class="fas fa-calendar-day"></i></div>
-            <div class="info">
-                <h5>รายวัน</h5>
-                <p>฿12,500</p>
+        <div class="parent ">
+            <div class="div1 stat-card" style="--accent: #6c5ce7;">
+                <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="info">
+                    <h5>รายวัน</h5>
+                    <p>฿12,500</p>
+                </div>
             </div>
-        </div>
 
-        <!-- สรุปยอดขายรายเดือน -->
-        <div class="div2 stat-card" style="--accent: #00b894;">
-            <div class="icon"><i class="fas fa-calendar-alt"></i></div>
-            <div class="info">
-                <h5>รายเดือน</h5>
-                <p>฿350,000</p>
+            <!-- สรุปยอดขายรายเดือน -->
+            <div class="div2 stat-card" style="--accent: #00b894;">
+                <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="info">
+                    <h5>รายเดือน</h5>
+                    <p>฿350,000</p>
+                </div>
             </div>
-        </div>
 
-        <!-- รายปี -->
-        <div class="div3 stat-card" style="--accent: #fdcb6e;">
-            <div class="icon"><i class="fas fa-chart-line"></i></div>
-            <div class="info">
-                <h5>รายปี</h5>
-                <p>฿4,200,000</p>
+            <!-- รายปี -->
+            <div class="div3 stat-card" style="--accent: #fdcb6e;">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <div class="info">
+                    <h5>รายปี</h5>
+                    <p>฿4,200,000</p>
+                </div>
             </div>
-        </div>
 
-        <!-- จำนวนคำสั่งซื้อ -->
-        <div class="div4 stat-card" style="--accent: #d63031;">
-            <div class="icon"><i class="fas fa-receipt"></i></div>
-            <div class="info">
-                <h5>คำสั่งซื้อ</h5>
-                <p>128 รายการ</p>
+            <!-- จำนวนคำสั่งซื้อ -->
+            <div class="div4 stat-card" style="--accent: #d63031;">
+                <div class="icon"><i class="fas fa-receipt"></i></div>
+                <div class="info">
+                    <h5>คำสั่งซื้อ</h5>
+                    <p>128 รายการ</p>
+                </div>
             </div>
-        </div>
 
-        <!-- กราฟซ้าย -->
-        <div class="div5 chart-container">
-            <h4>กราฟภาพรวมยอดขาย</h4>
-            <canvas id="mainSalesChart"></canvas>
-        </div>
+            <!-- กราฟซ้าย -->
+            <div class="div5 chart-container">
+                <h4>กราฟภาพรวมยอดขาย</h4>
+                <canvas id="mainSalesChart"></canvas>
+            </div>
 
-        <!-- กราฟขวา -->
-        <div class="div6 chart-container">
-            <h4>ลูกค้าใหม่</h4>
-            <canvas id="newCustomerChart"></canvas>
+            <!-- กราฟขวา -->
+            <div class="div6 chart-container">
+                <h4>ลูกค้าใหม่</h4>
+                <canvas id="newCustomerChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -3114,8 +3197,12 @@ $total_pages = ceil($total_items / $limit);
                             <div class="action-dropdown">
                                 <button onclick="toggleDropdown(this)">⋮</button>
                                 <div class="dropdown-content">
-                                    <a onclick="openEditPanel(<?php echo $item['id']; ?>); return false;">แก้ไข</a>
-                                    <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')">ลบ</a>
+                                    <a onclick="openEditPanel(<?php echo $item['id']; ?>); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                                    <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
                                 </div>
                             </div>
                         </td>
@@ -3123,6 +3210,101 @@ $total_pages = ceil($total_items / $limit);
                 <?php endforeach; ?>
             </tbody>
         </table>
+
+
+        <div class="card-grid" style="display: none;">
+            <?php foreach ($dried_food as $item): ?>
+                <div class="card">
+                    <img class="product-image" src="<?php echo $item['image_url']; ?>"
+                        alt="<?php echo $item['product_name']; ?>">
+
+                    <div class="card-content">
+                        <h3><?php echo $item['product_name']; ?></h3>
+
+                        <div class="barcode">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="40">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>
+                            <span><?php echo $item['barcode']; ?></span>
+                        </div>
+
+                        <p><span class="label">ราคา :</span> <?php echo number_format($item['price']); ?> บาท</p>
+                        <p><span class="label">ต้นทุน :</span> <?php echo number_format($item['cost']); ?> บาท</p>
+                        <p><span class="label">สต็อก :</span> <?php echo $item['stock']; ?> ชิ้น</p>
+                        <p><span class="label">เกณฑ์สั่งซื้อ :</span> <?php echo $item['reorder_level']; ?> ชิ้น</p>
+
+
+                        <div class="card-actions">
+                            <button onclick="openEditPanel(<?php echo $item['id']; ?>)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                </svg>แก้ไข</button>
+                            <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                </svg>ลบ</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- ฟอร์มแก้ไขสินค้า (จะไม่ใส่ค่าไว้แต่แรก) -->
+        <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
+
+        <div id="editPanel" class="side-panel">
+            <div class="side-panel-content">
+                <h2 class="h2-text-upload">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff">
+                        <path d="M360-600v-80h360v80H360Zm0 120v-80h360v80H360ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm263-224 37-39-37-37-38 38 38 38ZM240-80q-50 0-85-35t-35-85v-120h120v-560h600v361q-20-2-40.5 1.5T760-505v-295H320v480h240l-80 80v160H240Z" />
+                    </svg>แก้ไขข้อมูลสินค้า
+                </h2>
+                <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
+
+                <div id="side-panel-form-content">
+                    <form id="editProductForm" method="POST" action="">
+                        <input type="hidden" id="edit_product_id" name="id">
+
+                        <label for="product_name">ชื่อสินค้า</label>
+                        <input type="text" id="product_name" name="product_name" required>
+
+                        <label for="barcode">บาร์โค้ด</label>
+                        <input type="text" id="barcode" name="barcode" maxlength="17" oninput="formatBarcode(this)" />
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price">ราคา</label>
+                                <input type="number" id="price" name="price" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost">ต้นทุน</label>
+                                <input type="number" id="cost" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock">สต็อก</label>
+                                <input type="number" id="stock" name="stock" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
+                                <input type="number" id="reorder_level" name="reorder_level" required>
+                            </div>
+                        </div>
+
+                        <label for="image_url">URL รูปภาพ</label>
+                        <input type="text" id="image_url" name="image_url" required>
+
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path d="M268-240 42-466l57-56 170 170 56 56-57 56Zm226 0L268-466l56-57 170 170 368-368 56 57-424 424Zm0-226-57-56 198..." />
+                            </svg>บันทึก
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="pagination" id="pagination">
             <?php if ($page > 1): ?>
@@ -3150,59 +3332,8 @@ $total_pages = ceil($total_items / $limit);
                 <a href="?page=<?php echo $page + 1; ?>">ถัดไป</a>
             <?php endif; ?>
         </div>
-
-        <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
-
-        <div id="editPanel" class="side-panel">
-            <div class="side-panel-content">
-                <h2 class="h2-text-upload"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff">
-                        <path d="M360-600v-80h360v80H360Zm0 120v-80h360v80H360ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm263-224 37-39-37-37-38 38 38 38ZM240-80q-50 0-85-35t-35-85v-120h120v-560h600v361q-20-2-40.5 1.5T760-505v-295H320v480h240l-80 80v160H240Z" />
-                    </svg>แก้ไขข้อมูลสินค้า</h2>
-                <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
-                <div id="side-panel-form-content">
-                    <!-- ฟอร์มการแก้ไขจะแสดงที่นี่ -->
-                    <form id="editProductForm" method="POST" action="../../product/edit_product/edit_dried_food/edit_dried_food.php?id=<?php echo $item['id']; ?>">
-
-                        <label for="product_name">ชื่อสินค้า</label>
-                        <input type="text" id="product_name" name="product_name" value="<?php echo htmlspecialchars($item['product_name']); ?>" required>
-
-                        <label for="barcode">บาร์โค้ด</label>
-                        <input type="text" id="barcode" name="barcode" value="<?php echo htmlspecialchars($item['barcode']); ?>" required>
-
-                        <div class="form-group-row">
-                            <div class="group-item">
-                                <label for="price">ราคา</label>
-                                <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($item['price']); ?>" required>
-                            </div>
-                            <div class="group-item">
-                                <label for="cost">ต้นทุน</label>
-                                <input type="number" id="cost" name="cost" value="<?php echo htmlspecialchars($item['cost']); ?>" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group-row">
-                            <div class="group-item">
-                                <label for="stock">สต็อก</label>
-                                <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($item['stock']); ?>" required>
-                            </div>
-                            <div class="group-item">
-                                <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
-                                <input type="number" id="reorder_level" name="reorder_level" value="<?php echo htmlspecialchars($item['reorder_level']); ?>" required>
-                            </div>
-                        </div>
-
-                        <label for="image_url">URL รูปภาพ</label>
-                        <input type="text" id="image_url" name="image_url" value="<?php echo htmlspecialchars($item['image_url']); ?>" required>
-
-                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                <path d="M268-240 42-466l57-56 170 170 56 56-57 56Zm226 0L268-466l56-57 170 170 368-368 56 57-424 424Zm0-226-57-56 198-198 57 56-198 198Z" />
-                            </svg>อัปเดตข้อมูลสินค้า</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
     </div>
+
 
     <div id="soft_drink" class="content">
         <h3 class="h-text">🔘 สวิตช์</h3>
@@ -3260,6 +3391,60 @@ $total_pages = ceil($total_items / $limit);
     </div>
 
     <div id="fresh_food" class="content">
+        <h3 class="h-text">🎨 คีย์แค็ป</h3>
+        <table border="1" cellspacing="0" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Profile</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($keycaps as $item): ?>
+                    <tr>
+                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
+                        <td><?php echo $item['NAME']; ?></td>
+                        <td>฿<?php echo $item['PRICE']; ?></td>
+                        <td><?php echo $item['KEYCAP_PROFILE']; ?></td>
+                        <td>
+                            <form action="#" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
+                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
+                            </form>
+                            <!-- Popup Form -->
+                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
+                                <div class="popup-content">
+                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                    <h3>แก้ไขข้อมูลสินค้า</h3>
+                                    <form action="../product/edit_product/edit_product.php" method="POST">
+                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
+                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
+                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
+                                        <input type="hidden" name="productCategory" value="keycaps"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
+                                        <input type="text" name="keycapProfile" value="<?php echo $item['KEYCAP_PROFILE']; ?>" required>
+                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
+                                <input type="hidden" name="category" value="keycaps"> <!-- หมวดหมู่สินค้านี้ -->
+                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'keycaps')">ลบสินค้า</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="snack_food" class="content">
         <h3 class="h-text">🎨 คีย์แค็ป</h3>
         <table border="1" cellspacing="0" cellpadding="10">
             <thead>
@@ -3519,16 +3704,64 @@ $total_pages = ceil($total_items / $limit);
         });
 
         function openEditPanel(id) {
-            document.getElementById('editPanel').classList.add('show');
-            document.getElementById('overlay').classList.add('show');
-            document.body.classList.add('side-panel-open');
+            const overlay = document.getElementById('overlay');
+            const editPanel = document.getElementById('editPanel');
+
+            // เปิด overlay กับ side panel
+            overlay.style.display = 'block';
+            editPanel.style.display = 'block'; // <<< เพิ่มบรรทัดนี้
+            setTimeout(() => {
+                editPanel.style.right = '0';
+            }, 10); // เพิ่ม delay เล็กน้อยให้ CSS transition ทำงานนุ่มนวล
+
+            // Fetch data จาก server
+            fetch('../../product/edit_product/get_food_all/get_dried_food.php?id=' + id)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('edit_product_id').value = data.id;
+                    document.getElementById('product_name').value = data.product_name;
+                    document.getElementById('barcode').value = data.barcode || ''; 
+                    document.getElementById('price').value = data.price;
+                    document.getElementById('cost').value = data.cost;
+                    document.getElementById('stock').value = data.stock;
+                    document.getElementById('reorder_level').value = data.reorder_level;
+                    document.getElementById('image_url').value = data.image_url;
+
+                    document.getElementById('editProductForm').action = '../../product/edit_product/edit_food_all/edit_dried_food.php?id=' + data.id;
+                })
+                .catch(error => {
+                    console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                });
+        }
+
+        function formatBarcode(input) {
+            let value = input.value.replace(/\D/g, ''); // ลบทุกตัวที่ไม่ใช่ตัวเลข
+            let formatted = '';
+
+            for (let i = 0; i < value.length; i++) {
+                formatted += value[i];
+
+                // ใส่เว้นวรรคหลังตัวที่ 1 และตัวที่ 7
+                if (i === 0 || i === 6) {
+                    formatted += ' ';
+                }
+            }
+
+            input.value = formatted.trim();
         }
 
         function closeEditPanel() {
-            document.getElementById('editPanel').classList.remove('show');
-            document.getElementById('overlay').classList.remove('show');
-            document.body.classList.remove('side-panel-open');
+            const overlay = document.getElementById('overlay');
+            const editPanel = document.getElementById('editPanel');
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
         }
+
+
 
         function showFileName(input) {
             const fileNameText = input.nextElementSibling;
@@ -3540,58 +3773,64 @@ $total_pages = ceil($total_items / $limit);
         }
 
         // กราฟภาพรวมยอดขาย (bar chart)
-    const mainSalesCtx = document.getElementById('mainSalesChart').getContext('2d');
-    const mainSalesChart = new Chart(mainSalesCtx, {
-        type: 'bar',
-        data: {
-            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
-            datasets: [{
-                label: 'ยอดขาย (บาท)',
-                data: [120000, 135000, 110000, 150000, 175000, 160000],
-                backgroundColor: '#4A90E2',
-                borderRadius: 6,
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: value => '฿' + value.toLocaleString()
+        const mainSalesCtx = document.getElementById('mainSalesChart').getContext('2d');
+        const mainSalesChart = new Chart(mainSalesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                datasets: [{
+                    label: 'ยอดขาย (บาท)',
+                    data: [120000, 135000, 110000, 150000, 175000, 160000],
+                    backgroundColor: '#4A90E2',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => '฿' + value.toLocaleString()
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                }
             }
-        }
-    });
+        });
 
-    // กราฟลูกค้าใหม่ (doughnut chart)
-    const customerCtx = document.getElementById('newCustomerChart').getContext('2d');
-    const newCustomerChart = new Chart(customerCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['ใหม่', 'เก่า'],
-            datasets: [{
-                label: 'ลูกค้า',
-                data: [42, 128],
-                backgroundColor: ['#50E3C2', '#E0E0E0'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+        // กราฟลูกค้าใหม่ (doughnut chart)
+        const customerCtx = document.getElementById('newCustomerChart').getContext('2d');
+        const newCustomerChart = new Chart(customerCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['ใหม่', 'เก่า'],
+                datasets: [{
+                    label: 'ลูกค้า',
+                    data: [42, 128],
+                    backgroundColor: ['#50E3C2', '#E0E0E0'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
                 }
             }
-        }
-    });
+        });
+
+        document.querySelector('.btn-grid').addEventListener('click', function() {
+    const cardGrid = document.querySelector('.card-grid');
+    cardGrid.style.display = 'grid';
+});
+
 
 
 
@@ -3799,7 +4038,7 @@ $total_pages = ceil($total_items / $limit);
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/dried_food/add_dried_food.php", {
+                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_dried_food.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -3867,7 +4106,7 @@ $total_pages = ceil($total_items / $limit);
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/soft_drink/add_soft_drink.php", {
+                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_soft_drink.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -3935,7 +4174,7 @@ $total_pages = ceil($total_items / $limit);
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/fresh_food/add_fresh_food.php", {
+                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_fresh_food.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -4003,7 +4242,7 @@ $total_pages = ceil($total_items / $limit);
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/snack/add_snack.php", {
+                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_snack.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
