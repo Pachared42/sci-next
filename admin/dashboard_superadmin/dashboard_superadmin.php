@@ -7,36 +7,83 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'superadmin') {
     exit();
 }
 
-require_once __DIR__ . '/../../config/db.php'; // ตรวจสอบเส้นทางให้ถูกต้อง
+require_once __DIR__ . '/../../config/db.php';
 $username = $_SESSION['user'];
+
+// ฟังก์ชันบันทึกข้อผิดพลาดลงไฟล์
+function logError($message)
+{
+    $file = __DIR__ . '/../../logs/error.log';
+    if (!file_exists(dirname($file))) {
+        mkdir(dirname($file), 0777, true);
+    }
+    $time = date('Y-m-d H:i:s');
+    $fullMessage = "[$time] ข้อผิดพลาด: $message\n";
+    file_put_contents($file, $fullMessage, FILE_APPEND);
+}
 
 // ฟังก์ชันตรวจสอบการเชื่อมต่อฐานข้อมูล
 function checkConnection($conn)
 {
-    if (!$conn) {
-        die("ไม่สามารถเชื่อมต่อฐานข้อมูลได้" . oci_error());
+    if ($conn->connect_error) {
+        logError("ไม่สามารถเชื่อมต่อฐานข้อมูลได้: " . $conn->connect_error);
+        die("ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่ภายหลัง.");
     }
 }
 
-// ตรวจสอบการเชื่อมต่อฐานข้อมูล
+// ตรวจสอบการเชื่อมต่อ
 checkConnection($conn);
 
-// ฟังก์ชันดึงข้อมูลสินค้า
+// ฟังก์ชันดึงข้อมูลสินค้าแบบปลอดภัย
 function fetchProducts($conn, $table)
 {
-    $sql = "SELECT * FROM " . $table;
-    $result = $conn->query($sql);
-
-    if (!$result) {
-        echo "เกิดข้อผิดพลาดในการดำเนินการคำสั่ง SQL บนตาราง: " . $table;
+    $allowedTables = ['dried_food', 'soft_drink', 'fresh_food', 'snack'];
+    if (!in_array($table, $allowedTables)) {
+        logError("มีการร้องขอเข้าถึงตารางที่ไม่ได้รับอนุญาต: " . htmlspecialchars($table));
         return [];
     }
 
+    $sql = "SELECT id, product_name, barcode, price, cost, stock, reorder_level, image_url FROM `$table`";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        logError("ไม่สามารถเตรียมคำสั่ง SQL สำหรับตาราง $table ได้: " . $conn->error);
+        return [];
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
     $products = [];
+
     while ($row = $result->fetch_assoc()) {
         $products[] = $row;
     }
+
+    $stmt->close();
     return $products;
+}
+
+// ฟังก์ชันดึงข้อมูลพนักงานแบบปลอดภัย
+function fetchUsers($conn)
+{
+    $sql = "SELECT ID_NUMBER, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME FROM employee";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        logError("ไม่สามารถเตรียมคำสั่ง SQL สำหรับดึงข้อมูลพนักงานได้: " . $conn->error);
+        return [];
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $users = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
+    }
+
+    $stmt->close();
+    return $users;
 }
 
 // ดึงข้อมูลจากหลายๆ ตาราง
@@ -45,49 +92,8 @@ $soft_drink = fetchProducts($conn, 'soft_drink');
 $fresh_food = fetchProducts($conn, 'fresh_food');
 $snack = fetchProducts($conn, 'snack');
 
-// ฟังก์ชันดึงข้อมูลพนักงาน
-function fetchUsers($conn)
-{
-    $sql = "SELECT ID_NUMBER, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME FROM employee";
-    $result = $conn->query($sql);
-
-    if (!$result) {
-        echo "Error executing query on users table.";
-        return [];
-    }
-
-    $users = [];
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
-    }
-    return $users;
-}
-
 // ดึงข้อมูลผู้ใช้ทั้งหมด
 $users = fetchUsers($conn);
-
-
-// จำนวนสินค้าต่อหน้า
-$limit = 9;
-
-// หน้าปัจจุบัน (ถ้าไม่มีตั้งค่าให้เริ่มที่หน้า 1)
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) $page = 1;
-
-// หาตำแหน่งเริ่มดึงข้อมูล
-$offset = ($page - 1) * $limit;
-
-// ดึงข้อมูลจากฐานข้อมูลแบบแบ่งหน้า
-$result = $conn->query("SELECT * FROM dried_food LIMIT $limit OFFSET $offset");
-$dried_food = $result->fetch_all(MYSQLI_ASSOC);
-
-// นับจำนวนสินค้าทั้งหมด
-$total_result = $conn->query("SELECT COUNT(*) as total FROM dried_food");
-$total_row = $total_result->fetch_assoc();
-$total_items = $total_row['total'];
-
-// หาจำนวนหน้าทั้งหมด
-$total_pages = ceil($total_items / $limit);
 ?>
 
 <!DOCTYPE html>
@@ -510,54 +516,38 @@ $total_pages = ceil($total_items / $limit);
             height: auto;
         }
 
-        /* ปุ่มเปลี่ยนหน้าสินค้า */
+        .highlight {
+            background-color: #FFD700;
+        }
+
         .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            margin: 20px 0 0 0;
-            flex-wrap: wrap;
+            margin-top: 20px;
+            text-align: center;
         }
 
-        .pagination a {
-            color: #000000;
-            padding: 6px 12px;
+        .page-btn {
             font-size: 16px;
+            color: #000000;
             font-weight: bold;
-            text-decoration: none;
-            border-radius: 10px;
-            background: #ffffff;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .pagination a:hover {
-            background-color: #444444;
-            color: white;
-        }
-
-        .pagination span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 37px;
+            padding: 5px 12px;
+            margin: 4px;
+            cursor: pointer;
             background-color: #ffffff;
-            border-radius: 10px;
-            cursor: default;
-            transition: background 0.2s ease;
+            border: none;
+            border-radius: 5px;
         }
 
-        .pagination span svg {
-            width: 20px;
-            height: 20px;
-            fill: #000000;
+        .page-btn:hover {
+            background-color: #dddddd;
+            color: #000000;
         }
 
-        .pagination a[style*="font-weight:bold;"] {
-            background-color: #444444;
+        .page-btn.active {
+            background-color: #555555;
             color: #ffffff;
         }
+
+
 
         /* สไตล์ของตาราง */
         table {
@@ -646,7 +636,7 @@ $total_pages = ceil($total_items / $limit);
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             padding: 20px 0 20px 0;
         }
@@ -674,6 +664,35 @@ $total_pages = ceil($total_items / $limit);
 
         .card:hover {
             background: rgba(255, 255, 255, 0.9);
+        }
+
+        .product-image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .out-of-stock-label-table {
+            top: 10px;
+            left: 50%;
+            background-color: rgba(255, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 15px;
+            border-radius: 10px;
+        }
+
+        .out-of-stock-label {
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 10px;
         }
 
         .product-image {
@@ -958,8 +977,25 @@ $total_pages = ceil($total_items / $limit);
             padding: 8px 0 8px 0;
         }
 
+        .no-items-message {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 16px;
+            color: #000000;
+            padding: 20px;
+            gap: 8px;
+
+            svg {
+                fill: #333333;
+                width: 24px;
+                height: 24px;
+                ;
+            }
+        }
+
         .search-container {
-            width: 55%;
+            width: 50%;
             display: flex;
             align-items: center;
             background: #fff;
@@ -1058,6 +1094,10 @@ $total_pages = ceil($total_items / $limit);
             fill: #DC143C;
         }
 
+        .btn-filter svg {
+            fill: #FFA500;
+        }
+
         .btn-grid svg {
             fill: #1E90FF;
         }
@@ -1065,7 +1105,6 @@ $total_pages = ceil($total_items / $limit);
         .btn-table svg {
             fill: #f72585;
         }
-
 
         .btn:hover svg {
             opacity: 0.7;
@@ -1096,76 +1135,66 @@ $total_pages = ceil($total_items / $limit);
             transform: translateX(-50%) translateY(-5px);
         }
 
-        /* Submit button */
-        .btn-edit-prodect {
-            padding: 20px;
-            background-color: #03c9a0;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 215px;
-            width: 100%;
-            transition: background-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .btn-edit-prodect:hover {
-            background-color: #45a049;
-        }
-
-
-        .btn-close {
+        .filter-menu {
+            display: none;
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 10px;
+            padding: 10px;
             position: absolute;
-            top: 10px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 34px;
-            color: #f44336;
-            cursor: pointer;
-            transition: 0.3s;
+            top: 78px;
+            right: 45px;
+            width: 200px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            option {
+                background-color: #ffffff;
+                color: #000000;
+                padding: 10px;
+                font-size: 14px;
+                font-weight: bold;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
         }
 
-        .btn-close:hover {
-            color: #d32f2f;
-            transform: scale(1.2);
-        }
-
-        .popup-content button:focus {
-            outline: none;
-        }
-
-        /* Close button outside of popup */
-        .btn-close-popup {
-            background-color: transparent;
-            color: #f44336;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            display: block;
-            margin: 20px auto;
-        }
-
-        .btn-close-popup:hover {
-            text-decoration: underline;
-        }
-
-        /* Background overlay */
-        .edit-popup .popup-content {
-            transition: opacity 0.3s ease;
-        }
-
-        /* Make the popup visible */
-        .edit-popup.show {
-            display: flex;
-        }
-
-        .description {
+        .filter-menu select,
+        .filter-menu input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
             font-size: 14px;
-            color: #666;
-            margin-top: 8px;
+            font-weight: bold;
+            background: #f9f9f9;
+        }
+
+        .filter-menu button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px;
+            background-color: #2176FF;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                fill: #ffffff;
+            }
+        }
+
+        .filter-menu button:hover {
+            background-color: #1056CC;
         }
 
         /* โครงสร้าง Grid หลัก */
@@ -1253,11 +1282,6 @@ $total_pages = ceil($total_items / $limit);
             color: #333;
             margin-bottom: 12px;
         }
-
-
-
-
-
 
         #order {
             margin-top: 68px;
@@ -1975,7 +1999,6 @@ $total_pages = ceil($total_items / $limit);
             display: none;
         }
 
-
         /* แสดง panel */
         .side-panel.show {
             transform: translateX(0);
@@ -2067,7 +2090,7 @@ $total_pages = ceil($total_items / $limit);
             gap: 8px;
             padding: 15px 20px;
             background-color: #000000;
-            color: white;
+            color: #ffffff;
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -2082,7 +2105,7 @@ $total_pages = ceil($total_items / $limit);
         #editProductForm button svg {
             width: 28px;
             height: 28px;
-            fill: #e3e3e3;
+            fill: #ffffff;
         }
 
         .excel-grid-upload {
@@ -2211,15 +2234,17 @@ $total_pages = ceil($total_items / $limit);
         <!-- รายการหลัก -->
         <div class="main-tabs">
             <h3>รายการหลัก</h3>
+
+            <div class="tab" onclick="showTab('graph')">
+                <span class="material-icons">analytics</span> แดชบอร์ดสถิติ
+            </div>
+
             <div class="tab" id="orderTab" onclick="showTab('order')">
                 <span class="material-icons">shopping_cart</span>
                 <span class="badge">99+</span> <!-- ตัวเลขแจ้งเตือน -->
                 รายการขาย
             </div>
 
-            <div class="tab" onclick="showTab('graph')">
-                <span class="material-icons">show_chart</span> สถิติการขาย
-            </div>
         </div>
         <hr class="tab-divider">
 
@@ -3135,8 +3160,8 @@ $total_pages = ceil($total_items / $limit);
             </h3>
 
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="ค้นหาสินค้า...">
-                <button class="search-button">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInput" oninput="filterProducts()">
+                <button class="search-button" onclick="filterProducts()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
                     </svg>
@@ -3144,13 +3169,28 @@ $total_pages = ceil($total_items / $limit);
             </div>
 
             <div class="btn-container">
-                <button class="btn btn-table" data-tooltip="แสดง Table">
+                <button class="btn btn-filter" data-tooltip="แสดง Filter" onclick="toggleMenu()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                        <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-grid" data-tooltip="แสดง Grid">
+                <div id="filterMenu" class="filter-menu">
+                    <select id="filterCategory">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="food">สินค้าใกล้หมด</option>
+                    </select>
+
+                    <!-- <button onclick="applyFilters()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M80-140v-320h320v320H80Zm80-80h160v-160H160v160Zm60-340 220-360 220 360H220Zm142-80h156l-78-126-78 126ZM863-42 757-148q-21 14-45.5 21t-51.5 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50.5T813-204L919-98l-56 56ZM660-200q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-380Zm120-260Z"/></svg>ค้นหา</button> -->
+                </div>
+
+                <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchView('table')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M320-80q-33 0-56.5-23.5T240-160v-480q0-33 23.5-56.5T320-720h480q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H320Zm0-80h200v-120H320v120Zm280 0h200v-120H600v120ZM80-240v-560q0-33 23.5-56.5T160-880h560v80H160v560H80Zm240-120h200v-120H320v120Zm280 0h200v-120H600v120ZM320-560h480v-80H320v80Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-grid" data-tooltip="แสดง Grid" onclick="switchView('grid')">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
                     </svg>
@@ -3158,96 +3198,28 @@ $total_pages = ceil($total_items / $limit);
             </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ชื่อสินค้า</th>
-                    <th>รูปภาพ</th>
-                    <th>บาร์โค้ด</th>
-                    <th>ราคา</th>
-                    <th>ต้นทุน</th>
-                    <th>สต็อก</th>
-                    <th>เกณฑ์สั่งซื้อ</th>
-                    <th>จัดการสินค้า</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($dried_food as $item): ?>
+        <div id="container">
+            <table id="productTable" display: none;">
+                <thead>
                     <tr>
-                        <td style="text-align: left;"><?php echo $item['product_name']; ?></td>
-                        <td>
-                            <img src="<?php echo $item['image_url']; ?>"
-                                alt="<?php echo $item['product_name']; ?>"
-                                width="100" height="auto">
-                        </td>
-                        <td style="text-align: center;">
-                            <div class="barcode-cell">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                                </svg>
-                                <span><?php echo $item['barcode']; ?></span>
-                            </div>
-                        </td>
-
-                        <td><?php echo number_format($item['price']); ?> บาท</td>
-                        <td><?php echo number_format($item['cost']); ?> บาท</td>
-                        <td><?php echo $item['stock']; ?> ชิ้น</td>
-                        <td><?php echo $item['reorder_level']; ?> ชิ้น</td>
-                        <td>
-                            <div class="action-dropdown">
-                                <button onclick="toggleDropdown(this)">⋮</button>
-                                <div class="dropdown-content">
-                                    <a onclick="openEditPanel(<?php echo $item['id']; ?>); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
-                                        </svg>แก้ไข</a>
-                                    <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                        </svg>ลบ</a>
-                                </div>
-                            </div>
-                        </td>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูป</th>
+                        <th>บาร์โค้ด</th>
+                        <th>ราคา</th>
+                        <th>ต้นทุน</th>
+                        <th>สต็อก</th>
+                        <th>เกณฑ์สั่งซื้อ</th>
+                        <th>การจัดการ</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+            </table>
 
-
-        <div class="card-grid" style="display: none;">
-            <?php foreach ($dried_food as $item): ?>
-                <div class="card">
-                    <img class="product-image" src="<?php echo $item['image_url']; ?>"
-                        alt="<?php echo $item['product_name']; ?>">
-
-                    <div class="card-content">
-                        <h3><?php echo $item['product_name']; ?></h3>
-
-                        <div class="barcode">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="40">
-                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>
-                            <span><?php echo $item['barcode']; ?></span>
-                        </div>
-
-                        <p><span class="label">ราคา :</span> <?php echo number_format($item['price']); ?> บาท</p>
-                        <p><span class="label">ต้นทุน :</span> <?php echo number_format($item['cost']); ?> บาท</p>
-                        <p><span class="label">สต็อก :</span> <?php echo $item['stock']; ?> ชิ้น</p>
-                        <p><span class="label">เกณฑ์สั่งซื้อ :</span> <?php echo $item['reorder_level']; ?> ชิ้น</p>
-
-
-                        <div class="card-actions">
-                            <button onclick="openEditPanel(<?php echo $item['id']; ?>)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                    <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
-                                </svg>แก้ไข</button>
-                            <a href="delete.php?id=<?php echo $item['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                </svg>ลบ</a>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+            <div id="productGrid" class="card-grid"></div>
         </div>
 
-        <!-- ฟอร์มแก้ไขสินค้า (จะไม่ใส่ค่าไว้แต่แรก) -->
+        <div id="pagination" class="pagination "></div>
+
         <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
 
         <div id="editPanel" class="side-panel">
@@ -3267,7 +3239,7 @@ $total_pages = ceil($total_items / $limit);
                         <input type="text" id="product_name" name="product_name" required>
 
                         <label for="barcode">บาร์โค้ด</label>
-                        <input type="text" id="barcode" name="barcode" maxlength="17" oninput="formatBarcode(this)" />
+                        <input type="text" id="barcode" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
@@ -3295,42 +3267,11 @@ $total_pages = ceil($total_items / $limit);
                         <input type="text" id="image_url" name="image_url" required>
 
                         <button type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                <path d="M268-240 42-466l57-56 170 170 56 56-57 56Zm226 0L268-466l56-57 170 170 368-368 56 57-424 424Zm0-226-57-56 198..." />
-                            </svg>บันทึก
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึก
                         </button>
                     </form>
                 </div>
             </div>
-        </div>
-
-
-
-        <div class="pagination" id="pagination">
-            <?php if ($page > 1): ?>
-                <a href="?page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
-            <?php endif; ?>
-
-            <?php
-            $start = max(1, $page - 2);
-            $end = min($total_pages, $page + 2);
-
-            for ($i = $start; $i <= $end; $i++):
-            ?>
-                <a href="?page=<?php echo $i; ?>" <?php if ($i == $page) echo 'style="font-weight:bold;"'; ?>>
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
-
-            <?php if ($end < $total_pages): ?>
-                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M200-360q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm280 80q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm280 80q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Z" />
-                    </svg></span>
-            <?php endif; ?>
-
-            <?php if ($page < $total_pages): ?>
-                <a href="?page=<?php echo $page + 1; ?>">ถัดไป</a>
-            <?php endif; ?>
         </div>
     </div>
 
@@ -3603,7 +3544,6 @@ $total_pages = ceil($total_items / $limit);
         </table>
     </div>
 
-
     <div id="account" class="content">
         <div class="profile-container">
             <div class="cover"></div>
@@ -3667,8 +3607,6 @@ $total_pages = ceil($total_items / $limit);
             }
         }
 
-
-
         document.getElementById("profile-form").addEventListener("submit", function(event) {
             event.preventDefault(); // ป้องกันการรีโหลดหน้า
 
@@ -3714,13 +3652,16 @@ $total_pages = ceil($total_items / $limit);
                 editPanel.style.right = '0';
             }, 10); // เพิ่ม delay เล็กน้อยให้ CSS transition ทำงานนุ่มนวล
 
+            // ปิดการเลื่อนหน้าจอ
+            document.body.style.overflow = 'hidden';
+
             // Fetch data จาก server
             fetch('../../product/edit_product/get_food_all/get_dried_food.php?id=' + id)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('edit_product_id').value = data.id;
                     document.getElementById('product_name').value = data.product_name;
-                    document.getElementById('barcode').value = data.barcode || ''; 
+                    document.getElementById('barcode').value = data.barcode || '';
                     document.getElementById('price').value = data.price;
                     document.getElementById('cost').value = data.cost;
                     document.getElementById('stock').value = data.stock;
@@ -3734,22 +3675,6 @@ $total_pages = ceil($total_items / $limit);
                 });
         }
 
-        function formatBarcode(input) {
-            let value = input.value.replace(/\D/g, ''); // ลบทุกตัวที่ไม่ใช่ตัวเลข
-            let formatted = '';
-
-            for (let i = 0; i < value.length; i++) {
-                formatted += value[i];
-
-                // ใส่เว้นวรรคหลังตัวที่ 1 และตัวที่ 7
-                if (i === 0 || i === 6) {
-                    formatted += ' ';
-                }
-            }
-
-            input.value = formatted.trim();
-        }
-
         function closeEditPanel() {
             const overlay = document.getElementById('overlay');
             const editPanel = document.getElementById('editPanel');
@@ -3759,9 +3684,10 @@ $total_pages = ceil($total_items / $limit);
             setTimeout(() => {
                 editPanel.style.display = 'none';
             }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
+
+            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
+            document.body.style.overflow = 'auto';
         }
-
-
 
         function showFileName(input) {
             const fileNameText = input.nextElementSibling;
@@ -3826,10 +3752,209 @@ $total_pages = ceil($total_items / $limit);
             }
         });
 
-        document.querySelector('.btn-grid').addEventListener('click', function() {
-    const cardGrid = document.querySelector('.card-grid');
-    cardGrid.style.display = 'grid';
-});
+        function toggleMenu() {
+            const filterMenu = document.getElementById('filterMenu');
+            filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function applyFilters() {
+            const category = document.getElementById('filterCategory').value;
+            const price = document.getElementById('filterPrice').value;
+
+            console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
+
+            // ทำการกรองข้อมูลตามฟิลเตอร์ที่เลือก
+            // ตัวอย่างเช่น กรองสินค้าใน filteredProducts ตาม category และ price ที่เลือก
+            // ฟังก์ชันนี้สามารถปรับให้ทำงานตามความต้องการของคุณ
+        }
+
+
+        const products = <?php echo json_encode($dried_food); ?>;
+        const tableBody = document.getElementById('productTableBody');
+        const grid = document.getElementById('productGrid');
+        const pagination = document.getElementById('pagination');
+        const container = document.getElementById('container');
+
+        let filteredProducts = [...products];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let searchText = '';
+        let currentView = localStorage.getItem('viewMode') || 'table'; // ใช้ค่าใน localStorage หรือ default เป็น table
+
+        function highlightText(text, keyword) {
+            if (!keyword) return text;
+            const pattern = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(pattern, '<span class="highlight">$1</span>');
+        }
+
+        function displayProducts() {
+            tableBody.innerHTML = '';
+            grid.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedItems = filteredProducts.slice(startIndex, endIndex);
+
+            if (currentView === 'table') {
+                document.getElementById('productTable').style.display = 'table';
+                grid.style.display = 'none';
+
+                if (paginatedItems.length === 0) {
+                    tableBody.innerHTML = `
+    <tr>
+        <td colspan="8" class="no-items-message">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </td>
+    </tr>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        tableBody.innerHTML += `
+                    <tr>
+                        <td style="text-align:left;">${highlightText(item.product_name, searchText)}</td>
+                        <td>
+                            <div class="product-image-container">
+                                <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                                <div class="out-of-stock-label-table">สินค้าใกล้หมด</div>
+                            </div>
+                        </td>
+                        <td style="text-align:center;">
+                            <div class="barcode-cell">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                                <span>${highlightText(item.barcode, searchText)}</span>
+                            </div>
+                        </td>
+                        <td>${Number(item.price).toLocaleString()} บาท</td>
+                        <td>${Number(item.cost).toLocaleString()} บาท</td>
+                        <td>${item.stock} ชิ้น</td>
+                        <td>${item.reorder_level} ชิ้น</td>
+                        <td>
+                            <div class="action-dropdown">
+                                <button onclick="toggleDropdown(this)">⋮</button>
+                                <div class="dropdown-content">
+                                    <a onclick="openEditPanel(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                                    <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                    });
+                }
+            } else if (currentView === 'grid') {
+                document.getElementById('productTable').style.display = 'none';
+                grid.style.display = 'grid';
+
+                if (paginatedItems.length === 0) {
+                    grid.innerHTML = `
+        <p style="grid-column: 1 / -1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 2px; ">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333" style="margin-right: 10px;">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </p>
+    `;
+                } else {
+                    paginatedItems.forEach(item => {
+                        grid.innerHTML += `
+                    <div class="card">
+                        <div class="product-image-container">
+                            <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                            <div class="out-of-stock-label">สินค้าใกล้หมด</div>
+                        </div>
+                        <div class="card-content">
+                            <h3>${highlightText(item.product_name, searchText)}</h3>
+                            <div class="barcode">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                                <span>${highlightText(item.barcode, searchText)}</span>
+                            </div>
+                            <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString()} บาท</p>
+                            <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString()} บาท</p>
+                            <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
+                            <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
+                            <div class="card-actions">
+                                <button onclick="openEditPanel(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</button>
+                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    });
+                }
+            }
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            pagination.innerHTML = '';
+
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            if (totalPages <= 1) return;
+
+            if (currentPage > 1) {
+                pagination.innerHTML += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">ก่อนหน้า</button>`;
+            }
+
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                pagination.innerHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+
+            if (currentPage < totalPages) {
+                pagination.innerHTML += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">ถัดไป</button>`;
+            }
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            displayProducts();
+        }
+
+        function filterProducts() {
+            searchText = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            if (searchText === '') {
+                filteredProducts = [...products];
+            } else {
+                filteredProducts = products.filter(item =>
+                    item.product_name.toLowerCase().includes(searchText) ||
+                    item.barcode.toLowerCase().includes(searchText)
+                );
+            }
+
+            currentPage = 1;
+            displayProducts();
+        }
+
+        function switchView(viewType) {
+            currentView = viewType; // บันทึกมุมมองที่เลือก
+            localStorage.setItem('viewMode', viewType); // บันทึกการเลือกมุมมองใน localStorage
+            displayProducts();
+        }
+
+        // โหลดครั้งแรก
+        displayProducts();
 
 
 
@@ -4298,51 +4423,6 @@ $total_pages = ceil($total_items / $limit);
             localStorage.setItem("activeTab", tabId); // บันทึกแท็บที่เปิดล่าสุด
         }
 
-        function showEditPasswordForm(id) {
-            // ซ่อนปุ่ม "แก้ไขรหัสผ่าน"
-            document.querySelector(`form[action="edit_password.php"] button[onclick="showEditPasswordForm(${id})"]`).style.display = 'none';
-
-            // แสดงฟอร์มแก้ไขรหัสผ่าน
-            document.getElementById(`password-form-${id}`).style.display = 'block';
-        }
-
-        function hideEditPasswordForm(id) {
-            // แสดงปุ่ม "แก้ไขรหัสผ่าน" กลับมา
-            document.querySelector(`form[action="edit_password.php"] button[onclick="showEditPasswordForm(${id})"]`).style.display = 'inline-block';
-
-            // ซ่อนฟอร์มแก้ไขรหัสผ่าน
-            document.getElementById(`password-form-${id}`).style.display = 'none';
-        }
-
-        function deleteProduct(id, category) {
-            if (confirm("คุณต้องการลบสินค้านี้ใช่หรือไม่?")) {
-                // ส่งคำขอลบสินค้าไปยัง server ด้วย AJAX
-                var formData = new FormData();
-                formData.append('id', id);
-                formData.append('category', category);
-
-                // ส่ง AJAX Request ไปยัง PHP
-                fetch('../product/delete_product/delete_product.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json()) // รับผลลัพธ์จาก PHP
-                    .then(data => {
-                        if (data.success) {
-                            // ถ้าลบสำเร็จ, รีเฟรชหน้า
-                            displayMessage(data.message, 'success'); // แสดงข้อความลบสำเร็จ
-                            location.reload(); // รีเฟรชหน้าเพื่อแสดงผลลัพธ์ใหม่
-                        } else {
-                            displayMessage('เกิดข้อผิดพลาดในการลบ: ' + data.message, 'error'); // แสดงข้อความข้อผิดพลาด
-                        }
-                    })
-                    .catch(error => {
-                        console.error('เกิดข้อผิดพลาด:', error);
-                        displayMessage('เกิดข้อผิดพลาดในการลบ!', 'error');
-                    });
-            }
-        }
-
         function displayMessage(message, type) {
             // สร้าง element สำหรับแสดงข้อความ
             var messageBox = document.createElement('div');
@@ -4592,21 +4672,6 @@ $total_pages = ceil($total_items / $limit);
                 // อัปเดตค่าใน input hidden
                 document.getElementById('productCategory').value = this.getAttribute('data-category');
             });
-        });
-
-        document.getElementById("barcode").addEventListener("input", function(e) {
-            let value = e.target.value.replace(/\s+/g, ""); // ลบช่องว่างทั้งหมดก่อน
-            let formatted = "";
-
-            // ตัวอย่าง: รองรับ EAN-13 (13 หลัก, เว้นวรรคที่ตำแหน่ง 3, 7, 11)
-            if (/^\d{1,13}$/.test(value)) {
-                formatted = value.replace(/(\d{1})(\d{6})?(\d{6})?/, function(_, g1, g2, g3, g4) {
-                    return [g1, g2, g3, g4].filter(Boolean).join(" ");
-                });
-            }
-
-            // อัปเดตค่ากลับไปที่ input
-            e.target.value = formatted;
         });
 
         document.querySelector('.collapsible-toggle').addEventListener('click', function() {

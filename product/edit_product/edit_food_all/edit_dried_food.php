@@ -25,19 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $query = "UPDATE dried_food SET 
-                    product_name = ?, 
-                    barcode = ?, 
-                    price = ?, 
-                    cost = ?, 
-                    stock = ?, 
-                    reorder_level = ?, 
-                    image_url = ? 
-                  WHERE id = ?";
+            product_name = ?, 
+            barcode = ?, 
+            price = ?, 
+            cost = ?, 
+            stock = ?, 
+            reorder_level = ?, 
+            image_url = ? 
+          WHERE id = ?";
 
         if ($stmt = $conn->prepare($query)) {
-
-            // ประเภทข้อมูล: s=string, d=double, i=integer
-            $stmt->bind_param("ssddii si", $product_name, $barcode, $price, $cost, $stock, $reorder_level, $image_url, $id);
+            $stmt->bind_param("ssddiiis", $product_name, $barcode, $price, $cost, $stock, $reorder_level, $image_url, $id);
 
             if ($stmt->execute()) {
                 echo "อัปเดตข้อมูลสำเร็จ";
@@ -55,5 +53,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $conn->close();
 }
-?>
-
