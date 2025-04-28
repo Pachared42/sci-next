@@ -516,12 +516,30 @@ $users = fetchUsers($conn);
             height: auto;
         }
 
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .highlight {
-            background-color: #FFD700;
+            background: linear-gradient(270deg, #FF6347, #FF4500, #FF6347);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientAnimation 3s ease infinite;
         }
 
         .pagination {
-            margin-top: 20px;
             text-align: center;
         }
 
@@ -547,6 +565,54 @@ $users = fetchUsers($conn);
             color: #ffffff;
         }
 
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 60px;
+            z-index: 99;
+            background-color: #2176FF;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            overflow: visible;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #1056CC;
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+
+        #scrollTopBtn svg {
+            display: block;
+            margin: auto;
+            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        #scrollTopBtn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #scrollTopBtn:hover::after {
+            opacity: 1;
+        }
 
 
         /* สไตล์ของตาราง */
@@ -556,7 +622,7 @@ $users = fetchUsers($conn);
             border-radius: 10px;
             overflow: hidden;
             text-align: center;
-            margin-top: 10px;
+            margin: 10px 0 20px 0;
         }
 
         th {
@@ -573,7 +639,7 @@ $users = fetchUsers($conn);
         td {
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
             background: rgba(255, 255, 255, 0.8);
-            color: black;
+            color: #000000;
             padding: 12px;
             max-width: 200px;
             text-overflow: ellipsis;
@@ -660,6 +726,12 @@ $users = fetchUsers($conn);
                 color: #000000;
                 margin-top: 8px;
             }
+        }
+
+        .name-grid {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card:hover {
@@ -853,32 +925,21 @@ $users = fetchUsers($conn);
         }
 
         .custom-file-upload {
+            width: 100%;
             display: inline-block;
             padding: 6px;
-            margin-left: 6px;
-            background-color: #5cb85c;
             color: #ffffff;
             font-size: 14px;
-            font-weight: bold;
-            border-radius: 10px;
             cursor: pointer;
             transition: background 0.3s;
         }
 
-        .custom-file-upload:hover {
-            background-color: #4cae4c;
-            /* สีเขียวเข้มเมื่อ hover */
-        }
-
-
-        /* ทำให้ชื่อและนามสกุลอยู่ในแถวเดียวกัน */
         .name-group {
             display: flex;
             justify-content: space-between;
             gap: 10px;
         }
 
-        /* ทำให้ช่องกรอกชื่อและนามสกุลมีขนาดเท่ากัน */
         .half-width {
             width: 48%;
         }
@@ -896,7 +957,7 @@ $users = fetchUsers($conn);
             background: #2176FF;
             color: white;
             border: none;
-            padding: 15px 20px;
+            padding: 14px 20px;
             font-size: 20px;
             font-weight: bold;
             border-radius: 10px;
@@ -907,7 +968,6 @@ $users = fetchUsers($conn);
         .btn-upload:hover {
             background: #1056CC;
         }
-
 
         /* Style for the popup */
         .edit-popup {
@@ -998,16 +1058,15 @@ $users = fetchUsers($conn);
             width: 50%;
             display: flex;
             align-items: center;
-            background: #fff;
-            border: 1px solid #ddd;
+            background: #ffffff;
+            border: 1px solid #dddddd;
             border-radius: 10px;
             padding: 4px;
             transition: box-shadow 0.2s ease;
         }
 
         .search-container:focus-within {
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-            border-color: #007bff;
+            border-color: #000000;
         }
 
         .search-input {
@@ -1038,7 +1097,7 @@ $users = fetchUsers($conn);
         .search-button svg {
             width: 24px;
             height: 24px;
-            fill: white;
+            fill: #ffffff;
         }
 
         #dried-food-selected-count,
@@ -1103,14 +1162,13 @@ $users = fetchUsers($conn);
         }
 
         .btn-table svg {
-            fill: #f72585;
+            fill: #DC143C;
         }
 
         .btn:hover svg {
             opacity: 0.7;
         }
 
-        /* Tooltip */
         .btn::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -1128,7 +1186,6 @@ $users = fetchUsers($conn);
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
-        /* แสดง Tooltip เมื่อ hover */
         .btn:hover::after {
             opacity: 1;
             visibility: visible;
@@ -1152,10 +1209,15 @@ $users = fetchUsers($conn);
                 color: #000000;
                 padding: 10px;
                 font-size: 14px;
-                font-weight: bold;
                 border-radius: 10px;
                 cursor: pointer;
                 transition: background-color 0.3s ease;
+            }
+
+            optgroup {
+                background-color: #000000;
+                font-weight: 600;
+                color: #ffffff;
             }
         }
 
@@ -1166,7 +1228,7 @@ $users = fetchUsers($conn);
             border: 1px solid #cccccc;
             border-radius: 5px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
             background: #f9f9f9;
         }
 
@@ -1182,7 +1244,7 @@ $users = fetchUsers($conn);
             border: none;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             border-radius: 10px;
             transition: background-color 0.3s ease;
 
@@ -1197,13 +1259,11 @@ $users = fetchUsers($conn);
             background-color: #1056CC;
         }
 
-        /* โครงสร้าง Grid หลัก */
         .parent {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
             gap: 16px;
-            padding: 20px;
         }
 
         /* กำหนดตำแหน่ง */
@@ -1639,19 +1699,17 @@ $users = fetchUsers($conn);
         .product-preview-box {
             width: 280px;
             height: 540px;
-            background: #f4f4f4;
             color: #000000;
             font-size: 16px;
             font-weight: bold;
             text-align: center;
             border-radius: 10px;
-            padding: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .product-preview-image img {
-            max-width: 250px;
-            max-height: 250px;
+            max-width: 280px;
+            max-height: 280px;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -1664,8 +1722,9 @@ $users = fetchUsers($conn);
 
         .detail-group {
             display: flex;
+            text-align: left;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             padding: 10px 14px;
             background: #ffffff;
             border-radius: 10px;
@@ -1688,8 +1747,8 @@ $users = fetchUsers($conn);
         .detail-inline {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 5px;
+            margin: 5px 0 5px 0;
             flex-wrap: wrap;
         }
 
@@ -1762,7 +1821,7 @@ $users = fetchUsers($conn);
             bottom: 10px;
             right: 10px;
             background: #111111;
-            color: white;
+            color: #ffffff;
             width: 45px;
             height: 45px;
             display: flex;
@@ -2012,8 +2071,8 @@ $users = fetchUsers($conn);
 
         .side-panel-close-btn {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             font-size: 40px;
             cursor: pointer;
             color: #ffffff;
@@ -2039,6 +2098,19 @@ $users = fetchUsers($conn);
             overflow: hidden;
         }
 
+        #imagePreviewContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #imagePreview {
+            height: 150px;
+            object-fit: cover;
+        }
+
         #editProductForm {
             max-width: 500px;
             padding: 15px;
@@ -2047,10 +2119,17 @@ $users = fetchUsers($conn);
         }
 
         #editProductForm label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000;
+            gap: 8px;
+
+            span {
+                color: #333333;
+            }
+
         }
 
         #editProductForm input[type="text"],
@@ -2058,7 +2137,7 @@ $users = fetchUsers($conn);
             width: 100%;
             padding: 10px 12px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #cccccc;
             border-radius: 10px;
             transition: border 0.3s, box-shadow 0.3s;
         }
@@ -2192,6 +2271,76 @@ $users = fetchUsers($conn);
         .excel-upload-button:hover {
             background-color: #1980C6;
         }
+
+        .password-progress {
+            width: 35%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #password-progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: red;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        #password-checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px 16px;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        #password-checklist li {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #777;
+            gap: 8px;
+        }
+
+        #password-checklist .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        #password-checklist li.valid {
+            color: green;
+        }
+
+        #password-checklist li.valid .icon {
+            color: green;
+            content: "✔";
+        }
+
+        #password-checklist li.invalid {
+            color: red;
+        }
+
+        #password-checklist li.invalid .icon {
+            color: red;
+        }
+
+        .password-strength-text {
+            padding-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            min-height: 20px;
+            transition: color 0.3s ease;
+        }
     </style>
 </head>
 
@@ -2216,10 +2365,7 @@ $users = fetchUsers($conn);
             <img src="\sci-shop-admin\img\NEXT.png" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
-
-
     </div>
-
 
     <div class="sidebar">
 
@@ -2252,11 +2398,11 @@ $users = fetchUsers($conn);
         <div class="main-tabs-upload">
             <h3>รายการอัพโหลด</h3>
             <div class="tab" onclick="showTab('admin_signup')">
-                <span class="material-icons">admin_panel_settings</span> สมัครแอดมิน
+                <span class="material-icons">manage_accounts</span> สมัครแอดมิน
             </div>
 
             <div class="tab" onclick="showTab('employee_signup')">
-                <span class="material-icons">person_add</span> สมัครพนักงาน
+                <span class="material-icons">group_add</span> สมัครพนักงาน
             </div>
 
             <div class="tab" onclick="showTab('upload_prodect')">
@@ -2507,9 +2653,7 @@ $users = fetchUsers($conn);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
-                        <path d="M480-440q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-46q-54-53-125.5-83.5T480-360q-83 0-154.5 30.5T200-246v46Z" />
-                    </svg>
+                    <img id="previewImageAdmin" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพแอดมิน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2554,6 +2698,17 @@ $users = fetchUsers($conn);
 
                 <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
 
+                    <div class="form-group">
+                        <label for="upload-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                                <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
+                            </svg>
+                            รูปแอดมิน :</label>
+                        </label>
+                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
+                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
+                    </div>
+
                     <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
                         <div class="form-group">
@@ -2574,17 +2729,6 @@ $users = fetchUsers($conn);
                     <hr class="tab-divider-admin">
 
                     <div class="form-group">
-                        <label for="upload-img">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
-                            </svg>
-                            รูปพนักงาน :
-                        </label>
-                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
-                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
-                    </div>
-
-                    <div class="form-group">
                         <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
                             </svg>ชื่อผู้ใช้งาน :</label>
@@ -2595,9 +2739,24 @@ $users = fetchUsers($conn);
                         <label for="password">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
-                            </svg>รหัสผ่าน :</label>
+                            </svg>รหัสผ่าน :
+                        </label>
                         <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
+
+
+                        <div id="password-strength-text" class="password-strength-text"></div>
+
+                        <div class="password-progress">
+                            <div id="password-progress-bar"></div>
+                        </div>
                     </div>
+
+                    <ul id="password-checklist">
+                        <li id="length"><span class="icon">✖</span> อย่างน้อย 8 ตัวอักษร</li>
+                        <li id="uppercase"><span class="icon">✖</span> มีตัวพิมพ์ใหญ่ (A-Z)</li>
+                        <li id="number"><span class="icon">✖</span> มีตัวเลข (0-9)</li>
+                        <li id="special"><span class="icon">✖</span> มีอักษรพิเศษ (!@#$...)</li>
+                    </ul>
 
                     <div class="form-group">
                         <label for="confirmPassword">
@@ -2624,9 +2783,7 @@ $users = fetchUsers($conn);
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <svg id="previewImage" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#333333">
-                        <path d="M480-440q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-46q-54-53-125.5-83.5T480-360q-83 0-154.5 30.5T200-246v46Z" />
-                    </svg>
+                    <img id="previewImageEmployee" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -2705,7 +2862,20 @@ $users = fetchUsers($conn);
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
                             </svg>รหัสผ่าน :</label>
                         <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
+
+                        <div id="password-strength-text" class="password-strength-text"></div>
+
+                        <div class="password-progress">
+                            <div id="password-progress-bar"></div>
+                        </div>
                     </div>
+
+                    <ul id="password-checklist">
+                        <li id="length"><span class="icon">✖</span> อย่างน้อย 8 ตัวอักษร</li>
+                        <li id="uppercase"><span class="icon">✖</span> มีตัวพิมพ์ใหญ่ (A-Z)</li>
+                        <li id="number"><span class="icon">✖</span> มีตัวเลข (0-9)</li>
+                        <li id="special"><span class="icon">✖</span> มีอักษรพิเศษ (!@#$...)</li>
+                    </ul>
 
                     <div class="form-group">
                         <label for="confirmPassword">
@@ -2760,24 +2930,30 @@ $users = fetchUsers($conn);
                             <span id="previewPriceProduct"></span>
                         </p>
                         <p>
-                            <span class="material-icons">savings</span>
+                            <span class="material-icons">money</span>
                             <span id="previewCostProduct"></span>
                         </p>
                     </div>
 
-                    <div class="detail-inline">
-                        <p>
-                            <span class="material-icons">inventory_2</span>
+                    <div class="detail-group">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <path d="M80-120v-560l400-160 400 160v560H640v-320H320v320H80Zm280 0v-80h80v80h-80Zm80-120v-80h80v80h-80Zm80 120v-80h80v80h-80Z" />
+                        </svg>
+                        <div>
                             <span id="previewStockProduct"></span>
-                        </p>
-                        <p>
-                            <span class="material-icons">notification_important</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <path d="M320-440v-287L217-624l-57-56 200-200 200 200-57 56-103-103v287h-80ZM600-80 400-280l57-56 103 103v-287h80v287l103-103 57 56L600-80Z" />
+                        </svg>
+                        <div>
                             <span id="previewReorderLevelProduct"></span>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="form-container">
                 <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
@@ -2810,40 +2986,40 @@ $users = fetchUsers($conn);
                     <hr class="tab-divider-category">
 
                     <div class="form-group">
+                        <label for="productImage">
+                            <span class="material-icons">add_photo_alternate</span> รูปภาพสินค้า :
+                        </label>
+                        <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required>
+                    </div>
+
+                    <div class="form-group">
                         <label for="productName">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                <path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z" />
-                            </svg> ชื่อสินค้า :
+                            <span class="material-icons">sell</span> ชื่อสินค้า :
                         </label>
                         <input type="text" id="productName" name="productName" placeholder="กรอกชื่อสินค้า" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="barcode">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>
+                            บาร์โค้ด :
+                        </label>
+                        <input type="text" id="barcode" name="barcode" placeholder="กรอกบาร์โค้ด" required>
+                    </div>
 
                     <div class="form-container-product">
                         <div class="form-group">
-                            <label for="barcode">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                                </svg>
-                                บาร์โค้ด :
-                            </label>
-                            <input type="text" id="barcode" name="barcode" placeholder="กรอกบาร์โค้ด" required>
-                        </div>
-
-                        <div class="form-group">
                             <label for="productPrice">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                    <path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z" />
-                                </svg> ราคาสินค้า :
+                                <span class="material-icons">paid</span> ราคาสินค้า :
                             </label>
                             <input type="number" id="productPrice" name="productPrice" placeholder="กรอกราคาสินค้า" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productCost">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                    <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
-                                </svg> ต้นทุน :
+                                <span class="material-icons">money</span> ต้นทุน :
                             </label>
                             <input type="number" id="productCost" name="productCost" placeholder="กรอกต้นทุนสินค้า" required>
                         </div>
@@ -2853,31 +3029,17 @@ $users = fetchUsers($conn);
                     <div class="from-container-stock">
                         <div class="form-group">
                             <label for="productStock">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                    <path d="M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z" />
-                                </svg> สต็อก :
+                                <span class="material-icons">warehouse</span> สต็อก :
                             </label>
                             <input type="number" id="productStock" name="productStock" placeholder="กรอกจำนวนสต็อกสินค้า" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productReorderLevel">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                    <path d="M600-320h120q17 0 28.5-11.5T760-360v-240q0-17-11.5-28.5T720-640H600q-17 0-28.5 11.5T560-600v240q0 17 11.5 28.5T600-320Zm40-80v-160h40v160h-40Zm-280 80h120q17 0 28.5-11.5T520-360v-240q0-17-11.5-28.5T480-640H360q-17 0-28.5 11.5T320-600v240q0 17 11.5 28.5T360-320Zm40-80v-160h40v160h-40Zm-200 80h80v-320h-80v320ZM80-160v-640h800v640H80Zm80-560v480-480Zm0 480h640v-480H160v480Z" />
-                                </svg> สต็อกต่ำสุด :
+                                <span class="material-icons">swap_vert</span> สต็อกต่ำสุด :
                             </label>
                             <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกจำนวนสต็อกสินค้าต่ำสุด" required>
                         </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="productImage">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
-                            </svg> รูปภาพสินค้า :
-                        </label>
-                        <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required>
                     </div>
 
                     <div>
@@ -3158,7 +3320,6 @@ $users = fetchUsers($conn);
                 </svg>
                 สินค้าประเภทแห้ง
             </h3>
-
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInput" oninput="filterProducts()">
                 <button class="search-button" onclick="filterProducts()">
@@ -3177,8 +3338,15 @@ $users = fetchUsers($conn);
 
                 <div id="filterMenu" class="filter-menu">
                     <select id="filterCategory">
-                        <option value="all">ทั้งหมด</option>
-                        <option value="food">สินค้าใกล้หมด</option>
+                        <optgroup label="ประเภทสินค้า">
+                            <option value="all">ทั้งหมด</option>
+                            <option value="food">สินค้าใกล้หมด</option>
+                        </optgroup>
+                        <optgroup label="จำนวนการแสดงผล">
+                            <option value="25">แสดง 25 ชิ้น</option>
+                            <option value="50">แสดง 50 ชิ้น</option>
+                            <option value="100">แสดง 100 ชิ้น</option>
+                        </optgroup>
                     </select>
 
                     <!-- <button onclick="applyFilters()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M80-140v-320h320v320H80Zm80-80h160v-160H160v160Zm60-340 220-360 220 360H220Zm142-80h156l-78-126-78 126ZM863-42 757-148q-21 14-45.5 21t-51.5 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50.5T813-204L919-98l-56 56ZM660-200q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-380Zm120-260Z"/></svg>ค้นหา</button> -->
@@ -3218,53 +3386,55 @@ $users = fetchUsers($conn);
             <div id="productGrid" class="card-grid"></div>
         </div>
 
+        <button id="scrollTopBtn" onclick="scrollToTop()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+                <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+            </svg></button>
+
         <div id="pagination" class="pagination "></div>
 
         <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
 
         <div id="editPanel" class="side-panel">
             <div class="side-panel-content">
-                <h2 class="h2-text-upload">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff">
-                        <path d="M360-600v-80h360v80H360Zm0 120v-80h360v80H360ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm263-224 37-39-37-37-38 38 38 38ZM240-80q-50 0-85-35t-35-85v-120h120v-560h600v361q-20-2-40.5 1.5T760-505v-295H320v480h240l-80 80v160H240Z" />
-                    </svg>แก้ไขข้อมูลสินค้า
-                </h2>
                 <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
 
                 <div id="side-panel-form-content">
                     <form id="editProductForm" method="POST" action="">
                         <input type="hidden" id="edit_product_id" name="id">
 
-                        <label for="product_name">ชื่อสินค้า</label>
+                        <div id="imagePreviewContainer">
+                            <img id="imagePreview" alt="รูปสินค้า">
+                        </div>
+
+                        <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name" name="product_name" required>
 
-                        <label for="barcode">บาร์โค้ด</label>
+                        <label for="barcode"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>บาร์โค้ด</label>
                         <input type="text" id="barcode" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price">ราคา</label>
+                                <label for="price"><span class="material-icons">price_change</span>ราคา</label>
                                 <input type="number" id="price" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost">ต้นทุน</label>
+                                <label for="cost"><span class="material-icons">money</span>ต้นทุน</label>
                                 <input type="number" id="cost" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock">สต็อก</label>
+                                <label for="stock"><span class="material-icons">warehouse</span>สต็อก</label>
                                 <input type="number" id="stock" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level">เกณฑ์สั่งซื้อ</label>
+                                <label for="reorder_level"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
                                 <input type="number" id="reorder_level" name="reorder_level" required>
                             </div>
                         </div>
-
-                        <label for="image_url">URL รูปภาพ</label>
-                        <input type="text" id="image_url" name="image_url" required>
 
                         <button type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึก
@@ -3660,13 +3830,13 @@ $users = fetchUsers($conn);
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('edit_product_id').value = data.id;
+                    document.getElementById('imagePreview').src = data.image_url;
                     document.getElementById('product_name').value = data.product_name;
                     document.getElementById('barcode').value = data.barcode || '';
                     document.getElementById('price').value = data.price;
                     document.getElementById('cost').value = data.cost;
                     document.getElementById('stock').value = data.stock;
                     document.getElementById('reorder_level').value = data.reorder_level;
-                    document.getElementById('image_url').value = data.image_url;
 
                     document.getElementById('editProductForm').action = '../../product/edit_product/edit_food_all/edit_dried_food.php?id=' + data.id;
                 })
@@ -3813,7 +3983,7 @@ $users = fetchUsers($conn);
                     paginatedItems.forEach(item => {
                         tableBody.innerHTML += `
                     <tr>
-                        <td style="text-align:left;">${highlightText(item.product_name, searchText)}</td>
+                        <td style="text-align:left; font-weight: bold;">${highlightText(item.product_name, searchText)}</td>
                         <td>
                             <div class="product-image-container">
                                 <img src="${item.image_url}" alt="${item.product_name}" width="100">
@@ -3828,8 +3998,8 @@ $users = fetchUsers($conn);
                                 <span>${highlightText(item.barcode, searchText)}</span>
                             </div>
                         </td>
-                        <td>${Number(item.price).toLocaleString()} บาท</td>
-                        <td>${Number(item.cost).toLocaleString()} บาท</td>
+                        <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</td>
+<td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</td>
                         <td>${item.stock} ชิ้น</td>
                         <td>${item.reorder_level} ชิ้น</td>
                         <td>
@@ -3871,15 +4041,15 @@ $users = fetchUsers($conn);
                             <div class="out-of-stock-label">สินค้าใกล้หมด</div>
                         </div>
                         <div class="card-content">
-                            <h3>${highlightText(item.product_name, searchText)}</h3>
+                            <h3 class="name-grid">${highlightText(item.product_name, searchText)}</h3>
                             <div class="barcode">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                     <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                                 </svg>
                                 <span>${highlightText(item.barcode, searchText)}</span>
                             </div>
-                            <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString()} บาท</p>
-                            <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString()} บาท</p>
+                            <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</p>
+<p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</p>
                             <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
                             <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
                             <div class="card-actions">
@@ -3956,6 +4126,27 @@ $users = fetchUsers($conn);
         // โหลดครั้งแรก
         displayProducts();
 
+        window.onscroll = function() {
+            toggleScrollButton();
+        };
+
+        // ฟังก์ชันโชว์/ซ่อนปุ่ม
+        function toggleScrollButton() {
+            const btn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        }
+
+        // ฟังก์ชันเลื่อนขึ้นบนสุด
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
 
 
 
@@ -4589,6 +4780,63 @@ $users = fetchUsers($conn);
             xhr.send(formData);
             return false;
         }
+
+        const passwordInput = document.getElementById('password');
+        const progressBar = document.getElementById('password-progress-bar');
+        const strengthText = document.getElementById('password-strength-text');
+
+        const checklist = {
+            length: document.getElementById('length'),
+            uppercase: document.getElementById('uppercase'),
+            number: document.getElementById('number'),
+            special: document.getElementById('special')
+        };
+
+        // ฟังก์ชันเช็คแต่ละเงื่อนไข
+        function validateCondition(element, condition) {
+            const icon = element.querySelector('.icon');
+            if (condition) {
+                element.classList.add('valid');
+                element.classList.remove('invalid');
+                if (icon) icon.textContent = '✔';
+                return 1;
+            } else {
+                element.classList.add('invalid');
+                element.classList.remove('valid');
+                if (icon) icon.textContent = '✖';
+                return 0;
+            }
+        }
+
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+
+            let score = 0;
+            score += validateCondition(checklist.length, password.length >= 8);
+            score += validateCondition(checklist.uppercase, /[A-Z]/.test(password));
+            score += validateCondition(checklist.number, /[0-9]/.test(password));
+            score += validateCondition(checklist.special, /[^A-Za-z0-9]/.test(password));
+
+            // อัปเดต Progress Bar
+            const percentage = (score / 4) * 100;
+            progressBar.style.width = `${percentage}%`;
+
+            // เปลี่ยนสีและข้อความตามคะแนน
+            if (score <= 1) {
+                progressBar.style.backgroundColor = '#e74c3c'; // แดง
+                strengthText.textContent = 'รหัสผ่านอ่อนมาก';
+                strengthText.style.color = '#e74c3c';
+            } else if (score === 2 || score === 3) {
+                progressBar.style.backgroundColor = '#f39c12'; // ส้ม
+                strengthText.textContent = 'รหัสผ่านปานกลาง';
+                strengthText.style.color = '#f39c12';
+            } else {
+                progressBar.style.backgroundColor = '#27ae60'; // เขียว
+                strengthText.textContent = 'รหัสผ่านแข็งแรงมาก';
+                strengthText.style.color = '#27ae60';
+            }
+        });
+
 
         // ฟังก์ชันแสดงข้อความแจ้งเตือน (admin)
         function showAlert(message, type) {
