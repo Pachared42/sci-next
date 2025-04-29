@@ -13,3 +13,9 @@ local_drink
 fastfood
 cookie
 
+dried_food
+soft_drink
+fresh_food
+snack
+
+

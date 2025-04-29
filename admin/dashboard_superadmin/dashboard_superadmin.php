@@ -607,7 +607,7 @@ $users = fetchUsers($conn);
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
         #scrollTopBtn:hover::after {
@@ -1172,7 +1172,7 @@ $users = fetchUsers($conn);
         .btn::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 75%;
+            bottom: 90%;
             left: 50%;
             transform: translateX(-50%);
             background: #000000;
@@ -1191,6 +1191,73 @@ $users = fetchUsers($conn);
             visibility: visible;
             transform: translateX(-50%) translateY(-5px);
         }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .download-template {
+            color: #000000;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.2s ease;
+
+            h3 {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                gap: 8px;
+                font-size: 16px;
+                margin-bottom: 50px;
+            }
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background-color: #F79824;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-download::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 6px 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            border-radius: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .btn-download:hover {
+            background-color: #E57300;
+        }
+
+        .btn-download svg {
+            fill: #ffffff;
+        }
+
 
         .filter-menu {
             display: none;
@@ -2222,6 +2289,8 @@ $users = fetchUsers($conn);
         .excel-type-title {
             display: flex;
             align-items: center;
+            justify-content: center;
+            text-align: center;
             gap: 8px;
             font-size: 20px;
             margin-bottom: 16px;
@@ -3062,20 +3131,13 @@ $users = fetchUsers($conn);
             <h3 class="h-text-upload">
                 เพิ่มสินค้าใหม่ผ่านไฟล์ Excel
             </h3>
-
-            <div class="btn-container">
-                <a href="../../assets/templates/template_dried_food.xlsx" download class="btn btn-addd" data-tooltip="ฟอร์ม Excel">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                    </svg>
-                </a>
-            </div>
         </div>
 
         <div class="excel-grid-upload">
             <!-- ประเภทแห้ง -->
-            <form action="upload_excel_handler_dried.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title"><span class="material-icons">food_bank</span>ประเภทแห้ง</h4>
+            <form action="../../product/upload_product/upload_product_excal/upload_excel_dried.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">food_bank</span>ประเภทแห้ง
+                </h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
@@ -3088,8 +3150,9 @@ $users = fetchUsers($conn);
             </form>
 
             <!-- ประเภทเครื่องดื่ม -->
-            <form action="upload_excel_handler_drink.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title"><span class="material-icons">local_drink</span>ประเภทเครื่องดื่ม</h4>
+            <form action="../../product/upload_product/upload_product_excal/upload_excel_drink.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">local_drink</span>ประเภทเครื่องดื่ม
+                </h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
@@ -3102,8 +3165,9 @@ $users = fetchUsers($conn);
             </form>
 
             <!-- ประเภทแช่แข็ง -->
-            <form action="upload_excel_handler_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title"><span class="material-icons">fastfood</span>ประเภทแช่แข็ง</h4>
+            <form action="../../product/upload_product/upload_product_excal/upload_excel_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">fastfood</span>ประเภทแช่แข็ง
+                </h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
@@ -3116,8 +3180,9 @@ $users = fetchUsers($conn);
             </form>
 
             <!-- ประเภทขนม -->
-            <form action="upload_excel_handler_fresh.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
-                <h4 class="excel-type-title"><span class="material-icons">cookie</span>ประเภทขนม</h4>
+            <form action="../../product/upload_product/upload_product_excal/upload_excel_snack.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">cookie</span>ประเภทขนม
+                </h4>
                 <div class="excel-upload-group">
                     <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
@@ -3128,6 +3193,42 @@ $users = fetchUsers($conn);
                         </svg>อัปโหลดไฟล์</button>
                 </div>
             </form>
+        </div>
+
+        <div class="download-grid">
+            <div class="download-template">
+                <h3><span class="material-icons">food_bank</span>ฟอร์ม Excal ของแห้ง</h3>
+                <a href="../../assets/templates/ฟอร์มของแห้ง.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มของแห้ง">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="download-template">
+                <h3><span class="material-icons">local_drink</span>ฟอร์ม Excal ของเครื่องดื่ม</h3>
+                <a href="../../assets/templates/ฟอร์มเครื่องดื่ม.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มเครื่องดื่ม">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="download-template">
+                <h3><span class="material-icons">fastfood</span>ฟอร์ม Excal ของแช่แข็ง</h3>
+                <a href="../../assets/templates/ฟอร์มของแช่แข็ง.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มของแช่แข็ง">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="download-template">
+                <h3><span class="material-icons">cookie</span>ฟอร์ม Excal ของขนม</h3>
+                <a href="../../assets/templates/ฟอร์มขนม.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มขนม">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -3459,7 +3560,7 @@ $users = fetchUsers($conn);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($switches as $item): ?>
+                <?php foreach ($dried_food as $item): ?>
                     <tr>
                         <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
                         <td><?php echo $item['NAME']; ?></td>
@@ -3568,7 +3669,7 @@ $users = fetchUsers($conn);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($keycaps as $item): ?>
+                <?php foreach ($snack as $item): ?>
                     <tr>
                         <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
                         <td><?php echo $item['NAME']; ?></td>
