@@ -18,4 +18,18 @@ soft_drink
 fresh_food
 snack
 
+btn-dried-food
+btn-soft-drink
+btn-fresh-food
+btn-snack
 
+DriedFood
+SoftDrink
+FreshFood
+SnackFood
+
+<span class="material-icons">sell</span>
+<span class="material-icons">price_change</span>
+<span class="material-icons">money</span>
+<span class="material-icons">warehouse</span>
+<span class="material-icons">swap_vert</span>

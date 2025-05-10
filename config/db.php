@@ -1,20 +1,87 @@
 <?php
-// กำหนดค่าการเชื่อมต่อ MySQL (phpMyAdmin)
 $host = 'localhost';
-$username = 'root'; // เปลี่ยนเป็นชื่อผู้ใช้จริงหากไม่ใช่ root
-$password = ''; // ถ้ามีรหัสผ่านให้ใส่ที่นี่
+$username = 'root';
+$password = '';
 $database = 'sci_shop';
 
-// เชื่อมต่อกับฐานข้อมูล MySQL
 try {
     $conn = new mysqli($host, $username, $password, $database);
 
-    // ตรวจสอบการเชื่อมต่อ
     if ($conn->connect_error) {
         throw new Exception("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    echo '
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <title>Database Connection Error</title>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&display=swap" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <style>
+            * {
+                box-sizing: border-box;
+                font-family: "Noto Sans Thai", sans-serif;
+            }
+
+            body {
+                background-color: #000000;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                text-align: center;
+                line-height: 1.6;
+                font-size: 18px;
+            }
+            .error-box {
+                margin: 100px auto;
+                max-width: 600px;
+                border-radius: 10px;
+                padding: 30px;
+                color: #ffffff;
+                text-align: center;
+            }
+            .refresh-btn {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                gap: 8px;
+                margin-top: 25px;
+                padding: 10px 20px;
+                font-size: 20px;
+                font-weight: 500;
+                background-color: #F79824;
+                border: none;
+                border-radius: 10px;
+                color: #ffffff;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .refresh-btn:hover {
+                background-color: #E57300;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-box">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="100px" viewBox="0 -960 960 960" width="100px" fill="#E01E37">
+                    <path d="m684-389-49-49q22-26 33.5-57t11.5-65q0-40-16-76t-44-64l48-48q38 38 59 86t21 102q0 48-17 91.5T684-389ZM565-508 428-645q12-7 25-11t27-4q42 0 71 29t29 71q0 14-4 27t-11 25Zm215 214-48-48q40-45 60-101.5T812-560q0-66-24.5-127.5T716-796l48-48q55 58 85.5 131T880-560q0 74-25.5 142.5T780-294Zm11 238L520-327v207h-80v-287L280-566v6q0 40 16 76t44 64l-48 48q-38-38-59-86t-21-102q0-17 2-33t7-33l-51-51q-11 29-16.5 58t-5.5 59q0 66 24.5 127.5T244-324l-48 48q-55-58-85.5-131T80-560q0-44 9.5-86.5T118-729l-62-62 56-57 736 736-57 56Z"/>
+                </svg>
+            </div>
+            <h1>เกิดข้อผิดพลาดในการเชื่อมต่อ</h1>
+            <p>( โปรดตรวจสอบสถานะของเซิร์ฟเวอร์หรือการตั้งค่าการเชื่อมต่อ )</p>
+            <button class="refresh-btn" onclick="location.reload();"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>โหลดใหม่</button>
+        </div>
+    </body>
+    </html>';
     exit;
 }
-?>

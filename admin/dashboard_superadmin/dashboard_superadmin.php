@@ -104,10 +104,11 @@ $users = fetchUsers($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCi_ADMIN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap');
-    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -136,7 +137,7 @@ $users = fetchUsers($conn);
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             color: #F79824;
         }
@@ -614,6 +615,153 @@ $users = fetchUsers($conn);
             opacity: 1;
         }
 
+        #scrollTopBtnSoftDrink {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 60px;
+            z-index: 99;
+            background-color: #2176FF;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            overflow: visible;
+        }
+
+        #scrollTopBtnSoftDrink:hover {
+            background-color: #1056CC;
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+
+        #scrollTopBtnSoftDrink svg {
+            display: block;
+            margin: auto;
+            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        #scrollTopBtnSoftDrink::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        #scrollTopBtnSoftDrink:hover::after {
+            opacity: 1;
+        }
+
+        #scrollTopBtnFreshFood {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 60px;
+            z-index: 99;
+            background-color: #2176FF;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            overflow: visible;
+        }
+
+        #scrollTopBtnFreshFood:hover {
+            background-color: #1056CC;
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+
+        #scrollTopBtnFreshFood svg {
+            display: block;
+            margin: auto;
+            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        #scrollTopBtnFreshFood::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        #scrollTopBtnFreshFood:hover::after {
+            opacity: 1;
+        }
+
+        #scrollTopBtnSnackFood {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 60px;
+            z-index: 99;
+            background-color: #2176FF;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            overflow: visible;
+        }
+
+        #scrollTopBtnSnackFood:hover {
+            background-color: #1056CC;
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+
+        #scrollTopBtnSnackFood svg {
+            display: block;
+            margin: auto;
+            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        #scrollTopBtnSnackFood::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        #scrollTopBtnSnackFood:hover::after {
+            opacity: 1;
+        }
+
 
         /* สไตล์ของตาราง */
         table {
@@ -702,7 +850,7 @@ $users = fetchUsers($conn);
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
             gap: 20px;
             padding: 20px 0 20px 0;
         }
@@ -724,7 +872,6 @@ $users = fetchUsers($conn);
             p {
                 font-size: 16px;
                 color: #000000;
-                margin-top: 8px;
             }
         }
 
@@ -756,15 +903,15 @@ $users = fetchUsers($conn);
 
         .out-of-stock-label {
             position: absolute;
-            top: 55px;
+            top: 45px;
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(255, 0, 0, 0.8);
             color: #ffffff;
             padding: 5px 10px;
             font-weight: bold;
-            font-size: 18px;
-            border-radius: 10px;
+            font-size: 16px;
+            border-radius: 5px;
         }
 
         .product-image {
@@ -780,7 +927,7 @@ $users = fetchUsers($conn);
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             color: #000000;
 
             h3 {
@@ -1129,19 +1276,19 @@ $users = fetchUsers($conn);
             transition: 0.3s;
         }
 
-        .btn-addd svg {
+        .btn-dried-food svg {
             fill: #4CAF50;
         }
 
-        .btn-adddd svg {
+        .btn-soft-drink svg {
             fill: #4CAF50;
         }
 
-        .btn-addddd svg {
+        .btn-fresh-food svg {
             fill: #4CAF50;
         }
 
-        .btn-adddddd svg {
+        .btn-snack svg {
             fill: #4CAF50;
         }
 
@@ -1149,7 +1296,39 @@ $users = fetchUsers($conn);
             fill: #FFA500;
         }
 
+        .btn-edit-dried-food svg {
+            fill: #FFA500;
+        }
+
+        .btn-edit-soft-drink svg {
+            fill: #FFA500;
+        }
+
+        .btn-edit-fresh-food svg {
+            fill: #FFA500;
+        }
+
+        .btn-edit-snack svg {
+            fill: #FFA500;
+        }
+
         .btn-deletee svg {
+            fill: #DC143C;
+        }
+
+        .btn-delete-dried-food svg {
+            fill: #DC143C;
+        }
+
+        .btn-delete-soft-drink svg {
+            fill: #DC143C;
+        }
+
+        .btn-delete-fresh-food svg {
+            fill: #DC143C;
+        }
+
+        .btn-delete-snack svg {
             fill: #DC143C;
         }
 
@@ -1217,7 +1396,7 @@ $users = fetchUsers($conn);
                 justify-content: center;
                 text-align: center;
                 gap: 8px;
-                font-size: 16px;
+                font-size: 14px;
                 margin-bottom: 50px;
             }
         }
@@ -1264,11 +1443,11 @@ $users = fetchUsers($conn);
             background-color: #ffffff;
             color: #000000;
             border-radius: 10px;
-            padding: 10px;
+            padding: 0 10px 10px 10px;
             position: absolute;
             top: 78px;
-            right: 45px;
-            width: 200px;
+            right: 75px;
+            width: 150px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
             option {
@@ -1292,6 +1471,7 @@ $users = fetchUsers($conn);
         .filter-menu input {
             width: 100%;
             padding: 8px;
+            margin-top: 10px;
             border: 1px solid #cccccc;
             border-radius: 5px;
             font-size: 14px;
@@ -2037,10 +2217,10 @@ $users = fetchUsers($conn);
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            right: -34px;
-            top: calc(-75% + 5px);
+            right: -20px;
+            top: calc(-50% + 5px);
             background-color: #ffffff;
-            min-width: 105px;
+            min-width: 85px;
             z-index: 1;
             border-radius: 10px;
             overflow: hidden;
@@ -2050,15 +2230,15 @@ $users = fetchUsers($conn);
 
         .dropdown-content a {
             color: #000000;
-            padding: 15px 10px 15px 10px;
+            padding: 10px 5px 10px 5px;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             transition: background 0.2s;
             white-space: nowrap;
-            gap: 8px;
+            gap: 4px;
             font-weight: bold;
 
             svg {
@@ -2095,17 +2275,46 @@ $users = fetchUsers($conn);
         #overlay {
             position: fixed;
             display: none;
-            /* เริ่มต้นซ่อนไว้ */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            /* สีเทาโปร่ง ๆ */
             z-index: 1000;
-            /* ต้องน้อยกว่า side-panel เล็กน้อย */
         }
 
+        #overlaySoftDrink {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #overlayFreshFood {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #overlaySnackFood {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
 
         .overlay.show {
             opacity: 1;
@@ -2132,6 +2341,8 @@ $users = fetchUsers($conn);
         }
 
         .side-panel-content {
+            height: 100%;
+            overflow-y: auto;
             padding: 15px;
             position: relative;
         }
@@ -2254,6 +2465,367 @@ $users = fetchUsers($conn);
             fill: #ffffff;
         }
 
+
+        /* edit Soft Drink */
+        #imagePreviewContainerSoftDrink {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #imagePreviewSoftDrink {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        #editProductFormSoftDrink {
+            max-width: 500px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        #editProductFormSoftDrink label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000;
+            gap: 8px;
+
+            span {
+                color: #333333;
+            }
+
+        }
+
+        #editProductFormSoftDrink input[type="text"],
+        #editProductFormSoftDrink input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        #editProductFormSoftDrink input[type="text"]:focus,
+        #editProductFormSoftDrink input[type="number"]:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group-row .group-item {
+            flex: 1;
+        }
+
+        #editProductFormSoftDrink button {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editProductFormSoftDrink button:hover {
+            background-color: #222222;
+        }
+
+
+        #editProductFormSoftDrink button svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
+        /* edit Soft Drink */
+        #imagePreviewContainerSoftDrink {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #imagePreviewSoftDrink {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        #editProductFormSoftDrink {
+            max-width: 500px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        #editProductFormSoftDrink label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000;
+            gap: 8px;
+
+            span {
+                color: #333333;
+            }
+
+        }
+
+        #editProductFormSoftDrink input[type="text"],
+        #editProductFormSoftDrink input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        #editProductFormSoftDrink input[type="text"]:focus,
+        #editProductFormSoftDrink input[type="number"]:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group-row .group-item {
+            flex: 1;
+        }
+
+        #editProductFormSoftDrink button {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editProductFormSoftDrink button:hover {
+            background-color: #222222;
+        }
+
+
+        #editProductFormSoftDrink button svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
+        /* edit Fresh Food */
+        #imagePreviewContainerFreshFood {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #imagePreviewFreshFood {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        #editProductFormFreshFood {
+            max-width: 500px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        #editProductFormFreshFood label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000;
+            gap: 8px;
+
+            span {
+                color: #333333;
+            }
+
+        }
+
+        #editProductFormFreshFood input[type="text"],
+        #editProductFormFreshFood input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        #editProductFormFreshFood input[type="text"]:focus,
+        #editProductFormFreshFood input[type="number"]:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group-row .group-item {
+            flex: 1;
+        }
+
+        #editProductFormFreshFood button {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editProductFormFreshFood button:hover {
+            background-color: #222222;
+        }
+
+
+        #editProductFormFreshFood button svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
+        /* edit Snack Food */
+        #imagePreviewContainerSnackFood {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #imagePreviewSnackFood {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        #editProductFormSnackFood {
+            max-width: 500px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        #editProductFormSnackFood label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000;
+            gap: 8px;
+
+            span {
+                color: #333333;
+            }
+
+        }
+
+        #editProductFormSnackFood input[type="text"],
+        #editProductFormSnackFood input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        #editProductFormSnackFood input[type="text"]:focus,
+        #editProductFormSnackFood input[type="number"]:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
+            outline: none;
+        }
+
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-group-row .group-item {
+            flex: 1;
+        }
+
+        #editProductFormSnackFood button {
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #editProductFormSnackFood button:hover {
+            background-color: #222222;
+        }
+
+
+        #editProductFormSnackFood button svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
         .excel-grid-upload {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -2358,7 +2930,7 @@ $users = fetchUsers($conn);
 
         #password-checklist {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 8px 16px;
             list-style: none;
             padding: 0;
@@ -2373,7 +2945,7 @@ $users = fetchUsers($conn);
             background-color: #ffffff;
             padding: 12px;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 12px;
             color: #777;
             gap: 8px;
         }
@@ -2916,8 +3488,6 @@ $users = fetchUsers($conn);
 
                     <hr class="tab-divider-admin">
 
-
-
                     <div class="form-group">
                         <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
@@ -3241,19 +3811,19 @@ $users = fetchUsers($conn);
             </h3>
 
             <div class="btn-container">
-                <button id="add_dried_food" class="btn btn-addd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_dried_food" class="btn btn-dried-food" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-dried-food" data-tooltip="แก้ไขสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-dried-food" data-tooltip="ลบสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3287,19 +3857,19 @@ $users = fetchUsers($conn);
             </h3>
 
             <div class="btn-container">
-                <button id="add_soft_drink" class="btn btn-adddd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_soft_drink" class="btn btn-soft-drink" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-soft-drink" data-tooltip="แก้ไขสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-soft-drink" data-tooltip="ลบสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3331,19 +3901,19 @@ $users = fetchUsers($conn);
             </h3>
 
             <div class="btn-container">
-                <button id="add_fresh_food" class="btn btn-addddd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_fresh_food" class="btn btn-fresh-food" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-fresh-food" data-tooltip="แก้ไขสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-fresh-food" data-tooltip="ลบสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3375,19 +3945,19 @@ $users = fetchUsers($conn);
             </h3>
 
             <div class="btn-container">
-                <button id="add_snack" class="btn btn-adddddd" data-tooltip="เพิ่มสินค้า">
+                <button id="add_snack" class="btn btn-snack" data-tooltip="เพิ่มสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
                         <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-editt" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-snack" data-tooltip="แก้ไขสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-deletee" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-snack" data-tooltip="ลบสินค้า">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3438,20 +4008,20 @@ $users = fetchUsers($conn);
                 </button>
 
                 <div id="filterMenu" class="filter-menu">
-                    <select id="filterCategory">
-                        <optgroup label="ประเภทสินค้า">
-                            <option value="all">ทั้งหมด</option>
-                            <option value="food">สินค้าใกล้หมด</option>
-                        </optgroup>
-                        <optgroup label="จำนวนการแสดงผล">
-                            <option value="25">แสดง 25 ชิ้น</option>
-                            <option value="50">แสดง 50 ชิ้น</option>
-                            <option value="100">แสดง 100 ชิ้น</option>
-                        </optgroup>
+                    <!-- ประเภทสินค้า -->
+                    <select id="filterCategory" onchange="applyFilters()">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="lowStock">สินค้าใกล้หมด</option>
                     </select>
 
-                    <!-- <button onclick="applyFilters()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M80-140v-320h320v320H80Zm80-80h160v-160H160v160Zm60-340 220-360 220 360H220Zm142-80h156l-78-126-78 126ZM863-42 757-148q-21 14-45.5 21t-51.5 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50.5T813-204L919-98l-56 56ZM660-200q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-380Zm120-260Z"/></svg>ค้นหา</button> -->
+                    <!-- จำนวนแสดงผลต่อหน้า -->
+                    <select id="itemsPerPageSelect" onchange="changeItemsPerPage(this.value)">
+                        <option value="25">แสดง 25 ชิ้น</option>
+                        <option value="50">แสดง 50 ชิ้น</option>
+                        <option value="100">แสดง 100 ชิ้น</option>
+                    </select>
                 </div>
+
 
                 <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchView('table')">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
@@ -3468,7 +4038,7 @@ $users = fetchUsers($conn);
         </div>
 
         <div id="container">
-            <table id="productTable" display: none;">
+            <table id="productTable" style="display: none;">
                 <thead>
                     <tr>
                         <th>ชื่อสินค้า</th>
@@ -3491,7 +4061,7 @@ $users = fetchUsers($conn);
                 <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
             </svg></button>
 
-        <div id="pagination" class="pagination "></div>
+        <div id="pagination" class="pagination"></div>
 
         <div id="overlay" class="overlay" onclick="closeEditPanel()"></div>
 
@@ -3500,7 +4070,7 @@ $users = fetchUsers($conn);
                 <span class="side-panel-close-btn" onclick="closeEditPanel()">&times;</span>
 
                 <div id="side-panel-form-content">
-                    <form id="editProductForm" method="POST" action="">
+                    <form id="editProductForm">
                         <input type="hidden" id="edit_product_id" name="id">
 
                         <div id="imagePreviewContainer">
@@ -3510,9 +4080,11 @@ $users = fetchUsers($conn);
                         <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name" name="product_name" required>
 
-                        <label for="barcode"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                        <label for="barcode">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด</label>
+                            </svg>บาร์โค้ด
+                        </label>
                         <input type="text" id="barcode" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
@@ -3538,178 +4110,398 @@ $users = fetchUsers($conn);
                         </div>
 
                         <button type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึก
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>
+                            บันทึกการแก้ไข
                         </button>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 
 
+    <!-- หมวด soft drink -->
     <div id="soft_drink" class="content">
-        <h3 class="h-text">🔘 สวิตช์</h3>
-        <table border="1" cellspacing="0" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($dried_food as $item): ?>
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ffffff">
+                    <path d="M400-240h40v-160q25 0 42.5-17.5T500-460v-120h-40v120h-20v-120h-40v120h-20v-120h-40v120q0 25 17.5 42.5T400-400v160Zm160 0h40v-340q-33 0-56.5 23.5T520-500v120h40v140ZM160-120v-480l320-240 320 240v480H160Z" />
+                </svg>
+                สินค้าเครื่องดื่ม
+            </h3>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputSoftDrink" oninput="filterProductsSoftDrink()">
+                <button class="search-button" onclick="filterProductsSoftDrink()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-filter" data-tooltip="แสดง Filter" onclick="toggleMenuSoftDrink()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
+                    </svg>
+                </button>
+
+                <div id="filterMenuSoftDrink" class="filter-menu">
+                    <select id="filterCategorySoftDrink" onchange="applyFiltersSoftDrink()">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="lowStock">สินค้าใกล้หมด</option>
+                    </select>
+
+                    <select id="itemsPerPageSelectSoftDrink" onchange="changeItemsPerPageSoftDrink(this.value)">
+                        <option value="25">แสดง 25 ชิ้น</option>
+                        <option value="50">แสดง 50 ชิ้น</option>
+                        <option value="100">แสดง 100 ชิ้น</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchViewSoftDrink('table')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M320-80q-33 0-56.5-23.5T240-160v-480q0-33 23.5-56.5T320-720h480q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H320Zm0-80h200v-120H320v120Zm280 0h200v-120H600v120ZM80-240v-560q0-33 23.5-56.5T160-880h560v80H160v560H80Zm240-120h200v-120H320v120Zm280 0h200v-120H600v120ZM320-560h480v-80H320v80Z" />
+                    </svg>
+                </button>
+                <button class="btn btn-grid" data-tooltip="แสดง Grid" onclick="switchViewSoftDrink('grid')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="containerSoftDrink">
+            <table id="productTableSoftDrink" style="display: none;">
+                <thead>
                     <tr>
-                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
-                        <td><?php echo $item['NAME']; ?></td>
-                        <td>฿<?php echo $item['PRICE']; ?></td>
-                        <td><?php echo $item['SWITCH_TYPE']; ?></td>
-                        <td>
-                            <form action="#" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
-                            </form>
-                            <!-- Popup Form -->
-                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
-                                <div class="popup-content">
-                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <h3>แก้ไขข้อมูลสินค้า</h3>
-                                    <form action="../product/edit_product/edit_product.php" method="POST">
-                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
-                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
-                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
-                                        <input type="hidden" name="productCategory" value="switches"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
-                                        <input type="text" name="switchType" value="<?php echo $item['SWITCH_TYPE']; ?>" required>
-                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
-                                    </form>
-
-                                </div>
-                            </div>
-
-                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <input type="hidden" name="category" value="switches"> <!-- หมวดหมู่สินค้านี้ -->
-                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'switches')">ลบสินค้า</button>
-                            </form>
-                        </td>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูป</th>
+                        <th>บาร์โค้ด</th>
+                        <th>ราคา</th>
+                        <th>ต้นทุน</th>
+                        <th>สต็อก</th>
+                        <th>เกณฑ์สั่งซื้อ</th>
+                        <th>การจัดการ</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="productTableBodySoftDrink"></tbody>
+            </table>
+
+            <div id="productGridSoftDrink" class="card-grid"></div>
+        </div>
+
+        <button id="scrollTopBtnSoftDrink" onclick="scrollToTopSoftDrink()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+                <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+            </svg></button>
+
+        <div id="paginationSoftDrink" class="pagination"></div>
+
+        <div id="overlaySoftDrink" class="overlay" onclick="closeEditPanelSoftDrink()"></div>
+
+        <div id="editPanelSoftDrink" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanelSoftDrink()">&times;</span>
+
+                <div id="side-panel-form-content-softdrink">
+                    <form id="editProductFormSoftDrink">
+                        <input type="hidden" id="edit_product_id_softdrink" name="id">
+
+                        <div id="imagePreviewContainerSoftDrink">
+                            <img id="imagePreviewSoftDrink" alt="รูปสินค้า">
+                        </div>
+
+                        <label for="product_name_softdrink"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <input type="text" id="product_name_softdrink" name="product_name" required>
+
+                        <label for="barcode_softdrink">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg> บาร์โค้ด</label>
+                        <input type="text" id="barcode_softdrink" name="barcode" maxlength="17" />
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price_softdrink"><span class="material-icons">price_change</span>ราคา</label>
+                                <input type="number" id="price_softdrink" name="price" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost_softdrink"><span class="material-icons">money</span>ต้นทุน</label>
+                                <input type="number" id="cost_softdrink" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock_softdrink"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <input type="number" id="stock_softdrink" name="stock" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level_softdrink"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <input type="number" id="reorder_level_softdrink" name="reorder_level" required>
+                            </div>
+                        </div>
+
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- หมวด fresh food -->
     <div id="fresh_food" class="content">
-        <h3 class="h-text">🎨 คีย์แค็ป</h3>
-        <table border="1" cellspacing="0" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Profile</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($keycaps as $item): ?>
-                    <tr>
-                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
-                        <td><?php echo $item['NAME']; ?></td>
-                        <td>฿<?php echo $item['PRICE']; ?></td>
-                        <td><?php echo $item['KEYCAP_PROFILE']; ?></td>
-                        <td>
-                            <form action="#" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
-                            </form>
-                            <!-- Popup Form -->
-                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
-                                <div class="popup-content">
-                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <h3>แก้ไขข้อมูลสินค้า</h3>
-                                    <form action="../product/edit_product/edit_product.php" method="POST">
-                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
-                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
-                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
-                                        <input type="hidden" name="productCategory" value="keycaps"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
-                                        <input type="text" name="keycapProfile" value="<?php echo $item['KEYCAP_PROFILE']; ?>" required>
-                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
-                                    </form>
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ffffff">
+                    <path d="M400-240h40v-160q25 0 42.5-17.5T500-460v-120h-40v120h-20v-120h-40v120h-20v-120h-40v120q0 25 17.5 42.5T400-400v160Zm160 0h40v-340q-33 0-56.5 23.5T520-500v120h40v140ZM160-120v-480l320-240 320 240v480H160Z" />
+                </svg>
+                สินค้าแช่แข็ง
+            </h3>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputFreshFood" oninput="filterProductsFreshFood()">
+                <button class="search-button" onclick="filterProductsFreshFood()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
 
-                                </div>
-                            </div>
-                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <input type="hidden" name="category" value="keycaps"> <!-- หมวดหมู่สินค้านี้ -->
-                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'keycaps')">ลบสินค้า</button>
-                            </form>
-                        </td>
+            <div class="btn-container">
+                <button class="btn btn-filter" data-tooltip="แสดง Filter" onclick="toggleMenuFreshFood()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
+                    </svg>
+                </button>
+
+                <div id="filterMenuFreshFood" class="filter-menu">
+                    <select id="filterCategoryFreshFood" onchange="applyFiltersFreshFood()">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="lowStock">สินค้าใกล้หมด</option>
+                    </select>
+
+                    <select id="itemsPerPageSelectFreshFood" onchange="changeItemsPerPageFreshFood(this.value)">
+                        <option value="25">แสดง 25 ชิ้น</option>
+                        <option value="50">แสดง 50 ชิ้น</option>
+                        <option value="100">แสดง 100 ชิ้น</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchViewFreshFood('table')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M320-80q-33 0-56.5-23.5T240-160v-480q0-33 23.5-56.5T320-720h480q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H320Zm0-80h200v-120H320v120Zm280 0h200v-120H600v120ZM80-240v-560q0-33 23.5-56.5T160-880h560v80H160v560H80Zm240-120h200v-120H320v120Zm280 0h200v-120H600v120ZM320-560h480v-80H320v80Z" />
+                    </svg>
+                </button>
+                <button class="btn btn-grid" data-tooltip="แสดง Grid" onclick="switchViewFreshFood('grid')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="containerFreshFood">
+            <table id="productTableFreshFood" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูป</th>
+                        <th>บาร์โค้ด</th>
+                        <th>ราคา</th>
+                        <th>ต้นทุน</th>
+                        <th>สต็อก</th>
+                        <th>เกณฑ์สั่งซื้อ</th>
+                        <th>การจัดการ</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="productTableBodyFreshFood"></tbody>
+            </table>
+
+            <div id="productGridFreshFood" class="card-grid"></div>
+        </div>
+
+        <button id="scrollTopBtnFreshFood" onclick="scrollToTopFreshFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+                <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+            </svg></button>
+
+        <div id="paginationFreshFood" class="pagination"></div>
+
+        <div id="overlayFreshFood" class="overlay" onclick="closeEditPanelFreshFood()"></div>
+
+        <div id="editPanelFreshFood" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanelFreshFood()">&times;</span>
+
+                <div id="side-panel-form-content-freshfood">
+                    <form id="editProductFormFreshFood" method="POST" action="">
+                        <input type="hidden" id="edit_product_id_freshfood" name="id">
+
+                        <div id="imagePreviewContainerFreshFood">
+                            <img id="imagePreviewFreshFood" alt="รูปสินค้า">
+                        </div>
+
+                        <label for="product_name_freshfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <input type="text" id="product_name_freshfood" name="product_name" required>
+
+                        <label for="barcode_freshfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>บาร์โค้ด</label>
+                        <input type="text" id="barcode_freshfood" name="barcode" maxlength="17" />
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price_freshfood"><span class="material-icons">price_change</span>ราคา</label>
+                                <input type="number" id="price_freshfood" name="price" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost_freshfood"><span class="material-icons">money</span>ต้นทุน</label>
+                                <input type="number" id="cost_freshfood" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock_freshfood"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <input type="number" id="stock_freshfood" name="stock" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level_freshfood"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <input type="number" id="reorder_level_freshfood" name="reorder_level" required>
+                            </div>
+                        </div>
+
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- หมวด snack food -->
     <div id="snack_food" class="content">
-        <h3 class="h-text">🎨 คีย์แค็ป</h3>
-        <table border="1" cellspacing="0" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Profile</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($snack as $item): ?>
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ffffff">
+                    <path d="M400-240h40v-160q25 0 42.5-17.5T500-460v-120h-40v120h-20v-120h-40v120h-20v-120h-40v120q0 25 17.5 42.5T400-400v160Zm160 0h40v-340q-33 0-56.5 23.5T520-500v120h40v140ZM160-120v-480l320-240 320 240v480H160Z" />
+                </svg>
+                สินค้าขนมขบเคี้ยว
+            </h3>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputSnackFood" oninput="filterProductsSnackFood()">
+                <button class="search-button" onclick="filterProductsSnackFood()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-filter" data-tooltip="แสดง Filter" onclick="toggleMenuSnackFood()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
+                    </svg>
+                </button>
+
+                <div id="filterMenuSnackFood" class="filter-menu">
+                    <select id="filterCategorySnackFood" onchange="applyFiltersSnackFood()">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="lowStock">สินค้าใกล้หมด</option>
+                    </select>
+
+                    <select id="itemsPerPageSelectSnackFood" onchange="changeItemsPerPageSnackFood(this.value)">
+                        <option value="25">แสดง 25 ชิ้น</option>
+                        <option value="50">แสดง 50 ชิ้น</option>
+                        <option value="100">แสดง 100 ชิ้น</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchViewSnackFood('table')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M320-80q-33 0-56.5-23.5T240-160v-480q0-33 23.5-56.5T320-720h480q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H320Zm0-80h200v-120H320v120Zm280 0h200v-120H600v120ZM80-240v-560q0-33 23.5-56.5T160-880h560v80H160v560H80Zm240-120h200v-120H320v120Zm280 0h200v-120H600v120ZM320-560h480v-80H320v80Z" />
+                    </svg>
+                </button>
+                <button class="btn btn-grid" data-tooltip="แสดง Grid" onclick="switchViewSnackFood('grid')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="containerSnackFood">
+            <table id="productTableSnackFood" style="display: none;">
+                <thead>
                     <tr>
-                        <td><img src="<?php echo $item['IMAGE_URL']; ?>" alt="<?php echo $item['NAME']; ?>" width="100"></td>
-                        <td><?php echo $item['NAME']; ?></td>
-                        <td>฿<?php echo $item['PRICE']; ?></td>
-                        <td><?php echo $item['KEYCAP_PROFILE']; ?></td>
-                        <td>
-                            <form action="#" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <button type="button" class="btn-edit" onclick="openEditPopup(<?php echo $item['ID']; ?>)">แก้ไขสินค้า</button>
-                            </form>
-                            <!-- Popup Form -->
-                            <div id="editPopup-<?php echo $item['ID']; ?>" class="edit-popup">
-                                <div class="popup-content">
-                                    <button type="button" class="btn-close" onclick="closeEditPopup(<?php echo $item['ID']; ?>)">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                    <h3>แก้ไขข้อมูลสินค้า</h3>
-                                    <form action="../product/edit_product/edit_product.php" method="POST">
-                                        <input type="hidden" name="productID" value="<?php echo $item['ID']; ?>">
-                                        <input type="text" name="productName" value="<?php echo $item['NAME']; ?>" required>
-                                        <input type="text" name="productPrice" value="<?php echo $item['PRICE']; ?>" required>
-                                        <input type="hidden" name="productCategory" value="keycaps"> <!-- หรือ หมวดหมู่อื่นๆ ตามความเหมาะสม -->
-                                        <input type="text" name="keycapProfile" value="<?php echo $item['KEYCAP_PROFILE']; ?>" required>
-                                        <button type="submit" class="btn-edit-prodect">บันทึก</button>
-                                    </form>
-
-                                </div>
-                            </div>
-                            <form id="deleteForm-<?php echo $item['ID']; ?>" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $item['ID']; ?>">
-                                <input type="hidden" name="category" value="keycaps"> <!-- หมวดหมู่สินค้านี้ -->
-                                <button type="button" class="btn-delete" onclick="deleteProduct(<?php echo $item['ID']; ?>, 'keycaps')">ลบสินค้า</button>
-                            </form>
-                        </td>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูป</th>
+                        <th>บาร์โค้ด</th>
+                        <th>ราคา</th>
+                        <th>ต้นทุน</th>
+                        <th>สต็อก</th>
+                        <th>เกณฑ์สั่งซื้อ</th>
+                        <th>การจัดการ</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody id="productTableBodySnackFood"></tbody>
+            </table>
 
+            <div id="productGridSnackFood" class="card-grid"></div>
+        </div>
+
+        <button id="scrollTopBtnSnackFood" onclick="scrollToTopSnackFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+                <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+            </svg></button>
+
+        <div id="paginationSnackFood" class="pagination"></div>
+
+        <div id="overlaySnackFood" class="overlay" onclick="closeEditPanelSnackFood()"></div>
+
+        <div id="editPanelSnackFood" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanelSnackFood()">&times;</span>
+
+                <div id="side-panel-form-content-snackfood">
+                    <!-- ฟอร์มที่ใช้แก้ไขสินค้า -->
+                    <form id="editProductFormSnackFood" method="POST" action="">
+                        <input type="hidden" id="edit_product_id_snackfood" name="id">
+
+                        <div id="imagePreviewContainerSnackFood">
+                            <img id="imagePreviewSnackFood" alt="รูปสินค้า">
+                        </div>
+
+                        <label for="product_name_snackfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <input type="text" id="product_name_snackfood" name="product_name" required>
+
+                        <label for="barcode_snackfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>บาร์โค้ด</label>
+                        <input type="text" id="barcode_snackfood" name="barcode" maxlength="17" />
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price_snackfood"><span class="material-icons">price_change</span>ราคา</label>
+                                <input type="number" id="price_snackfood" name="price" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost_snackfood"><span class="material-icons">money</span>ต้นทุน</label>
+                                <input type="number" id="cost_snackfood" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock_snackfood"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <input type="number" id="stock_snackfood" name="stock" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level_snackfood"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <input type="number" id="reorder_level_snackfood" name="reorder_level" required>
+                            </div>
+                        </div>
+
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="sci_admin" class="content">
         <h3 class="h-text">🛠️ การจัดการ Admin</h3>
@@ -3725,7 +4517,7 @@ $users = fetchUsers($conn);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($adminUsers as $user): ?>
+                <?php foreach ($admins as $user): ?>
                     <tr>
                         <td><?php echo $user['ID']; ?></td>
                         <td><?php echo $user['USERNAME']; ?></td>
@@ -3890,76 +4682,7 @@ $users = fetchUsers($conn);
             alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
         });
 
-
-        function toggleDropdown(button) {
-            // ปิด dropdown อื่นก่อน
-            document.querySelectorAll('.action-dropdown').forEach(dropdown => {
-                if (dropdown !== button.parentElement) {
-                    dropdown.classList.remove('show');
-                }
-            });
-
-            // toggle อันที่คลิก
-            button.parentElement.classList.toggle('show');
-        }
-
-        // ปิด dropdown เมื่อคลิกนอก
-        window.addEventListener('click', function(e) {
-            if (!e.target.matches('.action-dropdown button')) {
-                document.querySelectorAll('.action-dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('show');
-                });
-            }
-        });
-
-        function openEditPanel(id) {
-            const overlay = document.getElementById('overlay');
-            const editPanel = document.getElementById('editPanel');
-
-            // เปิด overlay กับ side panel
-            overlay.style.display = 'block';
-            editPanel.style.display = 'block'; // <<< เพิ่มบรรทัดนี้
-            setTimeout(() => {
-                editPanel.style.right = '0';
-            }, 10); // เพิ่ม delay เล็กน้อยให้ CSS transition ทำงานนุ่มนวล
-
-            // ปิดการเลื่อนหน้าจอ
-            document.body.style.overflow = 'hidden';
-
-            // Fetch data จาก server
-            fetch('../../product/edit_product/get_food_all/get_dried_food.php?id=' + id)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('edit_product_id').value = data.id;
-                    document.getElementById('imagePreview').src = data.image_url;
-                    document.getElementById('product_name').value = data.product_name;
-                    document.getElementById('barcode').value = data.barcode || '';
-                    document.getElementById('price').value = data.price;
-                    document.getElementById('cost').value = data.cost;
-                    document.getElementById('stock').value = data.stock;
-                    document.getElementById('reorder_level').value = data.reorder_level;
-
-                    document.getElementById('editProductForm').action = '../../product/edit_product/edit_food_all/edit_dried_food.php?id=' + data.id;
-                })
-                .catch(error => {
-                    console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
-                });
-        }
-
-        function closeEditPanel() {
-            const overlay = document.getElementById('overlay');
-            const editPanel = document.getElementById('editPanel');
-
-            overlay.style.display = 'none';
-            editPanel.style.right = '-500px';
-            setTimeout(() => {
-                editPanel.style.display = 'none';
-            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
-
-            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
-            document.body.style.overflow = 'auto';
-        }
-
+        // ฟังก์ชันแสดงชื่อไฟล์ที่เลือก Excal
         function showFileName(input) {
             const fileNameText = input.nextElementSibling;
             if (input.files.length > 0) {
@@ -4023,6 +4746,390 @@ $users = fetchUsers($conn);
             }
         });
 
+        function toggleDropdown(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        function toggleDropdownSoftDrink(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown-soft-drink').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        function toggleDropdownFreshFood(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown-fresh-food').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        function toggleDropdownSnackFood(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        // ปิด dropdown เมื่อคลิกนอก
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown button')) {
+                document.querySelectorAll('.action-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown-soft-drink button')) {
+                document.querySelectorAll('.action-dropdown-soft-drink').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown-fresh-food button')) {
+                document.querySelectorAll('.action-dropdown-fresh-food').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown-snack button')) {
+                document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        document.getElementById('editProductForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกัน submit แบบเปลี่ยนหน้า
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('../../product/edit_product/edit_food_all/edit_dried_food.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        // ปิด panel
+                        document.getElementById('editPanel').style.right = '-100%';
+                        document.getElementById('overlay').style.display = 'none';
+                        document.body.style.overflow = '';
+                    } else {
+                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('เกิดข้อผิดพลาด:', error);
+                    alert('❌ ไม่สามารถส่งข้อมูลไปยังเซิร์ฟเวอร์ได้');
+                });
+        });
+
+        function openEditPanel(id) {
+            const overlay = document.getElementById('overlay');
+            const editPanel = document.getElementById('editPanel');
+
+            if (overlay && editPanel) {
+                overlay.style.display = 'block';
+                editPanel.style.display = 'block';
+                setTimeout(() => {
+                    editPanel.style.right = '0';
+                }, 10);
+                document.body.style.overflow = 'hidden';
+
+                // ใช้ fetch เพื่อดึงข้อมูลสินค้าตาม id ที่ส่งมา
+                fetch('../../product/edit_product/get_food_all/get_dried_food.php?id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('edit_product_id').value = data.id;
+                        document.getElementById('imagePreview').src = data.image_url;
+                        document.getElementById('product_name').value = data.product_name;
+                        document.getElementById('barcode').value = data.barcode || '';
+                        document.getElementById('price').value = data.price;
+                        document.getElementById('cost').value = data.cost;
+                        document.getElementById('stock').value = data.stock;
+                        document.getElementById('reorder_level').value = data.reorder_level;
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                    });
+            } else {
+                console.error("ไม่พบ overlay หรือ editPanel ใน DOM");
+            }
+        }
+
+        function closeEditPanel() {
+            const overlay = document.getElementById('overlay');
+            const editPanel = document.getElementById('editPanel');
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
+
+            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('editProductFormSoftDrink').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการเปลี่ยนหน้า
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('../../product/edit_product/edit_food_all/edit_soft_drink.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        // ปิด panel
+                        document.getElementById('editPanelSoftDrink').style.right = '-100%';
+                        document.getElementById('overlaySoftDrink').style.display = 'none';
+                        document.body.style.overflow = '';
+                    } else {
+                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                });
+        });
+
+        function openEditPanelSoftDrink(id) {
+            const overlay = document.getElementById('overlaySoftDrink');
+            const editPanel = document.getElementById('editPanelSoftDrink');
+
+            if (overlay && editPanel) {
+                overlay.style.display = 'block';
+                editPanel.style.display = 'block';
+                setTimeout(() => {
+                    editPanel.style.right = '0';
+                }, 10);
+                document.body.style.overflow = 'hidden';
+
+                // ใช้ fetch เพื่อดึงข้อมูลสินค้าตาม id ที่ส่งมา
+                fetch('../../product/edit_product/get_food_all/get_soft_drink.php?id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('edit_product_id_softdrink').value = data.id;
+                        document.getElementById('imagePreviewSoftDrink').src = data.image_url;
+                        document.getElementById('product_name_softdrink').value = data.product_name;
+                        document.getElementById('barcode_softdrink').value = data.barcode || '';
+                        document.getElementById('price_softdrink').value = data.price;
+                        document.getElementById('cost_softdrink').value = data.cost;
+                        document.getElementById('stock_softdrink').value = data.stock;
+                        document.getElementById('reorder_level_softdrink').value = data.reorder_level;
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                    });
+            } else {
+                console.error("ไม่พบ overlay หรือ editPanel ใน DOM");
+            }
+        }
+
+
+        function closeEditPanelSoftDrink() {
+            const overlay = document.getElementById('overlaySoftDrink');
+            const editPanel = document.getElementById('editPanelSoftDrink');
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
+
+            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
+            document.body.style.overflow = 'auto';
+        }
+
+
+        document.getElementById('editProductFormFreshFood').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการเปลี่ยนหน้า
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('../../product/edit_product/edit_food_all/edit_fresh_food.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        // ปิด panel
+                        document.getElementById('editPanelFreshFood').style.right = '-100%';
+                        document.getElementById('overlayFreshFood').style.display = 'none';
+                        document.body.style.overflow = '';
+                    } else {
+                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                });
+        });
+
+        function openEditPanelFreshFood(id) {
+            const overlay = document.getElementById('overlayFreshFood');
+            const editPanel = document.getElementById('editPanelFreshFood');
+
+            if (overlay && editPanel) {
+                overlay.style.display = 'block';
+                editPanel.style.display = 'block';
+                setTimeout(() => {
+                    editPanel.style.right = '0';
+                }, 10);
+                document.body.style.overflow = 'hidden';
+
+                // ใช้ fetch เพื่อดึงข้อมูลสินค้าตาม id ที่ส่งมา
+                fetch('../../product/edit_product/get_food_all/get_fresh_food.php?id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('edit_product_id_freshfood').value = data.id;
+                        document.getElementById('imagePreviewFreshFood').src = data.image_url;
+                        document.getElementById('product_name_freshfood').value = data.product_name;
+                        document.getElementById('barcode_freshfood').value = data.barcode || '';
+                        document.getElementById('price_freshfood').value = data.price;
+                        document.getElementById('cost_freshfood').value = data.cost;
+                        document.getElementById('stock_freshfood').value = data.stock;
+                        document.getElementById('reorder_level_freshfood').value = data.reorder_level;
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                    });
+            } else {
+                console.error("ไม่พบ overlay หรือ editPanel ใน DOM");
+            }
+        }
+
+        function closeEditPanelFreshFood() {
+            const overlay = document.getElementById('overlayFreshFood');
+            const editPanel = document.getElementById('editPanelFreshFood');
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
+
+            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('editProductFormSnackFood').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการเปลี่ยนหน้า
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('../../product/edit_product/edit_food_all/edit_snack.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        // ปิด panel
+                        document.getElementById('editPanelSnackFood').style.right = '-100%';
+                        document.getElementById('overlaySnackFood').style.display = 'none';
+                        document.body.style.overflow = '';
+                    } else {
+                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                });
+        });
+
+        function openEditPanelSnackFood(id) {
+            const overlay = document.getElementById('overlaySnackFood');
+            const editPanel = document.getElementById('editPanelSnackFood');
+
+            if (overlay && editPanel) {
+                overlay.style.display = 'block';
+                editPanel.style.display = 'block';
+                setTimeout(() => {
+                    editPanel.style.right = '0';
+                }, 10);
+                document.body.style.overflow = 'hidden';
+
+                // ใช้ fetch เพื่อดึงข้อมูลสินค้าตาม id ที่ส่งมา
+                fetch('../../product/edit_product/get_food_all/get_snack.php?id=' + id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // แสดงข้อมูลในฟอร์ม
+                        document.getElementById('edit_product_id_snackfood').value = data.id;
+                        document.getElementById('imagePreviewSnackFood').src = data.image_url;
+                        document.getElementById('product_name_snackfood').value = data.product_name;
+                        document.getElementById('barcode_snackfood').value = data.barcode || '';
+                        document.getElementById('price_snackfood').value = data.price;
+                        document.getElementById('cost_snackfood').value = data.cost;
+                        document.getElementById('stock_snackfood').value = data.stock;
+                        document.getElementById('reorder_level_snackfood').value = data.reorder_level;
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                    });
+            } else {
+                console.error("ไม่พบ overlay หรือ editPanel ใน DOM");
+            }
+        }
+
+        function closeEditPanelSnackFood() {
+            const overlay = document.getElementById('overlaySnackFood');
+            const editPanel = document.getElementById('editPanelSnackFood');
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300); // ต้องรอให้ side panel เลื่อนออกไปก่อนค่อยปิด display
+
+            // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
+            document.body.style.overflow = 'auto';
+        }
+
         function toggleMenu() {
             const filterMenu = document.getElementById('filterMenu');
             filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
@@ -4033,10 +5140,30 @@ $users = fetchUsers($conn);
             const price = document.getElementById('filterPrice').value;
 
             console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
+        }
 
-            // ทำการกรองข้อมูลตามฟิลเตอร์ที่เลือก
-            // ตัวอย่างเช่น กรองสินค้าใน filteredProducts ตาม category และ price ที่เลือก
-            // ฟังก์ชันนี้สามารถปรับให้ทำงานตามความต้องการของคุณ
+        function toggleMenuSoftDrink() {
+            const filterMenu = document.getElementById('filterMenuSoftDrink');
+            filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function applyFiltersSoftDrink() {
+            const category = document.getElementById('filterCategorySoftDrink').value;
+            const price = document.getElementById('filterPrice').value;
+
+            console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
+        }
+
+        function toggleMenuFreshFood() {
+            const filterMenu = document.getElementById('filterMenuFreshFood');
+            filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function applyFiltersFreshFood() {
+            const category = document.getElementById('filterCategoryFreshFood').value;
+            const price = document.getElementById('filterPrice').value;
+
+            console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
         }
 
 
@@ -4088,7 +5215,9 @@ $users = fetchUsers($conn);
                         <td>
                             <div class="product-image-container">
                                 <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                                ${item.stock <= item.reorder_level ? `
                                 <div class="out-of-stock-label-table">สินค้าใกล้หมด</div>
+                                ` : ''}
                             </div>
                         </td>
                         <td style="text-align:center;">
@@ -4100,7 +5229,7 @@ $users = fetchUsers($conn);
                             </div>
                         </td>
                         <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</td>
-<td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</td>
+                        <td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</td>
                         <td>${item.stock} ชิ้น</td>
                         <td>${item.reorder_level} ชิ้น</td>
                         <td>
@@ -4139,7 +5268,9 @@ $users = fetchUsers($conn);
                     <div class="card">
                         <div class="product-image-container">
                             <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                            ${item.stock <= item.reorder_level ? `
                             <div class="out-of-stock-label">สินค้าใกล้หมด</div>
+                        ` : ''}
                         </div>
                         <div class="card-content">
                             <h3 class="name-grid">${highlightText(item.product_name, searchText)}</h3>
@@ -4150,7 +5281,7 @@ $users = fetchUsers($conn);
                                 <span>${highlightText(item.barcode, searchText)}</span>
                             </div>
                             <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</p>
-<p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</p>
+                            <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท</p>
                             <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
                             <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
                             <div class="card-actions">
@@ -4220,7 +5351,10 @@ $users = fetchUsers($conn);
 
         function switchView(viewType) {
             currentView = viewType; // บันทึกมุมมองที่เลือก
-            localStorage.setItem('viewMode', viewType); // บันทึกการเลือกมุมมองใน localStorage
+            localStorage.setItem('viewMode', viewType);
+            container.scrollIntoView({
+                behavior: 'smooth'
+            })
             displayProducts();
         }
 
@@ -4230,6 +5364,8 @@ $users = fetchUsers($conn);
         window.onscroll = function() {
             toggleScrollButton();
         };
+
+
 
         // ฟังก์ชันโชว์/ซ่อนปุ่ม
         function toggleScrollButton() {
@@ -4249,19 +5385,615 @@ $users = fetchUsers($conn);
             });
         }
 
+        // ฟังก์ชันสำหรับการค้นหาสินค้า Soft Drink
+        const productsSoftDrink = <?php echo json_encode($soft_drink); ?>;
+        const tableBodySoftDrink = document.getElementById('productTableBodySoftDrink');
+        const gridSoftDrink = document.getElementById('productGridSoftDrink');
+        const paginationSoftDrink = document.getElementById('paginationSoftDrink');
+        const containerSoftDrink = document.getElementById('containerSoftDrink');
+        const searchInputSoftDrink = document.getElementById('searchInputSoftDrink');
+
+        let filteredProductsSoftDrink = [...productsSoftDrink];
+        let currentPageSoftDrink = 1;
+        const itemsPerPageSoftDrink = 10;
+        let searchTextSoftDrink = '';
+        let currentViewSoftDrink = localStorage.getItem('viewModeSoftDrink') || 'table';
+
+        function highlightTextSoftDrink(text, keyword) {
+            if (!keyword) return text;
+            const pattern = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(pattern, '<span class="highlight">$1</span>');
+        }
+
+        function displayProductsSoftDrink() {
+            tableBodySoftDrink.innerHTML = '';
+            gridSoftDrink.innerHTML = '';
+
+            const startIndex = (currentPageSoftDrink - 1) * itemsPerPageSoftDrink;
+            const endIndex = startIndex + itemsPerPageSoftDrink;
+            const paginatedItems = filteredProductsSoftDrink.slice(startIndex, endIndex);
+
+            if (currentViewSoftDrink === 'table') {
+                document.getElementById('productTableSoftDrink').style.display = 'table';
+                gridSoftDrink.style.display = 'none';
+
+                if (paginatedItems.length === 0) {
+                    tableBodySoftDrink.innerHTML = `
+            <tr><td colspan="8" class="no-items-message">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+                ไม่พบสินค้าที่ค้นหา
+            </td></tr>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        tableBodySoftDrink.innerHTML += `
+                <tr>
+                    <td style="text-align:left; font-weight: bold;">${highlightTextSoftDrink(item.product_name, searchTextSoftDrink)}</td>
+                    <td>
+                        <div class="product-image-container">
+                            <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                            ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label-table">สินค้าใกล้หมด</div>` : ''}
+                        </div>
+                    </td>
+                    <td style="text-align:center;">
+                        <div class="barcode-cell">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                            <span>${highlightTextSoftDrink(item.barcode, searchTextSoftDrink)}</span>
+                        </div>
+                    </td>
+                    <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                    <td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                    <td>${item.stock} ชิ้น</td>
+                    <td>${item.reorder_level} ชิ้น</td>
+                    <td>
+                        <div class="action-dropdown">
+                            <button onclick="toggleDropdownSoftDrink(this)">⋮</button>
+                            <div class="dropdown-content">
+                                <a onclick="openEditPanelSoftDrink(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+                    });
+                }
+            } else {
+                document.getElementById('productTableSoftDrink').style.display = 'none';
+                gridSoftDrink.style.display = 'grid';
+
+                if (paginatedItems.length === 0) {
+                    gridSoftDrink.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 2px; ">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333" style="margin-right: 10px;">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </p>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        gridSoftDrink.innerHTML += `
+                <div class="card">
+                    <div class="product-image-container">
+                        <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                        ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label">สินค้าใกล้หมด</div>` : ''}
+                    </div>
+                    <div class="card-content">
+                        <h3 class="name-grid">${highlightTextSoftDrink(item.product_name, searchTextSoftDrink)}</h3>
+                        <div class="barcode"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg><span>${highlightTextSoftDrink(item.barcode, searchTextSoftDrink)}</span></div>
+                        <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                        <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                        <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
+                        <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
+                        <div class="card-actions">
+                            <button onclick="openEditPanelSoftDrink(${item.id})">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</button>
+                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                        </div>
+                    </div>
+                </div>`;
+                    });
+                }
+            }
+
+            renderPaginationSoftDrink();
+        }
+
+        function renderPaginationSoftDrink() {
+            paginationSoftDrink.innerHTML = '';
+
+            const totalPages = Math.ceil(filteredProductsSoftDrink.length / itemsPerPageSoftDrink);
+            if (totalPages <= 1) return;
+
+            if (currentPageSoftDrink > 1) {
+                paginationSoftDrink.innerHTML += `<button class="page-btn" onclick="goToPageSoftDrink(${currentPageSoftDrink - 1})">ก่อนหน้า</button>`;
+            }
+
+            let startPage = Math.max(1, currentPageSoftDrink - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationSoftDrink.innerHTML += `<button class="page-btn ${i === currentPageSoftDrink ? 'active' : ''}" onclick="goToPageSoftDrink(${i})">${i}</button>`;
+            }
+
+            if (currentPageSoftDrink < totalPages) {
+                paginationSoftDrink.innerHTML += `<button class="page-btn" onclick="goToPageSoftDrink(${currentPageSoftDrink + 1})">ถัดไป</button>`;
+            }
+        }
+
+        function goToPageSoftDrink(page) {
+            currentPageSoftDrink = page;
+            displayProductsSoftDrink();
+        }
+
+        function filterProductsSoftDrink() {
+            searchTextSoftDrink = searchInputSoftDrink.value.trim().toLowerCase();
+
+            if (searchTextSoftDrink === '') {
+                filteredProductsSoftDrink = [...productsSoftDrink];
+            } else {
+                filteredProductsSoftDrink = productsSoftDrink.filter(item =>
+                    item.product_name.toLowerCase().includes(searchTextSoftDrink) ||
+                    item.barcode.toLowerCase().includes(searchTextSoftDrink)
+                );
+            }
+
+            currentPageSoftDrink = 1;
+            displayProductsSoftDrink();
+        }
+
+        function switchViewSoftDrink(viewType) {
+            currentViewSoftDrink = viewType;
+            localStorage.setItem('viewModeSoftDrink', viewType);
+            containerSoftDrink.scrollIntoView({
+                behavior: 'smooth'
+            });
+            displayProductsSoftDrink();
+        }
+
+        displayProductsSoftDrink();
 
 
+        window.onscroll = function() {
+            toggleScrollButtonSoftDrink();
+        };
 
+        // ฟังก์ชันโชว์/ซ่อนปุ่ม
+        function toggleScrollButtonSoftDrink() {
+            const btn = document.getElementById("scrollTopBtnSoftDrink");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        }
 
+        // ฟังก์ชันเลื่อนขึ้นบนสุด
+        function scrollToTopSoftDrink() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
 
+        // ฟังก์ชันสำหรับการค้นหาสินค้า Fresh Food
+        const productsFreshFood = <?php echo json_encode($fresh_food); ?>;
+        const tableBodyFreshFood = document.getElementById('productTableBodyFreshFood');
+        const gridFreshFood = document.getElementById('productGridFreshFood');
+        const paginationFreshFood = document.getElementById('paginationFreshFood');
+        const containerFreshFood = document.getElementById('containerFreshFood');
+        const searchInputFreshFood = document.getElementById('searchInputFreshFood');
+        let filteredProductsFreshFood = [...productsFreshFood];
+        let currentPageFreshFood = 1;
+        const itemsPerPageFreshFood = 10;
+        let searchTextFreshFood = '';
+        let currentViewFreshFood = localStorage.getItem('viewModeFreshFood') || 'table';
 
+        function highlightTextFreshFood(text, keyword) {
+            if (!keyword) return text;
+            const pattern = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(pattern, '<span class="highlight">$1</span>');
+        }
 
+        function displayProductsFreshFood() {
+            tableBodyFreshFood.innerHTML = '';
+            gridFreshFood.innerHTML = '';
 
+            const startIndex = (currentPageFreshFood - 1) * itemsPerPageFreshFood;
+            const endIndex = startIndex + itemsPerPageFreshFood;
+            const paginatedItems = filteredProductsFreshFood.slice(startIndex, endIndex);
 
+            if (currentViewFreshFood === 'table') {
+                document.getElementById('productTableFreshFood').style.display = 'table';
+                gridFreshFood.style.display = 'none';
 
+                if (paginatedItems.length === 0) {
+                    tableBodyFreshFood.innerHTML = `
+            <tr><td colspan="8" class="no-items-message">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+                ไม่พบสินค้าที่ค้นหา
+            </td></tr>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        tableBodyFreshFood.innerHTML += `
+                <tr>
+                    <td style="text-align:left; font-weight: bold;">${highlightTextFreshFood(item.product_name, searchTextFreshFood)}</td>
+                    <td>
+                        <div class="product-image-container">
+                            <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                            ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label-table">สินค้าใกล้หมด</div>` : ''}
+                        </div>
+                    </td>
+                    <td style="text-align:center;">
+                        <div class="barcode-cell">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                            <span>${highlightTextFreshFood(item.barcode, searchTextFreshFood)}</span>
+                        </div>
+                    </td>
+                    <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                    <td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                    <td>${item.stock} ชิ้น</td>
+                    <td>${item.reorder_level} ชิ้น</td>
+                    <td>
+                        <div class="action-dropdown">
+                            <button onclick="toggleDropdownFreshFood(this)">⋮</button>
+                            <div class="dropdown-content">
+                                <a onclick="openEditPanelFreshFood(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                            </div>  
+                        </div>
+                    </td>
+                </tr>`;
+                    });
+                }
+            } else {
+                document.getElementById('productTableFreshFood').style.display = 'none';
+                gridFreshFood.style.display = 'grid';
 
+                if (paginatedItems.length === 0) {
+                    gridFreshFood.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 2px; ">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333" style="margin-right: 10px;">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </p>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        gridFreshFood.innerHTML += `
+                <div class="card">
+                    <div class="product-image-container">
+                        <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                        ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label">สินค้าใกล้หมด</div>` : ''}
+                    </div>
+                    <div class="card-content">
+                        <h3 class="name-grid">${highlightTextFreshFood(item.product_name, searchTextFreshFood)}</h3>
+                        <div class="barcode">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg><span>${highlightTextFreshFood(item.barcode, searchTextFreshFood)}</span></div>
+                        <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                        <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                        <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
+                        <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
+                        <div class="card-actions">
+                            <button onclick="openEditPanelFreshFood(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</button>
+                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                        </div>
+                    </div>
+                </div>`;
+                    });
+                }
+            }
+            renderPaginationFreshFood();
+        }
 
+        function renderPaginationFreshFood() {
+            paginationFreshFood.innerHTML = '';
 
+            const totalPages = Math.ceil(filteredProductsFreshFood.length / itemsPerPageFreshFood);
+            if (totalPages <= 1) return;
+
+            if (currentPageFreshFood > 1) {
+                paginationFreshFood.innerHTML += `<button class="page-btn" onclick="goToPageFreshFood(${currentPageFreshFood - 1})">ก่อนหน้า</button>`;
+            }
+
+            let startPage = Math.max(1, currentPageFreshFood - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationFreshFood.innerHTML += `<button class="page-btn ${i === currentPageFreshFood ? 'active' : ''}" onclick="goToPageFreshFood(${i})">${i}</button>`;
+            }
+
+            if (currentPageFreshFood < totalPages) {
+                paginationFreshFood.innerHTML += `<button class="page-btn" onclick="goToPageFreshFood(${currentPageFreshFood + 1})">ถัดไป</button>`;
+            }
+        }
+
+        function goToPageFreshFood(page) {
+            currentPageFreshFood = page;
+            displayProductsFreshFood();
+        }
+
+        function filterProductsFreshFood() {
+            searchTextFreshFood = searchInputFreshFood.value.trim().toLowerCase();
+
+            if (searchTextFreshFood === '') {
+                filteredProductsFreshFood = [...productsFreshFood];
+            } else {
+                filteredProductsFreshFood = productsFreshFood.filter(item =>
+                    item.product_name.toLowerCase().includes(searchTextFreshFood) ||
+                    item.barcode.toLowerCase().includes(searchTextFreshFood)
+                );
+            }
+
+            currentPageFreshFood = 1;
+            displayProductsFreshFood();
+        }
+
+        function switchViewFreshFood(viewType) {
+            currentViewFreshFood = viewType;
+            localStorage.setItem('viewModeFreshFood', viewType);
+            containerFreshFood.scrollIntoView({
+                behavior: 'smooth'
+            });
+            displayProductsFreshFood();
+        }
+        displayProductsFreshFood();
+        window.onscroll = function() {
+            toggleScrollButtonFreshFood();
+        };
+        // ฟังก์ชันโชว์/ซ่อนปุ่ม
+        function toggleScrollButtonFreshFood() {
+            const btn = document.getElementById("scrollTopBtnFreshFood");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        }
+        // ฟังก์ชันเลื่อนขึ้นบนสุด
+        function scrollToTopFreshFood() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ฟังก์ชันสำหรับการค้นหาสินค้า SnackFood
+        const productsSnackFood = <?php echo json_encode($snack); ?>;
+        const tableBodySnackFood = document.getElementById('productTableBodySnackFood');
+        const gridSnackFood = document.getElementById('productGridSnackFood');
+        const paginationSnackFood = document.getElementById('paginationSnackFood');
+        const containerSnackFood = document.getElementById('containerSnackFood');
+        const searchInputSnackFood = document.getElementById('searchInputSnackFood');
+        let filteredProductsSnackFood = [...productsSnackFood];
+        let currentPageSnackFood = 1;
+        const itemsPerPageSnackFood = 10;
+        let searchTextSnackFood = '';
+        let currentViewSnackFood = localStorage.getItem('viewModeSnackFood') || 'table';
+
+        function highlightTextSnackFood(text, keyword) {
+            if (!keyword) return text;
+            const pattern = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(pattern, '<span class="highlight">$1</span>');
+        }
+
+        function displayProductsSnackFood() {
+            tableBodySnackFood.innerHTML = '';
+            gridSnackFood.innerHTML = '';
+
+            const startIndex = (currentPageSnackFood - 1) * itemsPerPageSnackFood;
+            const endIndex = startIndex + itemsPerPageSnackFood;
+            const paginatedItems = filteredProductsSnackFood.slice(startIndex, endIndex);
+
+            if (currentViewSnackFood === 'table') {
+                document.getElementById('productTableSnackFood').style.display = 'table';
+                gridSnackFood.style.display = 'none';
+
+                if (paginatedItems.length === 0) {
+                    tableBodySnackFood.innerHTML = `
+        <tr><td colspan="8" class="no-items-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </td></tr>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        tableBodySnackFood.innerHTML += `
+            <tr>
+                <td style="text-align:left; font-weight: bold;">${highlightTextSnackFood(item.product_name, searchTextSnackFood)}</td>
+                <td>
+                    <div class="product-image-container">
+                        <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                        ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label-table">สินค้าใกล้หมด</div>` : ''}
+                    </div>
+                </td>
+                <td style="text-align:center;">
+                    <div class="barcode-cell">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                        <span>${highlightTextSnackFood(item.barcode, searchTextSnackFood)}</span>
+                    </div>
+                </td>
+                <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                <td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                <td>${item.stock} ชิ้น</td>
+                <td>${item.reorder_level} ชิ้น</td>
+                <td>
+                    <div class="action-dropdown">
+                        <button onclick="toggleDropdownSnackFood(this)">⋮</button>
+                        <div class="dropdown-content">
+                            <a onclick="openEditPanelSnackFood(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                        </div>  
+                    </div>
+                </td>
+            </tr>`;
+                    });
+                }
+            } else {
+                document.getElementById('productTableSnackFood').style.display = 'none';
+                gridSnackFood.style.display = 'grid';
+
+                if (paginatedItems.length === 0) {
+                    gridSnackFood.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 2px; ">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333" style="margin-right: 10px;">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </p>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        gridSnackFood.innerHTML += `
+            <div class="card">
+                <div class="product-image-container">
+                    <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                    ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label">สินค้าใกล้หมด</div>` : ''}
+                </div>
+                <div class="card-content">
+                    <h3 class="name-grid">${highlightTextSnackFood(item.product_name, searchTextSnackFood)}</h3>
+                    <div class="barcode">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg><span>${highlightTextSnackFood(item.barcode, searchTextSnackFood)}</span></div>
+                    <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                    <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                    <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
+                    <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
+                    <div class="card-actions">
+                        <button onclick="openEditPanelSnackFood(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</button>
+                        <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                    </div>
+                </div>
+            </div>`;
+                    });
+                }
+            }
+            renderPaginationSnackFood();
+        }
+
+        function renderPaginationSnackFood() {
+            paginationSnackFood.innerHTML = '';
+
+            const totalPages = Math.ceil(filteredProductsSnackFood.length / itemsPerPageSnackFood);
+            if (totalPages <= 1) return;
+
+            if (currentPageSnackFood > 1) {
+                paginationSnackFood.innerHTML += `<button class="page-btn" onclick="goToPageSnackFood(${currentPageSnackFood - 1})">ก่อนหน้า</button>`;
+            }
+
+            let startPage = Math.max(1, currentPageSnackFood - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationSnackFood.innerHTML += `<button class="page-btn ${i === currentPageSnackFood ? 'active' : ''}" onclick="goToPageSnackFood(${i})">${i}</button>`;
+            }
+
+            if (currentPageSnackFood < totalPages) {
+                paginationSnackFood.innerHTML += `<button class="page-btn" onclick="goToPageSnackFood(${currentPageSnackFood + 1})">ถัดไป</button>`;
+            }
+        }
+
+        function goToPageSnackFood(page) {
+            currentPageSnackFood = page;
+            displayProductsSnackFood();
+        }
+
+        function filterProductsSnackFood() {
+            searchTextSnackFood = searchInputSnackFood.value.trim().toLowerCase();
+
+            if (searchTextSnackFood === '') {
+                filteredProductsSnackFood = [...productsSnackFood];
+            } else {
+                filteredProductsSnackFood = productsSnackFood.filter(item =>
+                    item.product_name.toLowerCase().includes(searchTextSnackFood) ||
+                    item.barcode.toLowerCase().includes(searchTextSnackFood)
+                );
+            }
+
+            currentPageSnackFood = 1;
+            displayProductsSnackFood();
+        }
+
+        function switchViewSnackFood(viewType) {
+            currentViewSnackFood = viewType;
+            localStorage.setItem('viewModeSnackFood', viewType);
+            containerSnackFood.scrollIntoView({
+                behavior: 'smooth'
+            });
+            displayProductsSnackFood();
+        }
+
+        displayProductsSnackFood();
+
+        window.onscroll = function() {
+            toggleScrollButtonSnackFood();
+        };
+
+        // ฟังก์ชันโชว์/ซ่อนปุ่ม
+        function toggleScrollButtonSnackFood() {
+            const btn = document.getElementById("scrollTopBtnSnackFood");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        }
+
+        // ฟังก์ชันเลื่อนขึ้นบนสุด
+        function scrollToTopSnackFood() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ฟังก์ชันสำหรับการเลือกหมวดหมู่สินค้า
         let selectedCategory = '';
 
         function selectCategory(event, category) {
@@ -4426,7 +6158,7 @@ $users = fetchUsers($conn);
             });
         }
 
-        document.querySelectorAll(".btn-addd").forEach(button => {
+        document.querySelectorAll(".btn-dried-food").forEach(button => {
             button.addEventListener("click", function() {
                 let selectedProducts = [];
 
@@ -4494,7 +6226,7 @@ $users = fetchUsers($conn);
             });
         });
 
-        document.querySelectorAll(".btn-adddd").forEach(button => {
+        document.querySelectorAll(".btn-soft-drink").forEach(button => {
             button.addEventListener("click", function() {
                 let selectedProducts = [];
 
@@ -4562,7 +6294,7 @@ $users = fetchUsers($conn);
             });
         });
 
-        document.querySelectorAll(".btn-addddd").forEach(button => {
+        document.querySelectorAll(".btn-fresh-food").forEach(button => {
             button.addEventListener("click", function() {
                 let selectedProducts = [];
 
@@ -4630,7 +6362,7 @@ $users = fetchUsers($conn);
             });
         });
 
-        document.querySelectorAll(".btn-adddddd").forEach(button => {
+        document.querySelectorAll(".btn-snack").forEach(button => {
             button.addEventListener("click", function() {
                 let selectedProducts = [];
 
