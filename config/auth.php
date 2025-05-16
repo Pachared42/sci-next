@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['ROLE'];
 
             if ($row['ROLE'] == 'superadmin') {
-                header("Location: /sci-shop-admin/admin/dashboard_superadmin/superadminDashboard.php");
+                header("Location: /sci-next/admin/dashboard_superadmin/superadminDashboard.php");
                 exit();
             } else {
-                header("Location: /sci-shop-admin/admin/dashboard_admin/adminDashboard.php");
+                header("Location: /sci-next/admin/dashboard_admin/adminDashboard.php");
                 exit();
             }
         } else {

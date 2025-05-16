@@ -39,7 +39,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
-            <img src="\sci-shop-admin\img\NEXT.png" alt="Logo" class="logo">
+            <img src="\sci-next\img\NEXT.png" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
     </div>
@@ -51,7 +51,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <!-- Avatar -->
         <div class="user-settings">
             <div class="avatar-wrapper">
-                <img src="\sci-shop-admin\img\pachara.jpg" alt="Avatar" class="avatar">
+                <img src="\sci-next\img\pachara.jpg" alt="Avatar" class="avatar">
                 <span class="online-status"></span>
             </div>
         </div>
@@ -143,7 +143,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="tab account" data-tab="account">
             <span class="material-icons">account_circle</span> โปรไฟล์แอดมิน
         </div>
-        <a class="tab logout" href="/sci-shop-admin/Logout.php">
+        <a class="tab logout" href="/sci-next/Logout.php">
             <span class="material-icons">logout</span> ออกจากระบบ
         </a>
     </div>
@@ -260,7 +260,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImageAdmin" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพแอดมิน">
+                    <img id="previewImageAdmin" src="/sci-next/img/product_food1.png" alt="รูปภาพแอดมิน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -390,7 +390,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImageEmployee" src="/sci-shop-admin/img/employee1.png" alt="รูปภาพพนักงาน">
+                    <img id="previewImageEmployee" src="/sci-next/img/employee1.png" alt="รูปภาพพนักงาน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
@@ -517,7 +517,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImageProduct" src="/sci-shop-admin/img/product_food1.png" alt="รูปภาพสินค้า">
+                    <img id="previewImageProduct" src="/sci-next/img/product_food1.png" alt="รูปภาพสินค้า">
                 </div>
 
                 <div class="product-details">
@@ -1692,7 +1692,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <div class="cover"></div>
             <div class="profile-card">
                 <div class="profile-image">
-                    <img id="profile-pic" src="\sci-shop-admin\img\pachara.jpg" alt="Admin Profile">
+                    <img id="profile-pic" src="\sci-next\img\pachara.jpg" alt="Admin Profile">
                     <label for="file-input" class="upload-btn">
                         <i class="material-icons">photo_camera</i>
                     </label>
@@ -3358,7 +3358,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         function sendProductsToServer(selectedProducts) {
             console.log("ส่งข้อมูลสินค้า:", selectedProducts);
 
-            fetch("/sci-shop-admin/product/upload_product/add_food_all/add_dried_food.php", {
+            fetch("/sci-next/product/upload_product/add_food_all/add_dried_food.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -3413,7 +3413,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_soft_drink.php", {
+                fetch("/sci-next/product/upload_product/add_food_all/add_soft_drink.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -3481,7 +3481,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_fresh_food.php", {
+                fetch("/sci-next/product/upload_product/add_food_all/add_fresh_food.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -3549,7 +3549,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 }));
 
                 // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_snack.php", {
+                fetch("/sci-next/product/upload_product/add_food_all/add_snack.php", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -4222,7 +4222,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         // เพิ่ม timestamp เพื่อป้องกัน cache
                         imagePreview.src = `${url}?t=${new Date().getTime()}`;
                     } else {
-                        imagePreview.src = "/sci-shop-admin/img/product_food1.png";
+                        imagePreview.src = "/sci-next/img/product_food1.png";
                     }
                 });
             }

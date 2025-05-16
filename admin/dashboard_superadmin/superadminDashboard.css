@@ -735,7 +735,7 @@ td input[type="checkbox"].checkbox-select-item {
 td input[type="checkbox"].checkbox-select-item:checked {
     background-color: #000000;
     border-color: #000000;
-    background-image: url('/sci-shop-admin/img/check.png');
+    background-image: url('/sci-next/img/check.png');
     background-size: 20px 20px;
     background-position: center;
     background-repeat: no-repeat;
@@ -2162,7 +2162,7 @@ th input[type="checkbox"] {
 th input[type="checkbox"]:checked {
     background-color: #000000;
     border-color: #000000;
-    background-image: url('/sci-shop-admin/img/done_all.png');
+    background-image: url('/sci-next/img/done_all.png');
     background-size: 20px 20px;
     background-position: center;
     background-repeat: no-repeat;
@@ -2190,7 +2190,7 @@ td input[type="checkbox"].row-checkbox {
 td input[type="checkbox"].row-checkbox:checked {
     background-color: #000000;
     border-color: #000000;
-    background-image: url('/sci-shop-admin/img/check.png');
+    background-image: url('/sci-next/img/check.png');
     background-size: 20px 20px;
     background-position: center;
     background-repeat: no-repeat;
