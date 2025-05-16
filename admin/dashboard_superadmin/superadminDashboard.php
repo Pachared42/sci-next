@@ -1,99 +1,5 @@
 <?php
-session_start();
-
-// ตรวจสอบสิทธิ์การเข้าถึง
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'superadmin') {
-    header("Location: /sci-/index.php");
-    exit();
-}
-
-require_once __DIR__ . '/../../config/db.php';
-$username = $_SESSION['user'];
-
-// ฟังก์ชันบันทึกข้อผิดพลาดลงไฟล์
-function logError($message)
-{
-    $file = __DIR__ . '/../../logs/error.log';
-    if (!file_exists(dirname($file))) {
-        mkdir(dirname($file), 0777, true);
-    }
-    $time = date('Y-m-d H:i:s');
-    $fullMessage = "[$time] ข้อผิดพลาด: $message\n";
-    file_put_contents($file, $fullMessage, FILE_APPEND);
-}
-
-// ฟังก์ชันตรวจสอบการเชื่อมต่อฐานข้อมูล
-function checkConnection($conn)
-{
-    if ($conn->connect_error) {
-        logError("ไม่สามารถเชื่อมต่อฐานข้อมูลได้: " . $conn->connect_error);
-        die("ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่ภายหลัง.");
-    }
-}
-
-// ตรวจสอบการเชื่อมต่อ
-checkConnection($conn);
-
-// ฟังก์ชันดึงข้อมูลสินค้าแบบปลอดภัย
-function fetchProducts($conn, $table)
-{
-    $allowedTables = ['dried_food', 'soft_drink', 'fresh_food', 'snack'];
-    if (!in_array($table, $allowedTables)) {
-        logError("มีการร้องขอเข้าถึงตารางที่ไม่ได้รับอนุญาต: " . htmlspecialchars($table));
-        return [];
-    }
-
-    $sql = "SELECT id, product_name, barcode, price, cost, stock, reorder_level, image_url FROM `$table`";
-    $stmt = $conn->prepare($sql);
-
-    if (!$stmt) {
-        logError("ไม่สามารถเตรียมคำสั่ง SQL สำหรับตาราง $table ได้: " . $conn->error);
-        return [];
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $products = [];
-
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
-    }
-
-    $stmt->close();
-    return $products;
-}
-
-// ฟังก์ชันดึงข้อมูลพนักงานแบบปลอดภัย
-function fetchUsers($conn)
-{
-    $sql = "SELECT ID_NUMBER, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME FROM employee";
-    $stmt = $conn->prepare($sql);
-
-    if (!$stmt) {
-        logError("ไม่สามารถเตรียมคำสั่ง SQL สำหรับดึงข้อมูลพนักงานได้: " . $conn->error);
-        return [];
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $users = [];
-
-    while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
-    }
-
-    $stmt->close();
-    return $users;
-}
-
-// ดึงข้อมูลจากหลายๆ ตาราง
-$dried_food = fetchProducts($conn, 'dried_food');
-$soft_drink = fetchProducts($conn, 'soft_drink');
-$fresh_food = fetchProducts($conn, 'fresh_food');
-$snack = fetchProducts($conn, 'snack');
-
-// ดึงข้อมูลผู้ใช้ทั้งหมด
-$users = fetchUsers($conn);
+require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 ?>
 
 <!DOCTYPE html>
@@ -110,2879 +16,9 @@ $users = fetchUsers($conn);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Noto Sans Thai", "Noto Sans", sans-serif;
-        }
 
-        body {
-            background-color: #111111;
-            margin-left: 220px;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: margin-left 0.5s ease;
-        }
+    <link rel="stylesheet" href="superadminDashboard.css">
 
-        body.sidebar-collapsed {
-            margin-left: 0;
-        }
-
-        .h-text-upload {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 30px;
-            font-weight: bold;
-            color: #F79824;
-        }
-
-        .h2-text-upload {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #F79824;
-            margin-bottom: 15px;
-        }
-
-        .tab-divider-category {
-            border: none;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            margin: 15px 0px 15px 0px;
-        }
-
-        .tab-divider-admin {
-            border: none;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            margin: 0px 0px 15px 0px;
-        }
-
-        /* เนื้อหาภายใน .container จะอยู่ทับพื้นหลัง */
-        .container {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #000000;
-            color: #ffffff;
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .hamburger {
-            position: absolute;
-            left: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .hamburger svg {
-            transition: transform 0.3s ease-out, fill 0.3s ease-out;
-            cursor: pointer;
-        }
-
-        .hamburger:hover svg {
-            transform: scale(1.1);
-            fill: #ff006e;
-        }
-
-        .logo-name {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo {
-            width: 40px;
-            height: auto;
-            margin-right: 10px;
-        }
-
-
-        .site-name {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .user-settings {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 15px 0 20px 0;
-        }
-
-        .avatar-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid #222222;
-        }
-
-        .online-status {
-            position: absolute;
-            bottom: 20px;
-            right: 14px;
-            width: 22px;
-            height: 22px;
-            background-color: #00ff00;
-            border-radius: 50%;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 64px;
-            left: 0;
-            width: 220px;
-            height: calc(100vh - 68px);
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
-            background-color: #000000;
-            border-right: 2px solid rgba(255, 255, 255, 0.2);
-            transform: translateX(0);
-            opacity: 1;
-            transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #000000;
-            border-radius: 50px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar .content {
-            display: block;
-        }
-
-        .sidebar.closed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar.closed .content {
-            display: none;
-        }
-
-        .main-tabs {
-            margin-bottom: 5px;
-        }
-
-        .main-tabs h3 {
-            font-size: 12px;
-            font-weight: bold;
-            color: #F79824;
-        }
-
-        /* กำหนดลักษณะของเส้น hr */
-        .tab-divider {
-            border: none;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            margin: 1px;
-        }
-
-        .main-tabs-upload {
-            margin-bottom: 5px;
-        }
-
-        .main-tabs-upload h3 {
-            margin-top: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #F79824;
-        }
-
-        .main-tabs-products {
-            margin-bottom: 5px;
-        }
-
-        .main-tabs-products h3 {
-            margin-top: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #F79824;
-        }
-
-        /* ปุ่มเมนู */
-        .tab {
-            padding: 10px 0 10px 15px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            border-radius: 10px;
-            margin: 2px 0px;
-        }
-
-        .tab i,
-        .tab span.material-icons {
-            margin-right: 8px;
-        }
-
-        /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
-        .tab:hover {
-            background-color: rgba(211, 211, 211, 0.4);
-        }
-
-        /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
-        .tab:active,
-        .tab.selected {
-            background-color: #ffffff;
-            color: black;
-            position: relative;
-        }
-
-        .tab:active .material-icons,
-        .tab.selected .material-icons {
-            color: #000000;
-        }
-
-        .tab.sci_admin:hover:active,
-        .tab.sci_admin.selected:hover {
-            color: white;
-        }
-
-        .tab.sci_admin:hover:active .material-icons,
-        .tab.sci_admin.selected:hover .material-icons {
-            color: #000000;
-        }
-
-        .tab.employee:hover:active,
-        .tab.employee.selected:hover {
-            color: white;
-        }
-
-        .tab.employee:hover:active .material-icons,
-        .tab.employee.selected:hover .material-icons {
-            color: #000000;
-        }
-
-        .tab.account:hover:active,
-        .tab.account.selected:hover {
-            color: white;
-        }
-
-        .tab.account:hover:active .material-icons,
-        .tab.account.selected:hover .material-icons {
-            color: #000000;
-        }
-
-        /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab 
-        .tab:active::after,
-        .tab.selected::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            width: 10px;
-            height: 10px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            transform: translateY(-50%);
-
-        } */
-
-        /* ปุ่มออกจากระบบ */
-        .logout {
-            padding: 10px 15px;
-            background: #ff4b4b;
-            text-align: center;
-            font-weight: 600;
-            color: white;
-            border-radius: 10px;
-            border: none;
-            transition: 0.3s ease;
-            margin-top: 5px;
-            text-decoration: none;
-        }
-
-        .logout:hover {
-            background: #ff0000;
-        }
-
-        .sci_admin {
-            padding: 10px 15px;
-            background: #2176FF;
-            text-align: center;
-            font-weight: 600;
-            color: white;
-            border-radius: 10px;
-            border: none;
-            transition: 0.3s ease;
-            margin-top: auto;
-            text-decoration: none;
-        }
-
-        .sci_admin:hover {
-            background: #1056CC;
-        }
-
-        .employee {
-            padding: 10px 15px;
-            background: #33A1FD;
-            text-align: center;
-            font-weight: 600;
-            color: white;
-            border-radius: 10px;
-            border: none;
-            margin-top: 5px;
-            transition: 0.3s ease;
-            text-decoration: none;
-        }
-
-        .employee:hover {
-            background: #1980C6;
-        }
-
-        .account {
-            padding: 10px 15px;
-            background: #FDCA40;
-            text-align: center;
-            font-weight: 600;
-            color: white;
-            border-radius: 10px;
-            border: none;
-            transition: 0.3s ease;
-            margin-top: 5px;
-            text-decoration: none;
-        }
-
-        .account:hover {
-            background: #D88A00;
-        }
-
-        .content {
-            display: none;
-            padding: 0px 15px 0px 15px;
-        }
-
-        .show {
-            display: block;
-        }
-
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .product-card {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            text-align: center;
-        }
-
-        .product-card img {
-            width: 100%;
-            height: auto;
-        }
-
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .highlight {
-            background: linear-gradient(270deg, #FF6347, #FF4500, #FF6347);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientAnimation 3s ease infinite;
-        }
-
-        .pagination {
-            text-align: center;
-        }
-
-        .page-btn {
-            font-size: 16px;
-            color: #000000;
-            font-weight: bold;
-            padding: 5px 12px;
-            margin: 4px;
-            cursor: pointer;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .page-btn:hover {
-            background-color: #dddddd;
-            color: #000000;
-        }
-
-        .page-btn.active {
-            background-color: #555555;
-            color: #ffffff;
-        }
-
-        #scrollTopBtn {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 60px;
-            z-index: 99;
-            background-color: #2176FF;
-            padding: 10px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
-            overflow: visible;
-        }
-
-        #scrollTopBtn:hover {
-            background-color: #1056CC;
-            transform: translateY(-3px);
-            opacity: 1;
-        }
-
-        #scrollTopBtn svg {
-            display: block;
-            margin: auto;
-            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        #scrollTopBtn::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        #scrollTopBtn:hover::after {
-            opacity: 1;
-        }
-
-        #scrollTopBtnSoftDrink {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 60px;
-            z-index: 99;
-            background-color: #2176FF;
-            padding: 10px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
-            overflow: visible;
-        }
-
-        #scrollTopBtnSoftDrink:hover {
-            background-color: #1056CC;
-            transform: translateY(-3px);
-            opacity: 1;
-        }
-
-        #scrollTopBtnSoftDrink svg {
-            display: block;
-            margin: auto;
-            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        #scrollTopBtnSoftDrink::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        #scrollTopBtnSoftDrink:hover::after {
-            opacity: 1;
-        }
-
-        #scrollTopBtnFreshFood {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 60px;
-            z-index: 99;
-            background-color: #2176FF;
-            padding: 10px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
-            overflow: visible;
-        }
-
-        #scrollTopBtnFreshFood:hover {
-            background-color: #1056CC;
-            transform: translateY(-3px);
-            opacity: 1;
-        }
-
-        #scrollTopBtnFreshFood svg {
-            display: block;
-            margin: auto;
-            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        #scrollTopBtnFreshFood::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        #scrollTopBtnFreshFood:hover::after {
-            opacity: 1;
-        }
-
-        #scrollTopBtnSnackFood {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 60px;
-            z-index: 99;
-            background-color: #2176FF;
-            padding: 10px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
-            overflow: visible;
-        }
-
-        #scrollTopBtnSnackFood:hover {
-            background-color: #1056CC;
-            transform: translateY(-3px);
-            opacity: 1;
-        }
-
-        #scrollTopBtnSnackFood svg {
-            display: block;
-            margin: auto;
-            filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        #scrollTopBtnSnackFood::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        #scrollTopBtnSnackFood:hover::after {
-            opacity: 1;
-        }
-
-
-        /* สไตล์ของตาราง */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 10px;
-            overflow: hidden;
-            text-align: center;
-            margin: 10px 0 20px 0;
-        }
-
-        th {
-            background: #333333;
-            color: #ffffff;
-            padding: 12px;
-            font-size: 16px;
-            max-width: 200px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        td {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.8);
-            color: #000000;
-            padding: 12px;
-            max-width: 200px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
-
-        tbody tr {
-            cursor: pointer;
-        }
-
-        tbody tr:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        td img {
-            border-radius: 10px;
-        }
-
-        .center-checkbox {
-            text-align: center;
-            padding: 12px 0 12px 0;
-        }
-
-        .center-checkbox input {
-            transform: scale(1);
-            vertical-align: middle;
-        }
-
-        td input[type="checkbox"].checkbox-select-item {
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border: 2px solid #4CAF50;
-            border-radius: 5px;
-            background-color: #ffffff;
-            position: relative;
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-            outline: none;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        td input[type="checkbox"].checkbox-select-item:checked {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-            background-image: url('/sci-shop-admin/img/check.png');
-            background-size: 20px 20px;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        td input[type="checkbox"].checkbox-select-item:hover {
-            border-color: #45a049;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
-            gap: 20px;
-            padding: 20px 0 20px 0;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s;
-
-            .label {
-                font-weight: bold;
-                font-size: 16px;
-                color: #000000;
-            }
-
-            p {
-                font-size: 16px;
-                color: #000000;
-            }
-        }
-
-        .name-grid {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .product-image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .out-of-stock-label-table {
-            top: 10px;
-            left: 50%;
-            background-color: rgba(255, 0, 0, 0.8);
-            color: #ffffff;
-            padding: 5px 10px;
-            font-weight: bold;
-            font-size: 15px;
-            border-radius: 10px;
-        }
-
-        .out-of-stock-label {
-            position: absolute;
-            top: 45px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 0, 0, 0.8);
-            color: #ffffff;
-            padding: 5px 10px;
-            font-weight: bold;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .product-image {
-            width: 50%;
-            height: auto;
-            object-fit: cover;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .card-content {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            color: #000000;
-
-            h3 {
-                text-align: center;
-            }
-        }
-
-        .barcode {
-            text-align: center;
-            justify-content: center;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-
-            svg {
-                width: 45px;
-                height: 45px;
-            }
-        }
-
-        .card-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .card-actions button,
-        .card-actions a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            padding: 8px;
-            border: none;
-            background: #2176FF;
-            color: #ffffff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            gap: 8px;
-
-            svg {
-                width: 24px;
-                height: 24px;
-                fill: #ffffff;
-            }
-        }
-
-        .card-actions a {
-            background: #F79824;
-        }
-
-        .card-actions button:hover,
-        .card-actions a:hover {
-            opacity: 0.9;
-        }
-
-        #uplord_prodect {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .form-container {
-            flex: 1;
-        }
-
-        .form-upload {
-            margin-top: 15px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .form-container-product {
-            display: flex;
-            column-gap: 10px;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .from-container-stock {
-            display: flex;
-            column-gap: 10px;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            background: #f4f4f4;
-            padding: 8px 12px;
-            border-radius: 10px;
-            flex: 1;
-            min-width: 340px;
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #000000;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .form-group input {
-            border: none;
-            outline: none;
-            padding: 6px 8px 6px 4px;
-            font-size: 14px;
-            flex: 1;
-            background: transparent;
-            min-width: 120px;
-        }
-
-        label svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .custom-file-upload {
-            width: 100%;
-            display: inline-block;
-            padding: 6px;
-            color: #ffffff;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .name-group {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .half-width {
-            width: 48%;
-        }
-
-        .full-width {
-            width: 100%;
-        }
-
-        .btn-upload {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            background: #2176FF;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-upload:hover {
-            background: #1056CC;
-        }
-
-        /* Style for the popup */
-        .edit-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 400px;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-
-        /* Content inside the popup */
-        .popup-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-        }
-
-        /* Heading inside the popup */
-        .popup-content h3 {
-            margin: 15px 0px 30px 0px;
-            color: #333;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        /* Label for inputs */
-        .popup-content label {
-            display: block;
-            margin: 10px 0 5px;
-            font-size: 16px;
-        }
-
-        /* Style for input fields */
-        .popup-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            position: sticky;
-            top: 64px;
-            background: #111111;
-            z-index: 1000;
-            padding: 8px 0 8px 0;
-        }
-
-        .no-items-message {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-            font-size: 16px;
-            color: #000000;
-            padding: 20px;
-            gap: 8px;
-
-            svg {
-                fill: #333333;
-                width: 24px;
-                height: 24px;
-                ;
-            }
-        }
-
-        .search-container {
-            width: 50%;
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 10px;
-            padding: 4px;
-            transition: box-shadow 0.2s ease;
-        }
-
-        .search-container:focus-within {
-            border-color: #000000;
-        }
-
-        .search-input {
-            border: none;
-            outline: none;
-            padding: 8px 12px;
-            font-size: 14px;
-            flex: 1;
-            background: transparent;
-        }
-
-        .search-button {
-            background: #000000;
-            border: none;
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease;
-        }
-
-        .search-button:hover {
-            background: #333333;
-        }
-
-        .search-button svg {
-            width: 24px;
-            height: 24px;
-            fill: #ffffff;
-        }
-
-        #dried-food-selected-count,
-        #soft-drink-selected-count,
-        #fresh-food-selected-count {
-            font-weight: bold;
-            color: #4caf50;
-            margin-left: 10px;
-        }
-
-        .btn {
-            position: relative;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .btn-container {
-            margin-top: 5px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .btn svg {
-            width: 35px;
-            height: 35px;
-            transition: 0.3s;
-        }
-
-        .btn-dried-food svg {
-            fill: #4CAF50;
-        }
-
-        .btn-soft-drink svg {
-            fill: #4CAF50;
-        }
-
-        .btn-fresh-food svg {
-            fill: #4CAF50;
-        }
-
-        .btn-snack svg {
-            fill: #4CAF50;
-        }
-
-        .btn-editt svg {
-            fill: #FFA500;
-        }
-
-        .btn-edit-dried-food svg {
-            fill: #FFA500;
-        }
-
-        .btn-edit-soft-drink svg {
-            fill: #FFA500;
-        }
-
-        .btn-edit-fresh-food svg {
-            fill: #FFA500;
-        }
-
-        .btn-edit-snack svg {
-            fill: #FFA500;
-        }
-
-        .btn-deletee svg {
-            fill: #DC143C;
-        }
-
-        .btn-delete-dried-food svg {
-            fill: #DC143C;
-        }
-
-        .btn-delete-soft-drink svg {
-            fill: #DC143C;
-        }
-
-        .btn-delete-fresh-food svg {
-            fill: #DC143C;
-        }
-
-        .btn-delete-snack svg {
-            fill: #DC143C;
-        }
-
-        .btn-filter svg {
-            fill: #FFA500;
-        }
-
-        .btn-grid svg {
-            fill: #1E90FF;
-        }
-
-        .btn-table svg {
-            fill: #DC143C;
-        }
-
-        .btn:hover svg {
-            opacity: 0.7;
-        }
-
-        .btn::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 90%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 6px 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            border-radius: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        .btn:hover::after {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-5px);
-        }
-
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .download-template {
-            color: #000000;
-            background: #ffffff;
-            border-radius: 10px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: transform 0.2s ease;
-
-            h3 {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                gap: 8px;
-                font-size: 14px;
-                margin-bottom: 50px;
-            }
-        }
-
-        .btn-download {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            background-color: #F79824;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-download::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #000000;
-            color: #ffffff;
-            padding: 6px 10px;
-            font-size: 14px;
-            white-space: nowrap;
-            border-radius: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-
-        .btn-download:hover {
-            background-color: #E57300;
-        }
-
-        .btn-download svg {
-            fill: #ffffff;
-        }
-
-
-        .filter-menu {
-            display: none;
-            background-color: #ffffff;
-            color: #000000;
-            border-radius: 10px;
-            padding: 0 10px 10px 10px;
-            position: absolute;
-            top: 78px;
-            right: 75px;
-            width: 150px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-            option {
-                background-color: #ffffff;
-                color: #000000;
-                padding: 10px;
-                font-size: 14px;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-            optgroup {
-                background-color: #000000;
-                font-weight: 600;
-                color: #ffffff;
-            }
-        }
-
-        .filter-menu select,
-        .filter-menu input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 600;
-            background: #f9f9f9;
-        }
-
-        .filter-menu button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 8px;
-            background-color: #2176FF;
-            color: #ffffff;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-
-            svg {
-                width: 24px;
-                height: 24px;
-                fill: #ffffff;
-            }
-        }
-
-        .filter-menu button:hover {
-            background-color: #1056CC;
-        }
-
-        .parent {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        /* กำหนดตำแหน่ง */
-        .div1 {
-            grid-area: 1 / 1 / 2 / 2;
-        }
-
-        .div2 {
-            grid-area: 1 / 2 / 2 / 3;
-        }
-
-        .div3 {
-            grid-area: 1 / 3 / 2 / 4;
-        }
-
-        .div4 {
-            grid-area: 1 / 4 / 2 / 5;
-        }
-
-        .div5 {
-            grid-area: 2 / 1 / 5 / 4;
-        }
-
-        .div6 {
-            grid-area: 2 / 4 / 5 / 5;
-        }
-
-        /* Card ยอดขายแต่ละช่อง */
-        .stat-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            transition: transform 0.2s ease;
-        }
-
-        .stat-card .icon {
-            background-color: var(--accent);
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 18px;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .stat-card .icon i {
-            font-size: 20px;
-        }
-
-        .stat-card .info h5 {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .stat-card .info p {
-            margin: 4px 0 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .chart-container {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-        }
-
-        .chart-container h4 {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        #order {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #graph {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #upload_prodect {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #upload_file_excal {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #admin_signup {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #employee_signup {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #dried_food {
-            margin-top: 60px;
-            padding: 0 20px 20px 20px;
-        }
-
-        #soft_drink {
-            margin-top: 60px;
-            padding: 0 20px 20px 20px;
-        }
-
-        #fresh_food {
-            margin-top: 60px;
-            padding: 0 20px 20px 20px;
-        }
-
-        #snack_food {
-            margin-top: 60px;
-            padding: 0 20px 20px 20px;
-        }
-
-        #sci_admin {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #employee {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #account {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #food_bank_check {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #local_drink_check {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #fastfood_check {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        #snack {
-            margin-top: 68px;
-            padding: 20px;
-        }
-
-        .category-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .category-btn {
-            display: flex;
-            align-items: center;
-            padding: 13px 15px;
-            background-color: #eee;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .category-btn:hover {
-            background-color: #ddd;
-        }
-
-        .category-btn.selected {
-            background-color: #F79824;
-            color: white;
-        }
-
-        .collapsible-toggle {
-            display: flex;
-            align-items: center;
-            color: white;
-            padding: 10px 20px 10px 15px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 190px;
-            justify-content: space-between;
-            background-color: transparent;
-            transition: background-color 0.3s ease;
-        }
-
-        button .material-icons {
-            margin-right: 8px;
-        }
-
-        .collapsible-toggle:hover {
-            background-color: #555555;
-        }
-
-        .collapsible-toggle svg {
-            transition: transform 0.3s ease;
-        }
-
-        /* ทำให้ลูกศรหมุนเมื่อเมนูเปิด */
-        .collapsible-toggle[aria-expanded="true"] svg {
-            transform: rotate(180deg);
-            transition: transform 0.3s ease;
-        }
-
-        /* ปรับสไตล์ของเมนู */
-        .menu {
-            display: block;
-            overflow: hidden;
-            max-height: 0;
-            padding: 0 0 0 15px;
-            border-radius: 5px;
-            transition: max-height 0.3s ease-out, padding 0.3s ease;
-        }
-
-        /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
-        .menu.active {
-            max-height: 200px;
-            padding: 0 0 0 15px;
-        }
-
-        .badge {
-            position: absolute;
-            top: 2px;
-            right: 138px;
-            background-color: #ff4b4b;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        /* สไตล์พื้นฐานสำหรับ alert */
-        .alert {
-            font-weight: bold;
-            text-align: left;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            position: fixed;
-            top: 18%;
-            right: 20px;
-            transform: translateY(-50%);
-            width: auto;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            display: flex;
-            align-items: center;
-            min-width: 200px;
-            line-height: 24px;
-        }
-
-        /* สไตล์สำหรับ svg ใน alert */
-        .alert svg {
-            margin-right: 6px;
-            vertical-align: middle;
-        }
-
-        /* สไตล์สำหรับ error */
-        .alert.error {
-            background-color: #ff4b4b;
-        }
-
-        /* สไตล์สำหรับ success */
-        .alert.success {
-            background-color: #4CAF50;
-        }
-
-        /* เส้นขอบสีแดงเมื่อมีข้อผิดพลาด */
-        .error-input {
-            border: 2px solid #ff4b4b transparent;
-            border-radius: 20px;
-            box-shadow: inset 0 0 5px rgba(255, 75, 78, 0.7);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        /* เมื่อ input ถูกโฟกัสหรือมีข้อผิดพลาด */
-        .error-input:focus {
-            border-color: #ff4b4bed !important;
-            box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
-            outline: 2px solid #ff4b4bed;
-        }
-
-        /* สไตล์พื้นฐานสำหรับ alert box */
-        .notify-box {
-            font-weight: bold;
-            text-align: left;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            position: fixed;
-            top: 18%;
-            right: 20px;
-            transform: translateY(-50%);
-            width: auto;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            display: flex;
-            align-items: center;
-            min-width: 200px;
-            line-height: 24px;
-        }
-
-        /* สไตล์สำหรับ svg ใน alert */
-        .notify-box svg {
-            margin-right: 6px;
-            vertical-align: middle;
-        }
-
-        /* สีของแจ้งเตือน */
-        .notify-error {
-            background-color: #ff4b4b;
-        }
-
-        .notify-success {
-            background-color: #4CAF50;
-        }
-
-        /* เส้นขอบสีแดงเมื่อมีข้อผิดพลาด */
-        .input-error {
-            border: 2px solid #ff4b4b transparent;
-            border-radius: 20px;
-            box-shadow: inset 0 0 5px rgba(255, 75, 78, 0.7);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        /* เมื่อ input โฟกัส + มี error */
-        .input-error:focus {
-            border-color: #ff4b4bed !important;
-            box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
-            outline: 2px solid #ff4b4bed;
-        }
-
-
-        th input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border: 2px solid #4CAF50;
-            /* สีเขียว */
-            border-radius: 5px;
-            background-color: #ffffff;
-            position: relative;
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-            outline: none;
-        }
-
-        th input[type="checkbox"]:checked {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-            background-image: url('/sci-shop-admin/img/done_all.png');
-            background-size: 20px 20px;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        td input[type="checkbox"].row-checkbox {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border: 2px solid #4CAF50;
-            border-radius: 5px;
-            background-color: #ffffff;
-            position: relative;
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-            outline: none;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        td input[type="checkbox"].row-checkbox:checked {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-            background-image: url('/sci-shop-admin/img/check.png');
-            background-size: 20px 20px;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        td input[type="checkbox"].row-checkbox:hover {
-            border-color: #45a049;
-        }
-
-        th input[type="checkbox"]:hover {
-            border-color: #45a049;
-        }
-
-        .upload-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .product-preview-box {
-            width: 280px;
-            height: 540px;
-            color: #000000;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-preview-image img {
-            max-width: 280px;
-            max-height: 280px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .product-details {
-            margin-top: 10px;
-            max-width: 500px;
-            color: #333;
-        }
-
-        .detail-group {
-            display: flex;
-            text-align: left;
-            align-items: center;
-            margin-bottom: 5px;
-            padding: 10px 14px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: inset 0 0 0 1px #dddddd;
-            transition: background 0.3s;
-        }
-
-        .detail-group svg {
-            margin-right: 12px;
-            fill: #000000;
-            flex-shrink: 0;
-        }
-
-        .detail-group div {
-            flex: 1;
-            font-size: 16px;
-            color: #222222;
-        }
-
-        .detail-inline {
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-            margin: 5px 0 5px 0;
-            flex-wrap: wrap;
-        }
-
-        .detail-inline p {
-            flex: 1 1 48%;
-            background: #ffffff;
-            padding: 10px 14px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            box-shadow: inset 0 0 0 1px #ddd;
-            transition: background 0.3s;
-        }
-
-        .detail-inline .material-icons {
-            margin-right: 10px;
-            font-size: 24px;
-            color: #000000;
-        }
-
-        #previewName,
-        #previewBarcode,
-        #previewPrice,
-        #previewCost,
-        #previewStock,
-        #previewReorderLevel {
-            color: #222;
-        }
-
-
-        .profile-container {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2, #a855f7, #d946ef);
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            position: relative;
-        }
-
-        .cover {
-            padding: 50px;
-        }
-
-        .profile-card {
-            background: #111111;
-            padding: 90px 15px 15px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            position: relative;
-            align-items: center;
-        }
-
-        .profile-image {
-            position: absolute;
-            top: -85px;
-            left: 40px;
-        }
-
-        .profile-image img {
-            width: 160px;
-            height: 160px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 8px solid #111111;
-        }
-
-        .upload-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: #111111;
-            color: #ffffff;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .upload-btn:hover {
-            background: #222222;
-        }
-
-        .upload-btn i {
-            font-size: 22px;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        .profile-details {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background: #f4f4f4;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #000000;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-
-        .profile-title::after {
-            content: "";
-            width: 50px;
-            height: 4px;
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        .profile-row {
-            display: flex;
-            gap: 15px;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-            min-width: 45%;
-        }
-
-        .profile-info label {
-            display: flex;
-            font-weight: bold;
-            color: #333333;
-            gap: 8px;
-        }
-
-        .profile-info label .material-icons {
-            font-size: 24px;
-            color: #000000;
-        }
-
-        .profile-info input {
-            padding: 10px;
-            border: 1px solid #ffffff;
-            border-radius: 10px;
-            width: 100%;
-            font-size: 14px;
-            transition: 0.3s;
-            margin-bottom: 20px;
-        }
-
-        .profile-info input:focus {
-            border-color: #111111;
-            outline: none;
-        }
-
-        .confirm-btn {
-            margin-top: 5px;
-            width: auto;
-            padding: 10px 15px;
-            background: #6a0dad;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-
-        .confirm-btn:hover {
-            background: #5a0ba5;
-        }
-
-        .confirm-btn .material-icons {
-            font-size: 24px;
-        }
-
-        .action-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .action-dropdown button {
-            background-color: #eeeeee;
-            border: none;
-            font-size: 25px;
-            padding: 5px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .action-dropdown button:hover {
-            background-color: #dddddd;
-        }
-
-        .dropdown-content {
-            display: block;
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            right: -20px;
-            top: calc(-50% + 5px);
-            background-color: #ffffff;
-            min-width: 85px;
-            z-index: 1;
-            border-radius: 10px;
-            overflow: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-
-        .dropdown-content a {
-            color: #000000;
-            padding: 10px 5px 10px 5px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: background 0.2s;
-            white-space: nowrap;
-            gap: 4px;
-            font-weight: bold;
-
-            svg {
-                width: 20px;
-                height: 20px;
-                fill: #000000;
-
-            }
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .action-dropdown.show .dropdown-content {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .barcode-cell {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .barcode-cell svg {
-            width: 45px;
-            height: 45px;
-            fill: #000000;
-        }
-
-        #overlay {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        #overlaySoftDrink {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        #overlayFreshFood {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        #overlaySnackFood {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .side-panel {
-            position: fixed;
-            top: 0;
-            right: -500px;
-            width: 500px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-            transition: right 0.3s ease;
-            z-index: 1001;
-            display: none;
-        }
-
-        /* แสดง panel */
-        .side-panel.show {
-            transform: translateX(0);
-            pointer-events: auto;
-        }
-
-        .side-panel-content {
-            height: 100%;
-            overflow-y: auto;
-            padding: 15px;
-            position: relative;
-        }
-
-        .side-panel-close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 40px;
-            cursor: pointer;
-            color: #ffffff;
-            background-color: #444444;
-            border: none;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-        }
-
-        .side-panel-close-btn:hover {
-            background-color: #555555;
-            color: #ffffff;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            border-radius: 10px;
-        }
-
-        body.side-panel-open {
-            overflow: hidden;
-        }
-
-        #imagePreviewContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #imagePreview {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        #editProductForm {
-            max-width: 500px;
-            padding: 15px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-        }
-
-        #editProductForm label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #000000;
-            gap: 8px;
-
-            span {
-                color: #333333;
-            }
-
-        }
-
-        #editProductForm input[type="text"],
-        #editProductForm input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            transition: border 0.3s, box-shadow 0.3s;
-        }
-
-        #editProductForm input[type="text"]:focus,
-        #editProductForm input[type="number"]:focus {
-            border-color: #000000;
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
-            outline: none;
-        }
-
-        .form-group-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-row .group-item {
-            flex: 1;
-        }
-
-        #editProductForm button {
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #editProductForm button:hover {
-            background-color: #222222;
-        }
-
-
-        #editProductForm button svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-
-        /* edit Soft Drink */
-        #imagePreviewContainerSoftDrink {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #imagePreviewSoftDrink {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        #editProductFormSoftDrink {
-            max-width: 500px;
-            padding: 15px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-        }
-
-        #editProductFormSoftDrink label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #000000;
-            gap: 8px;
-
-            span {
-                color: #333333;
-            }
-
-        }
-
-        #editProductFormSoftDrink input[type="text"],
-        #editProductFormSoftDrink input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            transition: border 0.3s, box-shadow 0.3s;
-        }
-
-        #editProductFormSoftDrink input[type="text"]:focus,
-        #editProductFormSoftDrink input[type="number"]:focus {
-            border-color: #000000;
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
-            outline: none;
-        }
-
-        .form-group-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-row .group-item {
-            flex: 1;
-        }
-
-        #editProductFormSoftDrink button {
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #editProductFormSoftDrink button:hover {
-            background-color: #222222;
-        }
-
-
-        #editProductFormSoftDrink button svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-        /* edit Soft Drink */
-        #imagePreviewContainerSoftDrink {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #imagePreviewSoftDrink {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        #editProductFormSoftDrink {
-            max-width: 500px;
-            padding: 15px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-        }
-
-        #editProductFormSoftDrink label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #000000;
-            gap: 8px;
-
-            span {
-                color: #333333;
-            }
-
-        }
-
-        #editProductFormSoftDrink input[type="text"],
-        #editProductFormSoftDrink input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            transition: border 0.3s, box-shadow 0.3s;
-        }
-
-        #editProductFormSoftDrink input[type="text"]:focus,
-        #editProductFormSoftDrink input[type="number"]:focus {
-            border-color: #000000;
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
-            outline: none;
-        }
-
-        .form-group-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-row .group-item {
-            flex: 1;
-        }
-
-        #editProductFormSoftDrink button {
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #editProductFormSoftDrink button:hover {
-            background-color: #222222;
-        }
-
-
-        #editProductFormSoftDrink button svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-        /* edit Fresh Food */
-        #imagePreviewContainerFreshFood {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #imagePreviewFreshFood {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        #editProductFormFreshFood {
-            max-width: 500px;
-            padding: 15px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-        }
-
-        #editProductFormFreshFood label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #000000;
-            gap: 8px;
-
-            span {
-                color: #333333;
-            }
-
-        }
-
-        #editProductFormFreshFood input[type="text"],
-        #editProductFormFreshFood input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            transition: border 0.3s, box-shadow 0.3s;
-        }
-
-        #editProductFormFreshFood input[type="text"]:focus,
-        #editProductFormFreshFood input[type="number"]:focus {
-            border-color: #000000;
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
-            outline: none;
-        }
-
-        .form-group-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-row .group-item {
-            flex: 1;
-        }
-
-        #editProductFormFreshFood button {
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #editProductFormFreshFood button:hover {
-            background-color: #222222;
-        }
-
-
-        #editProductFormFreshFood button svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-        /* edit Snack Food */
-        #imagePreviewContainerSnackFood {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #imagePreviewSnackFood {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        #editProductFormSnackFood {
-            max-width: 500px;
-            padding: 15px;
-            background-color: #f4f4f4;
-            border-radius: 10px;
-        }
-
-        #editProductFormSnackFood label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #000000;
-            gap: 8px;
-
-            span {
-                color: #333333;
-            }
-
-        }
-
-        #editProductFormSnackFood input[type="text"],
-        #editProductFormSnackFood input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            transition: border 0.3s, box-shadow 0.3s;
-        }
-
-        #editProductFormSnackFood input[type="text"]:focus,
-        #editProductFormSnackFood input[type="number"]:focus {
-            border-color: #000000;
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.5);
-            outline: none;
-        }
-
-        .form-group-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .form-group-row .group-item {
-            flex: 1;
-        }
-
-        #editProductFormSnackFood button {
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 15px 20px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #editProductFormSnackFood button:hover {
-            background-color: #222222;
-        }
-
-
-        #editProductFormSnackFood button svg {
-            width: 28px;
-            height: 28px;
-            fill: #ffffff;
-        }
-
-        .excel-grid-upload {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 1200px) {
-            .excel-grid-upload {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 900px) {
-            .excel-grid-upload {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .excel-grid-upload {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .excel-upload-form {
-            background: #f8f9fa;
-            padding: 24px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .excel-type-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 8px;
-            font-size: 20px;
-            margin-bottom: 16px;
-            color: #333333;
-        }
-
-        .excel-upload-group {
-            margin-bottom: 16px;
-        }
-
-        .excel-upload-input {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #cccccc;
-            border-radius: 10px;
-            display: block !important;
-            z-index: 999 !important;
-            background: #ffffff;
-            cursor: pointer;
-        }
-
-        .file-name-text {
-            margin-top: 15px;
-            font-size: 15px;
-            color: #555555;
-            text-align: center;
-        }
-
-        .excel-upload-button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background-color: #33A1FD;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 500;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.25s ease, transform 0.2s ease;
-        }
-
-        .excel-upload-button:hover {
-            background-color: #1980C6;
-        }
-
-        .password-progress {
-            width: 35%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        #password-progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: red;
-            transition: width 0.3s, background-color 0.3s;
-        }
-
-        #password-checklist {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px 16px;
-            list-style: none;
-            padding: 0;
-            margin-bottom: 15px;
-        }
-
-        #password-checklist li {
-            display: flex;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #777;
-            gap: 8px;
-        }
-
-        #password-checklist .icon {
-            display: inline-block;
-            width: 20px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        #password-checklist li.valid {
-            color: green;
-        }
-
-        #password-checklist li.valid .icon {
-            color: green;
-            content: "✔";
-        }
-
-        #password-checklist li.invalid {
-            color: red;
-        }
-
-        #password-checklist li.invalid .icon {
-            color: red;
-        }
-
-        .password-strength-text {
-            padding-right: 10px;
-            font-weight: bold;
-            font-size: 14px;
-            min-height: 20px;
-            transition: color 0.3s ease;
-        }
-    </style>
 </head>
 
 <body>
@@ -3008,6 +44,8 @@ $users = fetchUsers($conn);
         </div>
     </div>
 
+    <div id="tabLoadingBar"></div>
+
     <div class="sidebar">
 
         <!-- Avatar -->
@@ -3022,11 +60,11 @@ $users = fetchUsers($conn);
         <div class="main-tabs">
             <h3>รายการหลัก</h3>
 
-            <div class="tab" onclick="showTab('graph')">
+            <div class="tab" data-tab="graph">
                 <span class="material-icons">analytics</span> แดชบอร์ดสถิติ
             </div>
 
-            <div class="tab" id="orderTab" onclick="showTab('order')">
+            <div class="tab" id="orderTab" data-tab="order">
                 <span class="material-icons">shopping_cart</span>
                 <span class="badge">99+</span> <!-- ตัวเลขแจ้งเตือน -->
                 รายการขาย
@@ -3038,23 +76,23 @@ $users = fetchUsers($conn);
         <!-- รายการอัพโหลด -->
         <div class="main-tabs-upload">
             <h3>รายการอัพโหลด</h3>
-            <div class="tab" onclick="showTab('admin_signup')">
+            <div class="tab" data-tab="admin_signup">
                 <span class="material-icons">manage_accounts</span> สมัครแอดมิน
             </div>
 
-            <div class="tab" onclick="showTab('employee_signup')">
+            <div class="tab" data-tab="employee_signup">
                 <span class="material-icons">group_add</span> สมัครพนักงาน
             </div>
 
-            <div class="tab" onclick="showTab('upload_prodect')">
+            <div class="tab" data-tab="upload_prodect">
                 <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
             </div>
 
-            <div class="tab" onclick="showTab('upload_file_excal')">
+            <div class="tab" data-tab="upload_file_excal">
                 <span class="material-icons">upload_file</span> อัปโหลดไฟล์สินค้า
             </div>
 
-            <button type="button" is="toggle-button" class="collapsible-toggle text--strong" aria-controls="menu" aria-expanded="false">
+            <button type="button" is="toggle-button" class="collapsible-toggle text-strong" aria-controls="menu" aria-expanded="false">
                 <span class="material-icons">checklist</span> ตรวจสอบสินค้า
                 <svg focusable="false" width="12" height="8" class="icon icon--chevron icon--inline" viewBox="0 0 12 8">
                     <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2"></path>
@@ -3062,16 +100,16 @@ $users = fetchUsers($conn);
             </button>
 
             <div id="menu" class="menu">
-                <div class="tab" onclick="showTab('food_bank_check')">
+                <div class="tab" data-tab="food_bank_check">
                     <span class="material-icons">food_bank</span> หมวดแห้ง
                 </div>
-                <div class="tab" onclick="showTab('local_drink_check')">
+                <div class="tab" data-tab="local_drink_check">
                     <span class="material-icons">local_drink</span> หมวดเครื่องดื่ม
                 </div>
-                <div class="tab" onclick="showTab('fastfood_check')">
+                <div class="tab" data-tab="fastfood_check">
                     <span class="material-icons">fastfood</span> หมวดแช่แข็ง
                 </div>
-                <div class="tab" onclick="showTab('snack')">
+                <div class="tab" data-tab="snack">
                     <span class="material-icons">cookie</span> หมวดขนม
                 </div>
             </div>
@@ -3081,31 +119,31 @@ $users = fetchUsers($conn);
         <!-- รายการสินค้า -->
         <div class="main-tabs-products">
             <h3>รายการสินค้า</h3>
-            <div class="tab" onclick="showTab('dried_food')">
+            <div class="tab" data-tab="dried_food">
                 <span class="material-icons">food_bank</span> ประเภทแห้ง
             </div>
-            <div class="tab" onclick="showTab('soft_drink')">
+            <div class="tab" data-tab="soft_drink">
                 <span class="material-icons">local_drink</span> ประเภทเครื่องดื่ม
             </div>
-            <div class="tab" onclick="showTab('fresh_food')">
+            <div class="tab" data-tab="fresh_food">
                 <span class="material-icons">fastfood</span> ประเภทแช่แข็ง
             </div>
-            <div class="tab" onclick="showTab('snack_food')">
+            <div class="tab" data-tab="snack_food">
                 <span class="material-icons">cookie</span> ประเภทขนม
             </div>
         </div>
 
 
-        <div class="tab sci_admin" onclick="showTab('sci_admin')">
+        <div class="tab sci_admin" data-tab="sci_admin">
             <span class="material-icons">admin_panel_settings</span> จัดการแอดมิน
         </div>
-        <div class="tab employee" onclick="showTab('employee')">
+        <div class="tab employee" data-tab="employee">
             <span class="material-icons">group</span> จัดการพนักงาน
         </div>
-        <div class="tab account" onclick="showTab('account')">
+        <div class="tab account" data-tab="account">
             <span class="material-icons">account_circle</span> โปรไฟล์แอดมิน
         </div>
-        <a class="tab logout" href="/sci-shop-admin/logout.php">
+        <a class="tab logout" href="/sci-shop-admin/Logout.php">
             <span class="material-icons">logout</span> ออกจากระบบ
         </a>
     </div>
@@ -3154,78 +192,6 @@ $users = fetchUsers($conn);
                         <td style="padding: 10px;">คุณวิชัย</td>
                         <td style="padding: 10px;">09:00</td>
                         <td style="padding: 10px;">12 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสายชล</td>
-                        <td style="padding: 10px;">15:40</td>
-                        <td style="padding: 10px;">11 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสมปอง</td>
-                        <td style="padding: 10px;">17:20</td>
-                        <td style="padding: 10px;">10 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณปิ่น</td>
-                        <td style="padding: 10px;">08:45</td>
-                        <td style="padding: 10px;">9 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสมชาย</td>
-                        <td style="padding: 10px;">14:30</td>
-                        <td style="padding: 10px;">14 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณมณี</td>
-                        <td style="padding: 10px;">10:15</td>
-                        <td style="padding: 10px;">13 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณวิชัย</td>
-                        <td style="padding: 10px;">09:00</td>
-                        <td style="padding: 10px;">12 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสายชล</td>
-                        <td style="padding: 10px;">15:40</td>
-                        <td style="padding: 10px;">11 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสมปอง</td>
-                        <td style="padding: 10px;">17:20</td>
-                        <td style="padding: 10px;">10 เมษายน 2025</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณปิ่น</td>
-                        <td style="padding: 10px;">08:45</td>
-                        <td style="padding: 10px;">9 เมษายน 2025</td>
                     </tr>
                 </tbody>
             </table>
@@ -3346,43 +312,43 @@ $users = fetchUsers($conn);
                             </svg>
                             รูปแอดมิน :</label>
                         </label>
-                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
-                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
+                        <label for="upload-img-admin" class="custom-file-upload">เลือกไฟล์</label>
+                        <input type="file" id="upload-img-admin" name="upload-img" accept="image/*" required>
                     </div>
 
                     <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
                         <div class="form-group">
-                            <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <label for="firstName-admin"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
                                 </svg>ชื่อ :</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
+                            <input type="text" id="firstName-admin" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
                         </div>
                         <div class="form-group">
-                            <label for="lastName">
+                            <label for="lastName-admin">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M481-781q106 0 200 45.5T838-604q7 9 4.5 16t-8.5 12q-6 5-14 4.5t-14-8.5q-55-78-141.5-119.5T481-741q-97 0-182 41.5T158-580q-6 9-14 10t-14-4q-7-5-8.5-12.5T126-602q62-85 155.5-132T481-781Zm0 94q135 0 232 90t97 223q0 50-35.5 83.5T688-257q-51 0-87.5-33.5T564-374q0-33-24.5-55.5T481-452q-34 0-58.5 22.5T398-374q0 97 57.5 162T604-121q9 3 12 10t1 15q-2 7-8 12t-15 3q-104-26-170-103.5T358-374q0-50 36-84t87-34q51 0 87 34t36 84q0 33 25 55.5t59 22.5q34 0 58-22.5t24-55.5q0-116-85-195t-203-79q-118 0-203 79t-85 194q0 24 4.5 60t21.5 84q3 9-.5 16T208-205q-8 3-15.5-.5T182-217q-15-39-21.5-77.5T154-374q0-133 96.5-223T481-687Zm0-192q64 0 125 15.5T724-819q9 5 10.5 12t-1.5 14q-3 7-10 11t-17-1q-53-27-109.5-41.5T481-839q-58 0-114 13.5T260-783q-8 5-16 2.5T232-791q-4-8-2-14.5t10-11.5q56-30 117-46t124-16Zm0 289q93 0 160 62.5T708-374q0 9-5.5 14.5T688-354q-8 0-14-5.5t-6-14.5q0-75-55.5-125.5T481-550q-76 0-130.5 50.5T296-374q0 81 28 137.5T406-123q6 6 6 14t-6 14q-6 6-14 6t-14-6q-59-62-90.5-126.5T256-374q0-91 66-153.5T481-590Zm-1 196q9 0 14.5 6t5.5 14q0 75 54 123t126 48q6 0 17-1t23-3q9-2 15.5 2.5T744-191q2 8-3 14t-13 8q-18 5-31.5 5.5t-16.5.5q-89 0-154.5-60T460-374q0-8 5.5-14t14.5-6Z" />
                                 </svg>นามสกุล :</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
+                            <input type="text" id="lastName-admin" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
                         </div>
                     </div>
 
                     <hr class="tab-divider-admin">
 
                     <div class="form-group">
-                        <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                        <label for="username-admin"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
                             </svg>ชื่อผู้ใช้งาน :</label>
-                        <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+                        <input type="text" id="username-admin" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
                     </div>
 
                     <div class="form-group">
-                        <label for="password">
+                        <label for="password-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
                             </svg>รหัสผ่าน :
                         </label>
-                        <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
+                        <input type="password" id="password-admin" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
 
 
                         <div id="password-strength-text" class="password-strength-text"></div>
@@ -3400,11 +366,11 @@ $users = fetchUsers($conn);
                     </ul>
 
                     <div class="form-group">
-                        <label for="confirmPassword">
+                        <label for="confirmPassword-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
                             </svg>ยืนยันรหัสผ่าน :</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
+                        <input type="password" id="confirmPassword-admin" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
                     </div>
 
                     <div>
@@ -3468,6 +434,16 @@ $users = fetchUsers($conn);
                 <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
 
                 <form class="form-upload" id="employeeSignupForm" action="../../employee/employee_signup/employee_signup.php" method="POST" onsubmit="return submitemployeeForm()" autocomplete="on">
+                    <div class="form-group">
+                        <label for="upload-img">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                                <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
+                            </svg>
+                            รูปแอดมิน :</label>
+                        </label>
+                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
+                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
+                    </div>
 
                     <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
@@ -3651,16 +627,16 @@ $users = fetchUsers($conn);
                     <div class="form-container-product">
                         <div class="form-group">
                             <label for="productPrice">
-                                <span class="material-icons">paid</span> ราคาสินค้า :
+                                <span class="material-icons">paid</span> ราคาขาย :
                             </label>
-                            <input type="number" id="productPrice" name="productPrice" placeholder="กรอกราคาสินค้า" required>
+                            <input type="number" id="productPrice" name="productPrice" placeholder="กรอกราคาขาย" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productCost">
-                                <span class="material-icons">money</span> ต้นทุน :
+                                <span class="material-icons">money</span> ราคาต้นทุน :
                             </label>
-                            <input type="number" id="productCost" name="productCost" placeholder="กรอกต้นทุนสินค้า" required>
+                            <input type="number" id="productCost" name="productCost" placeholder="กรอกราคาต้นทุน" required>
                         </div>
                     </div>
 
@@ -3668,16 +644,16 @@ $users = fetchUsers($conn);
                     <div class="from-container-stock">
                         <div class="form-group">
                             <label for="productStock">
-                                <span class="material-icons">warehouse</span> สต็อก :
+                                <span class="material-icons">warehouse</span> จำนวนสต็อก :
                             </label>
-                            <input type="number" id="productStock" name="productStock" placeholder="กรอกจำนวนสต็อกสินค้า" required>
+                            <input type="number" id="productStock" name="productStock" placeholder="กรอกจำนวนสต็อก" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productReorderLevel">
                                 <span class="material-icons">swap_vert</span> สต็อกต่ำสุด :
                             </label>
-                            <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกจำนวนสต็อกสินค้าต่ำสุด" required>
+                            <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกจำนวนสต็อกต่ำสุด" required>
                         </div>
                     </div>
 
@@ -3817,18 +793,17 @@ $users = fetchUsers($conn);
                     </svg>
                 </button>
 
-                <button class="btn btn-edit-dried-food" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-product-localStorage" data-tooltip="แก้ไขสินค้า" data-key="dried_food">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-delete-dried-food" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-product" data-tooltip="ลบสินค้า" data-key="dried_food">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
                 </button>
-
             </div>
         </div>
 
@@ -3839,10 +814,10 @@ $users = fetchUsers($conn);
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
-                    <th>ราคา</th>
-                    <th>ต้นทุน</th>
-                    <th>สต็อก</th>
-                    <th>เกณฑ์สั่งซื้อ</th>
+                    <th>ราคาขาย</th>
+                    <th>ราคาต้นทุน</th>
+                    <th>จำนวนสต็อก</th>
+                    <th>สต็อกต่ำสุด</th>
                 </tr>
             </thead>
             <tbody id="dried_food_table">
@@ -3863,13 +838,13 @@ $users = fetchUsers($conn);
                     </svg>
                 </button>
 
-                <button class="btn btn-edit-soft-drink" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-product-localStorage" data-tooltip="แก้ไขสินค้า" data-key="soft_drink">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-delete-soft-drink" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-product" data-tooltip="ลบสินค้า" data-key="soft_drink">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3884,10 +859,10 @@ $users = fetchUsers($conn);
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
-                    <th>ราคา</th>
-                    <th>ต้นทุน</th>
-                    <th>สต็อก</th>
-                    <th>เกณฑ์สั่งซื้อ</th>
+                    <th>ราคาขาย</th>
+                    <th>ราคาต้นทุน</th>
+                    <th>จำนวนสต็อก</th>
+                    <th>สต็อกต่ำสุด</th>
                 </tr>
             </thead>
             <tbody id="soft_drink_table"></tbody>
@@ -3907,13 +882,13 @@ $users = fetchUsers($conn);
                     </svg>
                 </button>
 
-                <button class="btn btn-edit-fresh-food" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-product-localStorage" data-tooltip="แก้ไขสินค้า" data-key="fresh_food">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-delete-fresh-food" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-product" data-tooltip="ลบสินค้า" data-key="fresh_food">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3928,10 +903,10 @@ $users = fetchUsers($conn);
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
-                    <th>ราคา</th>
-                    <th>ต้นทุน</th>
-                    <th>สต็อก</th>
-                    <th>เกณฑ์สั่งซื้อ</th>
+                    <th>ราคาขาย</th>
+                    <th>ราคาต้นทุน</th>
+                    <th>จำนวนสต็อก</th>
+                    <th>สต็อกต่ำสุด</th>
                 </tr>
             </thead>
             <tbody id="fresh_food_table"></tbody>
@@ -3951,13 +926,13 @@ $users = fetchUsers($conn);
                     </svg>
                 </button>
 
-                <button class="btn btn-edit-snack" data-tooltip="แก้ไขสินค้า">
+                <button class="btn btn-edit-product-localStorage" data-tooltip="แก้ไขสินค้า" data-key="snack">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                     </svg>
                 </button>
 
-                <button class="btn btn-delete-snack" data-tooltip="ลบสินค้า">
+                <button class="btn btn-delete-product" data-tooltip="ลบสินค้า" data-key="snack">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>
@@ -3972,15 +947,120 @@ $users = fetchUsers($conn);
                     <th>ชื่อสินค้า</th>
                     <th>รูปภาพ</th>
                     <th>บาร์โค้ด</th>
-                    <th>ราคา</th>
-                    <th>ต้นทุน</th>
-                    <th>สต็อก</th>
-                    <th>เกณฑ์สั่งซื้อ</th>
+                    <th>ราคาขาย</th>
+                    <th>ราคาต้นทุน</th>
+                    <th>จำนวนสต็อก</th>
+                    <th>สต็อกต่ำสุด</th>
                 </tr>
             </thead>
             <tbody id="snack_table"></tbody>
         </table>
     </div>
+
+    <!-- Modal Edit Form loaclStorage-->
+    <div id="editModal">
+        <div class="modal-content">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v120h-80v-80H520v-200H240v640h240v80H240Zm280-400Zm241 199-19-18 37 37-18-19Z" />
+                </svg>แบบฟอร์มแก้ไขสินค้า</h3>
+            <form id="editForm" class="modal-form">
+                <div class="modal-flex">
+                    <!-- รูปภาพ -->
+                    <div class="modal-image">
+                        <img id="editImagePreview" src="" alt="รูปสินค้า" />
+                    </div>
+
+                    <!-- ฟอร์ม -->
+                    <div class="modal-fields">
+                        <label for="editName"><span class="material-icons">sell</span>ชื่อสินค้า
+                            <p>*</p>
+                        </label>
+                        <input type="text" id="editName" required />
+
+                        <label><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#444444">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>บาร์โค้ด<p>*</p></label>
+                        <input type="text" id="editBarcode" required />
+
+                        <div class="field-row">
+                            <div>
+                                <label for="editPrice"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <input type="number" id="editPrice" required />
+                            </div>
+                            <div>
+                                <label for="editCost"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <input type="number" id="editCost" required />
+                            </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div>
+                                <label for="editStock"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <input type="number" id="editStock" required />
+                            </div>
+                            <div>
+                                <label for="editReorder"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <input type="number" id="editReorder" required />
+                            </div>
+                        </div>
+                        <p class="image-warning"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path d="m40-120 440-760 440 760H40Zm440-120q17 0 28.5-11.5T520-280q0-17-11.5-28.5T480-320q-17 0-28.5 11.5T440-280q0 17 11.5 28.5T480-240Zm-40-120h80v-200h-80v200Z" />
+                            </svg>กรุณาตรวจสอบข้อมูลอีกครั้งเพื่อความถูกต้อง</p>
+
+                        <div class="modal-buttons field-row">
+                            <button type="submit" class="modal-btn modal-btn-save"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
+                                </svg>บันทึกการแก้ไข</button>
+                            <button type="button" id="closeModal" class="modal-btn modal-btn-cancel"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                                </svg>ยกเลิก</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <span class="material-icons">feedback</span>
+            <p id="deleteMessage"></p>
+            <div class="modal-actions">
+                <button id="confirmDeleteBtn" class="btn-Confirm btn-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>ลบสินค้า</button>
+                <button id="cancelDeleteBtn" class="btn-Confirm btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addProductConfirmModal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <p id="confirmMessage">คุณต้องการเพิ่มสินค้าที่เลือกหรือไม่?</p>
+            <div class="modal-actions">
+                <button id="confirmAddProductBtn" class="btn-Confirm btn-danger">เพิ่มสินค้า</button>
+                <button id="cancelAddProductBtn" class="btn-Confirm btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteSuccessToast" class="custom-toast">
+        <span class="material-icons">check_circle</span>
+        <p id="deleteSuccessMessage"></p>
+    </div>
+
+    <div id="alertToast" class="alert-toast">
+        <span id="alertToastIcon" class="icon-container"></span>
+        <span id="alertToastMessage"></span>
+    </div>
+
+
+
 
 
     <div id="dried_food" class="content">
@@ -4042,13 +1122,13 @@ $users = fetchUsers($conn);
                 <thead>
                     <tr>
                         <th>ชื่อสินค้า</th>
-                        <th>รูป</th>
+                        <th>รูปภาพ</th>
                         <th>บาร์โค้ด</th>
-                        <th>ราคา</th>
-                        <th>ต้นทุน</th>
-                        <th>สต็อก</th>
-                        <th>เกณฑ์สั่งซื้อ</th>
-                        <th>การจัดการ</th>
+                        <th>ราคาขาย</th>
+                        <th>ราคาต้นทุน</th>
+                        <th>จำนวนสต็อก</th>
+                        <th>สต็อกต่ำสุด</th>
+                        <th>จัดการสินค้า</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBody"></tbody>
@@ -4057,7 +1137,7 @@ $users = fetchUsers($conn);
             <div id="productGrid" class="card-grid"></div>
         </div>
 
-        <button id="scrollTopBtn" onclick="scrollToTop()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+        <button id="scrollTopBtn" onclick="scrollToTop()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#e3e3e3">
                 <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
             </svg></button>
 
@@ -4077,34 +1157,35 @@ $users = fetchUsers($conn);
                             <img id="imagePreview" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
                         <input type="text" id="product_name" name="product_name" required>
 
                         <label for="barcode">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                             </svg>บาร์โค้ด
+                            <p>*</p>
                         </label>
-                        <input type="text" id="barcode" name="barcode" maxlength="17" />
+                        <input type="text" id="barcodeDriedFood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price"><span class="material-icons">price_change</span>ราคา</label>
+                                <label for="price"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
                                 <input type="number" id="price" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost"><span class="material-icons">money</span>ต้นทุน</label>
+                                <label for="cost"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
                                 <input type="number" id="cost" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <label for="stock"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
                                 <input type="number" id="stock" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <label for="reorder_level"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
                                 <input type="number" id="reorder_level" name="reorder_level" required>
                             </div>
                         </div>
@@ -4114,7 +1195,6 @@ $users = fetchUsers($conn);
                             บันทึกการแก้ไข
                         </button>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -4175,13 +1255,13 @@ $users = fetchUsers($conn);
                 <thead>
                     <tr>
                         <th>ชื่อสินค้า</th>
-                        <th>รูป</th>
+                        <th>รูปภาพ</th>
                         <th>บาร์โค้ด</th>
-                        <th>ราคา</th>
-                        <th>ต้นทุน</th>
-                        <th>สต็อก</th>
-                        <th>เกณฑ์สั่งซื้อ</th>
-                        <th>การจัดการ</th>
+                        <th>ราคาขาย</th>
+                        <th>ราคาต้นทุน</th>
+                        <th>จำนวนสต็อก</th>
+                        <th>สต็อกต่ำสุด</th>
+                        <th>จัดการสินค้า</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBodySoftDrink"></tbody>
@@ -4190,7 +1270,7 @@ $users = fetchUsers($conn);
             <div id="productGridSoftDrink" class="card-grid"></div>
         </div>
 
-        <button id="scrollTopBtnSoftDrink" onclick="scrollToTopSoftDrink()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+        <button id="scrollTopBtnSoftDrink" onclick="scrollToTopSoftDrink()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#e3e3e3">
                 <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
             </svg></button>
 
@@ -4210,33 +1290,33 @@ $users = fetchUsers($conn);
                             <img id="imagePreviewSoftDrink" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_softdrink"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <label for="product_name_softdrink"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
                         <input type="text" id="product_name_softdrink" name="product_name" required>
 
                         <label for="barcode_softdrink">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg> บาร์โค้ด</label>
+                            </svg>บาร์โค้ด<p>*</p></label>
                         <input type="text" id="barcode_softdrink" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_softdrink"><span class="material-icons">price_change</span>ราคา</label>
+                                <label for="price_softdrink"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
                                 <input type="number" id="price_softdrink" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_softdrink"><span class="material-icons">money</span>ต้นทุน</label>
+                                <label for="cost_softdrink"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
                                 <input type="number" id="cost_softdrink" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_softdrink"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <label for="stock_softdrink"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
                                 <input type="number" id="stock_softdrink" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_softdrink"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <label for="reorder_level_softdrink"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
                                 <input type="number" id="reorder_level_softdrink" name="reorder_level" required>
                             </div>
                         </div>
@@ -4302,13 +1382,13 @@ $users = fetchUsers($conn);
                 <thead>
                     <tr>
                         <th>ชื่อสินค้า</th>
-                        <th>รูป</th>
+                        <th>รูปภาพ</th>
                         <th>บาร์โค้ด</th>
-                        <th>ราคา</th>
-                        <th>ต้นทุน</th>
-                        <th>สต็อก</th>
-                        <th>เกณฑ์สั่งซื้อ</th>
-                        <th>การจัดการ</th>
+                        <th>ราคาขาย</th>
+                        <th>ราคาต้นทุน</th>
+                        <th>จำนวนสต็อก</th>
+                        <th>สต็อกต่ำสุด</th>
+                        <th>จัดการสินค้า</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBodyFreshFood"></tbody>
@@ -4317,7 +1397,7 @@ $users = fetchUsers($conn);
             <div id="productGridFreshFood" class="card-grid"></div>
         </div>
 
-        <button id="scrollTopBtnFreshFood" onclick="scrollToTopFreshFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+        <button id="scrollTopBtnFreshFood" onclick="scrollToTopFreshFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#e3e3e3">
                 <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
             </svg></button>
 
@@ -4337,32 +1417,32 @@ $users = fetchUsers($conn);
                             <img id="imagePreviewFreshFood" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_freshfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <label for="product_name_freshfood"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
                         <input type="text" id="product_name_freshfood" name="product_name" required>
 
                         <label for="barcode_freshfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด</label>
+                            </svg>บาร์โค้ด<p>*</p></label>
                         <input type="text" id="barcode_freshfood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_freshfood"><span class="material-icons">price_change</span>ราคา</label>
+                                <label for="price_freshfood"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
                                 <input type="number" id="price_freshfood" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_freshfood"><span class="material-icons">money</span>ต้นทุน</label>
+                                <label for="cost_freshfood"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
                                 <input type="number" id="cost_freshfood" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_freshfood"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <label for="stock_freshfood"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
                                 <input type="number" id="stock_freshfood" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_freshfood"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <label for="reorder_level_freshfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
                                 <input type="number" id="reorder_level_freshfood" name="reorder_level" required>
                             </div>
                         </div>
@@ -4429,13 +1509,13 @@ $users = fetchUsers($conn);
                 <thead>
                     <tr>
                         <th>ชื่อสินค้า</th>
-                        <th>รูป</th>
+                        <th>รูปภาพ</th>
                         <th>บาร์โค้ด</th>
-                        <th>ราคา</th>
-                        <th>ต้นทุน</th>
-                        <th>สต็อก</th>
-                        <th>เกณฑ์สั่งซื้อ</th>
-                        <th>การจัดการ</th>
+                        <th>ราคาขาย</th>
+                        <th>ราคาต้นทุน</th>
+                        <th>จำนวนสต็อก</th>
+                        <th>สต็อกต่ำสุด</th>
+                        <th>จัดการสินค้า</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBodySnackFood"></tbody>
@@ -4444,7 +1524,7 @@ $users = fetchUsers($conn);
             <div id="productGridSnackFood" class="card-grid"></div>
         </div>
 
-        <button id="scrollTopBtnSnackFood" onclick="scrollToTopSnackFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 -960 960 960" width="45px" fill="#e3e3e3">
+        <button id="scrollTopBtnSnackFood" onclick="scrollToTopSnackFood()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#e3e3e3">
                 <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
             </svg></button>
 
@@ -4465,32 +1545,32 @@ $users = fetchUsers($conn);
                             <img id="imagePreviewSnackFood" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_snackfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
+                        <label for="product_name_snackfood"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
                         <input type="text" id="product_name_snackfood" name="product_name" required>
 
                         <label for="barcode_snackfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด</label>
+                            </svg>บาร์โค้ด<p>*</p></label>
                         <input type="text" id="barcode_snackfood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_snackfood"><span class="material-icons">price_change</span>ราคา</label>
+                                <label for="price_snackfood"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
                                 <input type="number" id="price_snackfood" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_snackfood"><span class="material-icons">money</span>ต้นทุน</label>
+                                <label for="cost_snackfood"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
                                 <input type="number" id="cost_snackfood" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_snackfood"><span class="material-icons">warehouse</span>สต็อก</label>
+                                <label for="stock_snackfood"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
                                 <input type="number" id="stock_snackfood" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_snackfood"><span class="material-icons">swap_vert</span>เกณฑ์สั่งซื้อ</label>
+                                <label for="reorder_level_snackfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
                                 <input type="number" id="reorder_level_snackfood" name="reorder_level" required>
                             </div>
                         </div>
@@ -4625,22 +1705,22 @@ $users = fetchUsers($conn);
                         <div class="profile-row">
                             <div class="profile-info">
                                 <label><span class="material-icons">badge</span> ชื่อ</label>
-                                <input type="text" id="first-name" value="Pachara">
+                                <input type="text" id="first-name-adminProfile" value="Pachara">
                             </div>
                             <div class="profile-info">
                                 <label><span class="material-icons">fingerprint</span> นามสกุล</label>
-                                <input type="text" id="last-name" value="Kalapakdee">
+                                <input type="text" id="last-name-adminProfile" value="Kalapakdee">
                             </div>
                         </div>
 
                         <div class="profile-row">
                             <div class="profile-info">
                                 <label><span class="material-icons">person_outline</span> ชื่อผู้ใช้</label>
-                                <input type="text" id="username" value="pachara">
+                                <input type="text" id="username-adminProfile" value="pachara">
                             </div>
                             <div class="profile-info">
                                 <label><span class="material-icons">password</span> รหัสผ่าน</label>
-                                <input type="password" id="password" placeholder="********">
+                                <input type="password" id="password-adminProfile" placeholder="********">
                             </div>
                         </div>
 
@@ -4656,6 +1736,53 @@ $users = fetchUsers($conn);
     </div>
 
     <script>
+        let toastTimeoutId = null;
+
+        const icons = {
+            empty: `
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="#E57300">
+        <path d="M600-240v-120H488q-32 54-87 87t-121 33q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h272v80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47q66 0 106-40.5t48-79.5h246v120h80v80H600Z"/>
+        </svg>`,
+            select: `
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#E57300">
+        <path d="M516-82q-9 2-18 2h-18q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480v18q0 9-2 18l-78-24v-12q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93h12l24 78Zm305 22L650-231 600-80 480-480l400 120-151 50 171 171-79 79Z"/>
+        </svg>`,
+            success: `
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4CAF50"><path d="m562-225 199-199-57-56-142 142-56-57-57 57 113 113ZM280-360h120v-80H280v80Zm0-120h280v-80H280v80Zm0-120h280v-80H280v80ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>`,
+            error: `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#DC143C"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg> `,
+        };
+
+        function showAlertToast(message, icon = "", customClass = "") {
+            const toast = document.getElementById("alertToast");
+            const text = document.getElementById("alertToastMessage");
+            const iconSpan = document.getElementById("alertToastIcon");
+
+            if (!toast || !text || !iconSpan) return;
+
+            // เคลียร์ timeout และรีเซ็ตก่อน
+            if (toastTimeoutId) {
+                clearTimeout(toastTimeoutId);
+                toast.style.display = "none";
+                toast.style.animation = "none";
+                toast.offsetHeight;
+            }
+
+            // ล้าง class ก่อน
+            toast.className = "alert-toast"; // class base
+            if (customClass) toast.classList.add(customClass); // เพิ่ม class เฉพาะ
+
+            iconSpan.innerHTML = icon;
+            text.textContent = message;
+
+            toast.style.display = "flex";
+            toast.style.animation = "bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards";
+
+            toastTimeoutId = setTimeout(() => {
+                toast.style.display = "none";
+                toastTimeoutId = null;
+            }, 4000);
+        }
+
         function previewImage(event) {
             const input = event.target;
             const reader = new FileReader();
@@ -4840,18 +1967,18 @@ $users = fetchUsers($conn);
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('✅ แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
                         // ปิด panel
                         document.getElementById('editPanel').style.right = '-100%';
                         document.getElementById('overlay').style.display = 'none';
                         document.body.style.overflow = '';
                     } else {
-                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                        alert('เกิดข้อผิดพลาด: ' + data.message);
                     }
                 })
                 .catch(error => {
                     console.error('เกิดข้อผิดพลาด:', error);
-                    alert('❌ ไม่สามารถส่งข้อมูลไปยังเซิร์ฟเวอร์ได้');
+                    alert('ไม่สามารถส่งข้อมูลไปยังเซิร์ฟเวอร์ได้');
                 });
         });
 
@@ -4874,7 +2001,7 @@ $users = fetchUsers($conn);
                         document.getElementById('edit_product_id').value = data.id;
                         document.getElementById('imagePreview').src = data.image_url;
                         document.getElementById('product_name').value = data.product_name;
-                        document.getElementById('barcode').value = data.barcode || '';
+                        document.getElementById('barcodeDriedFood').value = data.barcode || '';
                         document.getElementById('price').value = data.price;
                         document.getElementById('cost').value = data.cost;
                         document.getElementById('stock').value = data.stock;
@@ -5199,14 +2326,14 @@ $users = fetchUsers($conn);
 
                 if (paginatedItems.length === 0) {
                     tableBody.innerHTML = `
-    <tr>
+        <tr>
         <td colspan="8" class="no-items-message">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                 <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
             </svg>
             ไม่พบสินค้าที่ค้นหา
         </td>
-    </tr>`;
+        </tr>`;
                 } else {
                     paginatedItems.forEach(item => {
                         tableBody.innerHTML += `
@@ -5261,7 +2388,7 @@ $users = fetchUsers($conn);
             </svg>
             ไม่พบสินค้าที่ค้นหา
         </p>
-    `;
+        `;
                 } else {
                     paginatedItems.forEach(item => {
                         grid.innerHTML += `
@@ -5365,8 +2492,6 @@ $users = fetchUsers($conn);
             toggleScrollButton();
         };
 
-
-
         // ฟังก์ชันโชว์/ซ่อนปุ่ม
         function toggleScrollButton() {
             const btn = document.getElementById("scrollTopBtn");
@@ -5384,6 +2509,13 @@ $users = fetchUsers($conn);
                 behavior: 'smooth'
             });
         }
+
+        // เรียกฟังก์ชันเมื่อ scroll
+        window.addEventListener("scroll", toggleScrollButton);
+
+        // ตรวจสอบสถานะตอนโหลดหน้า (เผื่อโหลดในตำแหน่งเลื่อน)
+        document.addEventListener("DOMContentLoaded", toggleScrollButton);
+
 
         // ฟังก์ชันสำหรับการค้นหาสินค้า Soft Drink
         const productsSoftDrink = <?php echo json_encode($soft_drink); ?>;
@@ -5591,6 +2723,11 @@ $users = fetchUsers($conn);
             });
         }
 
+        window.addEventListener("scroll", toggleScrollButtonSoftDrink);
+
+        document.addEventListener("DOMContentLoaded", toggleScrollButtonSoftDrink);
+
+
         // ฟังก์ชันสำหรับการค้นหาสินค้า Fresh Food
         const productsFreshFood = <?php echo json_encode($fresh_food); ?>;
         const tableBodyFreshFood = document.getElementById('productTableBodyFreshFood');
@@ -5770,6 +2907,7 @@ $users = fetchUsers($conn);
             displayProductsFreshFood();
         }
         displayProductsFreshFood();
+
         window.onscroll = function() {
             toggleScrollButtonFreshFood();
         };
@@ -5789,6 +2927,11 @@ $users = fetchUsers($conn);
                 behavior: 'smooth'
             });
         }
+
+        window.addEventListener("scroll", toggleScrollButtonFreshFood);
+
+        document.addEventListener("DOMContentLoaded", toggleScrollButtonFreshFood);
+
 
         // ฟังก์ชันสำหรับการค้นหาสินค้า SnackFood
         const productsSnackFood = <?php echo json_encode($snack); ?>;
@@ -5993,6 +3136,10 @@ $users = fetchUsers($conn);
             });
         }
 
+        window.addEventListener("scroll", toggleScrollButtonSnackFood);
+
+        document.addEventListener("DOMContentLoaded", toggleScrollButtonSnackFood);
+
         // ฟังก์ชันสำหรับการเลือกหมวดหมู่สินค้า
         let selectedCategory = '';
 
@@ -6048,15 +3195,15 @@ $users = fetchUsers($conn);
             // สร้างแถวใหม่ในตาราง
             const row = document.createElement('tr');
             row.innerHTML = `
-        <td><input type="checkbox" class="row-checkbox" data-product="${productName}" onchange="updateCheckboxStatus(event, '${category}')"></td>
-        <td>${productName}</td>
-        <td><img src="${productImage}" alt="${productName}" style="width: 60px; height: auto;"></td>
-        <td>${barcode}</td>
-        <td>${productPrice} บาท</td>
-        <td>${productCost} บาท</td>
-        <td>${productStock} ชิ้น</td>
-        <td>${productReorderLevel} ชิ้น</td>
-    `;
+            <td><input type="checkbox" class="row-checkbox" data-product="${productName}" onchange="updateCheckboxStatus(event, '${category}')"></td>
+            <td>${productName}</td>
+            <td><img src="${productImage}" alt="${productName}" style="width: 100px; height: auto;"></td>
+            <td>${barcode}</td>
+            <td>${productPrice} บาท</td>
+            <td>${productCost} บาท</td>
+            <td>${productStock} ชิ้น</td>
+            <td>${productReorderLevel} ชิ้น</td>
+            `;
             tableBody.appendChild(row);
 
             // บันทึกข้อมูลสินค้าและสถานะ checkbox ลงใน localStorage
@@ -6109,7 +3256,7 @@ $users = fetchUsers($conn);
                         row.innerHTML = `
                     <td><input type="checkbox" class="row-checkbox" data-product="${data.productName}" ${data.isChecked ? 'checked' : ''} onchange="updateCheckboxStatus(event, '${category}')"></td>
                     <td>${data.productName}</td>
-                    <td><img src="${data.productImage}" alt="${data.productName}" style="width: 60px; height: auto;"></td>
+                    <td><img src="${data.productImage}" alt="${data.productName}" style="width: 100px; height: auto;"></td>
                     <td>${data.barcode}</td>
                     <td>${data.productPrice} บาท</td>
                     <td>${data.productCost} บาท</td>
@@ -6159,15 +3306,14 @@ $users = fetchUsers($conn);
         }
 
         document.querySelectorAll(".btn-dried-food").forEach(button => {
-            button.addEventListener("click", function() {
+            button.addEventListener("click", () => {
                 let selectedProducts = [];
 
-                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
-                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
+                document.querySelectorAll(".row-checkbox:checked").forEach(checkbox => {
                     let row = checkbox.closest("tr");
                     let productData = {
                         productName: row.children[1].textContent.trim(),
-                        productImage: row.children[2].querySelector("img").src,
+                        productImage: row.children[2].querySelector("img")?.src || "",
                         barcode: row.children[3].textContent.trim(),
                         productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
                         productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
@@ -6182,49 +3328,61 @@ $users = fetchUsers($conn);
                     return;
                 }
 
-                console.log("🛒 Sending data:", JSON.stringify({
-                    products: selectedProducts
-                }));
+                // แสดง modal confirm
+                const modal = document.getElementById("addProductConfirmModal");
+                modal.classList.remove("hidden");
 
-                // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-shop-admin/product/upload_product/add_food_all/add_dried_food.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            products: selectedProducts
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data);
-                        if (data.success) {
-                            alert("เพิ่มสินค้าสำเร็จ!");
+                // ปุ่ม confirm และ cancel
+                const confirmBtn = document.getElementById("confirmAddProductBtn");
+                const cancelBtn = document.getElementById("cancelAddProductBtn");
 
-                            // ลบแถวที่ถูกเลือกออกจากตาราง
-                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                                let row = checkbox.closest("tr");
-                                row.remove();
-                            });
+                // ลบ event listener เก่า (ถ้ามี)
+                confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+                cancelBtn.replaceWith(cancelBtn.cloneNode(true));
 
-                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
-                            selectedProducts.forEach(product => {
-                                const category = "dried_food"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
-                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
+                // ดึงปุ่มใหม่หลัง clone
+                const newConfirmBtn = document.getElementById("confirmAddProductBtn");
+                const newCancelBtn = document.getElementById("cancelAddProductBtn");
 
-                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
+                newConfirmBtn.addEventListener("click", () => {
+                    modal.classList.add("hidden");
+                    sendProductsToServer(selectedProducts);
+                });
 
-                                // บันทึกข้อมูลที่อัปเดตลง localStorage
-                                localStorage.setItem(category, JSON.stringify(savedData));
-                            });
-                        } else {
-                            alert("เกิดข้อผิดพลาด: " + data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
+                newCancelBtn.addEventListener("click", () => {
+                    modal.classList.add("hidden");
+                });
             });
         });
+
+        function sendProductsToServer(selectedProducts) {
+            console.log("ส่งข้อมูลสินค้า:", selectedProducts);
+
+            fetch("/sci-shop-admin/product/upload_product/add_food_all/add_dried_food.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        products: selectedProducts
+                    }),
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("เพิ่มสินค้าสำเร็จ!");
+                        // ลบแถวที่ถูกเลือกออกจากตาราง
+                        document.querySelectorAll(".row-checkbox:checked").forEach(cb => cb.closest("tr").remove());
+                    } else {
+                        alert("เกิดข้อผิดพลาด: " + data.message);
+                    }
+                })
+                .catch(err => {
+                    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+                    console.error(err);
+                });
+        }
+
 
         document.querySelectorAll(".btn-soft-drink").forEach(button => {
             button.addEventListener("click", function() {
@@ -6430,22 +3588,265 @@ $users = fetchUsers($conn);
             });
         });
 
+        // ฟังก์ชันสำหรับเปิด Modal แก้ไขสินค้า localStorage
+        let editingBarcode = null;
 
-        // แสดง Tab ที่ถูกเลือก
-        document.addEventListener("DOMContentLoaded", function() {
-            const activeTab = localStorage.getItem("activeTab") || "order";
-            showTab(activeTab);
+        // เริ่มทำงานเมื่อกดปุ่ม "แก้ไขสินค้า"
+        document.querySelectorAll(".btn-edit-product-localStorage").forEach(button => {
+            button.addEventListener("click", function() {
+                const key = this.dataset.key;
+                const storedData = JSON.parse(localStorage.getItem(key)) || [];
+
+                // ✅ ไม่มีข้อมูลใน localStorage
+                if (storedData.length === 0) {
+                    showAlertToast("ไม่มีข้อมูลใน localStorage ที่จะแก้ไข", icons.error, "alert-toast");
+                    return;
+                }
+
+                const checkedBoxes = document.querySelectorAll(".row-checkbox:checked");
+
+                // ✅ ไม่ได้เลือกเลย
+                if (checkedBoxes.length === 0) {
+                    showAlertToast("กรุณาเลือกสินค้าที่ต้องการแก้ไข", icons.select, "alert-toast");
+                    return;
+                }
+
+                // ✅ เลือกมากกว่า 1 รายการ
+                if (checkedBoxes.length > 1) {
+                    showAlertToast("กรุณาเลือกสินค้าเพียง 1 รายการเพื่อแก้ไข", icons.select, "alert-toast");
+                    return;
+                }
+
+                const checked = checkedBoxes[0];
+                const row = checked.closest("tr");
+
+                if (!row) {
+                    showAlertToast("ไม่พบแถวของสินค้าในตาราง", icons.error, "alert-toast");
+                    return;
+                }
+
+                const barcode = row.children[3]?.textContent.trim();
+                if (!barcode) {
+                    showAlertToast("ไม่สามารถดึงข้อมูลบาร์โค้ดจากแถวที่เลือกได้", icons.error, "alert-toast");
+                    return;
+                }
+
+                const product = storedData.find(item => item.barcode === barcode);
+                if (!product) {
+                    showAlertToast("ไม่พบสินค้านี้ใน localStorage", icons.empty, "alert-toast");
+                    return;
+                }
+
+                // เติมข้อมูลลงฟอร์ม
+                document.getElementById("editImagePreview").src = product.productImage || "";
+                document.getElementById("editName").value = product.productName;
+                document.getElementById("editBarcode").value = product.barcode;
+                document.getElementById("editPrice").value = product.productPrice;
+                document.getElementById("editCost").value = product.productCost;
+                document.getElementById("editStock").value = product.productStock;
+                document.getElementById("editReorder").value = product.productReorderLevel;
+
+                editingBarcode = barcode;
+                document.getElementById("editForm").dataset.key = key;
+                document.getElementById("editModal").style.display = "flex";
+            });
         });
 
-        function showTab(tabId) {
-            document.querySelectorAll('.content').forEach(c => c.classList.remove('show'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // ปิด Modal เมื่อกดปุ่มปิด
+        document.getElementById("closeModal").addEventListener("click", () => {
+            document.getElementById("editModal").style.display = "none";
+            editingBarcode = null;
+        });
 
-            document.getElementById(tabId).classList.add('show');
-            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+        // ปิด Modal เมื่อคลิกนอกกล่อง
+        window.addEventListener("click", function(e) {
+            const modal = document.getElementById("editModal");
+            if (e.target === modal) {
+                modal.style.display = "none";
+                editingBarcode = null;
+            }
+        });
 
-            localStorage.setItem("activeTab", tabId); // บันทึกแท็บที่เปิดล่าสุด
+        // บันทึกการแก้ไข
+        document.getElementById("editForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const key = this.dataset.key;
+            let storedData = JSON.parse(localStorage.getItem(key)) || [];
+
+            const newBarcode = document.getElementById("editBarcode").value.trim();
+            const updatedProduct = {
+                productName: document.getElementById("editName").value.trim(),
+                barcode: newBarcode,
+                productImage: document.getElementById("editImagePreview").src,
+                productPrice: document.getElementById("editPrice").value,
+                productCost: document.getElementById("editCost").value,
+                productStock: document.getElementById("editStock").value,
+                productReorderLevel: document.getElementById("editReorder").value,
+            };
+
+            // อัปเดตใน localStorage
+            storedData = storedData.map(item => {
+                if (item.barcode === editingBarcode) {
+                    return {
+                        ...item,
+                        ...updatedProduct
+                    };
+                }
+                return item;
+            });
+            localStorage.setItem(key, JSON.stringify(storedData));
+
+            // อัปเดตแถวในตาราง
+            const checked = document.querySelector(".row-checkbox:checked");
+            const row = checked?.closest("tr");
+
+            if (!row || row.children.length < 8) {
+                showAlertToast("เกิดข้อผิดพลาดในการอัปเดตแถว", icons.error, "alert-toast");
+                return;
+            }
+
+            row.children[1].textContent = updatedProduct.productName;
+            row.children[2].querySelector("img").src = updatedProduct.productImage;
+            row.children[3].textContent = updatedProduct.barcode;
+            row.children[4].textContent = `${updatedProduct.productPrice} บาท`;
+            row.children[5].textContent = `${updatedProduct.productCost} บาท`;
+            row.children[6].textContent = `${updatedProduct.productStock} ชิ้น`;
+            row.children[7].textContent = `${updatedProduct.productReorderLevel} ชิ้น`;
+
+            // ปิด Modal
+            document.getElementById("editModal").style.display = "none";
+            editingBarcode = null;
+
+            // แสดง toast สำเร็จ
+            showAlertToast(`แก้ไขสินค้าเรียบร้อยแล้ว`, icons.success, "success-toast");
+        });
+
+
+        let deleteCallback = null;
+
+        // เริ่มใช้งานปุ่มลบสินค้า
+        document.querySelectorAll(".btn-delete-product").forEach(button => {
+            button.addEventListener("click", function() {
+                const key = this.dataset.key;
+                const table = document.getElementById(`${key}_table`);
+                const storedData = JSON.parse(localStorage.getItem(key)) || [];
+
+                if (!table) {
+                    showAlertToast("ไม่พบตารางสำหรับสินค้า", icons.error, "alert-toast");
+                    return;
+                }
+
+                // ดึงบาร์โค้ดของสินค้าที่ถูกเลือก
+                const checkedBarcodes = Array.from(table.querySelectorAll(".row-checkbox:checked"))
+                    .map(cb => cb.closest("tr").children[3]?.textContent.trim())
+                    .filter(Boolean); // กรองค่าที่เป็น null หรือ undefined
+
+                if (storedData.length === 0) {
+                    showAlertToast("ไม่มีข้อมูลใน localStorage ที่จะลบ", icons.error, "alert-toast");
+                    return;
+                }
+
+                if (checkedBarcodes.length === 0) {
+                    showAlertToast("กรุณาเลือกสินค้าเพื่อทำการลบ", icons.select, "alert-toast");
+                    return;
+                }
+
+                // แสดง Modal ยืนยัน
+                const deleteMessage = document.getElementById("deleteMessage");
+                deleteMessage.innerHTML = `คุณแน่ใจหรือไม่ว่าต้องการลบ <div class="highlight-text">สินค้า ${checkedBarcodes.length} รายการ?</div>`;
+
+                const modal = document.getElementById("deleteConfirmModal");
+                modal.style.display = "flex";
+
+                // สร้าง callback สำหรับการยืนยันลบ
+                deleteCallback = () => {
+                    const updatedData = storedData.filter(item => !checkedBarcodes.includes(item.barcode));
+                    localStorage.setItem(key, JSON.stringify(updatedData));
+
+                    // ลบแถวจาก DOM
+                    table.querySelectorAll(".row-checkbox:checked").forEach(cb => {
+                        const row = cb.closest("tr");
+                        if (row) row.remove();
+                    });
+
+                    showAlertToast(`ลบสินค้า ${checkedBarcodes.length} รายการเรียบร้อยแล้ว`, icons.success, "success-toast");
+
+                    closeModal();
+                };
+            });
+        });
+
+        // ปุ่มยืนยันลบ
+        document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+            if (typeof deleteCallback === "function") {
+                deleteCallback();
+            }
+        });
+
+        // ปุ่มยกเลิก
+        document.getElementById("cancelDeleteBtn").addEventListener("click", closeModal);
+
+        // ปิด Modal และล้าง callback
+        function closeModal() {
+            document.getElementById("deleteConfirmModal").style.display = "none";
+            deleteCallback = null;
         }
+
+
+
+        let loadingInterval; // สำหรับเก็บ interval ของ progress
+
+        function showTab(tabId) {
+            const loadingBar = document.getElementById("tabLoadingBar");
+            let progress = 0;
+            loadingBar.style.width = "0%";
+            loadingBar.style.opacity = "1";
+
+            // เริ่มโหลดแบบค่อยๆ เพิ่มขึ้น
+            loadingInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += Math.random() * 5; // ค่อยๆ เพิ่มแบบสุ่ม
+                    loadingBar.style.width = progress + "%";
+                }
+            }, 80);
+
+            // โหลดคอนเทนต์จริง (mock delay 400ms)
+            setTimeout(() => {
+                clearInterval(loadingInterval); // หยุด interval
+
+                // เปลี่ยนแท็บ
+                document.querySelectorAll('.content').forEach(content => content.classList.remove('show'));
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+                const activeContent = document.getElementById(tabId);
+                if (activeContent) activeContent.classList.add('show');
+
+                const activeTabButton = document.querySelector(`.tab[data-tab="${tabId}"]`);
+                if (activeTabButton) activeTabButton.classList.add('active');
+
+                localStorage.setItem("activeTab", tabId);
+
+                // โหลดจบ → ดัน 100% แล้วจางหาย
+                loadingBar.style.width = "100%";
+                setTimeout(() => {
+                    loadingBar.style.opacity = "0";
+                }, 400);
+            }, 400); // ความล่าช้าสำหรับ simulate loading จริง
+        }
+
+        // event listener
+        document.querySelectorAll('.tab[data-tab]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                showTab(tabId);
+            });
+        });
+
+        // โหลดแท็บล่าสุด
+        const savedTab = localStorage.getItem("activeTab");
+        showTab(savedTab);
+
 
         function displayMessage(message, type) {
             // สร้าง element สำหรับแสดงข้อความ

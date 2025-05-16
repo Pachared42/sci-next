@@ -14,10 +14,6 @@ require_once __DIR__ . '/config/auth.php';
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="Login-Register/Login.css">
-
-    <link rel="manifest" href="/sci-shop-admin/manifest.json">
-    <meta name="theme-color" content="#31393C">
-    <link rel="apple-touch-icon" href="/sci-shop-admin/img/Rocket.256.png">
 </head>
 
 <body>
@@ -48,13 +44,6 @@ require_once __DIR__ . '/config/auth.php';
             </button>
         </form>
     </div>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sci-shop-admin/serviceWorker.js')
-                .then(reg => console.log('✅ Service Worker registered:', reg))
-                .catch(err => console.error('❌ Service Worker registration failed:', err));
-        }
-    </script>
 </body>
 
 </html>

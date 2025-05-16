@@ -38,7 +38,7 @@ try {
                 cost = ?, 
                 stock = ?, 
                 reorder_level = ?
-              WHERE id = ?";
+                WHERE id = ?";
 
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param("ssddiii", $product_name, $barcode, $price, $cost, $stock, $reorder_level, $id);

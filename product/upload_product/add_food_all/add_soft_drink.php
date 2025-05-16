@@ -38,13 +38,14 @@ foreach ($data['products'] as $product) {
     }
 
     // Bind ค่า
-    $stmt->bind_param("ssssddd", 
-        $product['productName'], 
-        $product['productImage'], 
-        $product['barcode'], 
-        $product['productPrice'], 
-        $product['productCost'], 
-        $product['productStock'], 
+    $stmt->bind_param(
+        "sssddii",
+        $product['productName'],
+        $product['productImage'],
+        $product['barcode'],
+        $product['productPrice'],
+        $product['productCost'],
+        $product['productStock'],
         $product['productReorderLevel']
     );
 

@@ -23,6 +23,11 @@ btn-soft-drink
 btn-fresh-food
 btn-snack
 
+dried-food
+soft-drink
+fresh-food
+snack
+
 DriedFood
 SoftDrink
 FreshFood
@@ -33,3 +38,10 @@ SnackFood
 <span class="material-icons">money</span>
 <span class="material-icons">warehouse</span>
 <span class="material-icons">swap_vert</span>
+
+ชื่อสินค้า
+บาร์โค้ด
+ราคาขาย
+ราคาต้นทุน
+จำนวนสต็อก
+สต็อกต่ำสุด
