@@ -17,7 +17,7 @@ require_once __DIR__ . '/config/auth.php';
 
     <link rel="manifest" href="/sci-next/manifest.json">
     <meta name="theme-color" content="#31393C">
-    <link rel="apple-touch-icon" href="/sci-next/img/Rocket.256.png">
+    <link rel="apple-touch-icon" href="/sci-next/img/next.256.png">
 </head>
 
 <body>

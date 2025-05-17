@@ -70,6 +70,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 รายการขาย
             </div>
 
+            <div class="tab" data-tab="update_product">
+                <span class="material-icons">analytics</span> ประวัติการอัปเดต
+            </div>
+
         </div>
         <hr class="tab-divider">
 
@@ -132,18 +136,27 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 <span class="material-icons">cookie</span> ประเภทขนม
             </div>
         </div>
+        <hr class="tab-divider">
 
 
-        <div class="tab sci_admin" data-tab="sci_admin">
-            <span class="material-icons">admin_panel_settings</span> จัดการแอดมิน
+        <div class="main-tabs-products">
+            <h3>รายการจัดการ</h3>
+            <div class="tab" data-tab="customer">
+                <span class="material-icons">manage_accounts</span> จัดการลูกค้า
+            </div>
+            <div class="tab" data-tab="sci_admin">
+                <span class="material-icons">manage_accounts</span> จัดการแอดมิน
+            </div>
+            <div class="tab" data-tab="employee">
+                <span class="material-icons">manage_accounts</span> จัดการพนักงาน
+            </div>
         </div>
-        <div class="tab employee" data-tab="employee">
-            <span class="material-icons">group</span> จัดการพนักงาน
-        </div>
+        <hr class="tab-divider">
+
         <div class="tab account" data-tab="account">
             <span class="material-icons">account_circle</span> โปรไฟล์แอดมิน
         </div>
-        <a class="tab logout" href="/sci-next/Logout.php">
+        <a class="tab logout" href="#" onclick="showLogoutModal(event)">
             <span class="material-icons">logout</span> ออกจากระบบ
         </a>
     </div>
@@ -196,6 +209,52 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div id="update_product" class="content">
+        <!-- ส่วนหัว -->
+        <h2 class="update-dashboard-title">แดชบอร์ดอัปเดตสินค้า</h2>
+
+        <!-- ตัวกรอง -->
+        <div class="update-filters">
+            <input type="text" placeholder="ค้นหาชื่อสินค้า..." class="filter-input">
+            <input type="text" placeholder="ค้นหาผู้ใช้งาน..." class="filter-input">
+            <select class="filter-input">
+                <option value="">ประเภทการกระทำ</option>
+                <option value="add">เพิ่ม</option>
+                <option value="update">แก้ไข</option>
+                <option value="delete">ลบ</option>
+            </select>
+        </div>
+
+        <!-- ตารางประวัติ -->
+        <table class="update-history-table">
+            <thead>
+                <tr>
+                    <th>วันที่เวลา</th>
+                    <th>ผู้ดำเนินการ</th>
+                    <th>ชื่อสินค้า</th>
+                    <th>การกระทำ</th>
+                    <th>รายละเอียด</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-05-17 18:42</td>
+                    <td>admin01</td>
+                    <td>โค้ก 1.25L</td>
+                    <td class="action-edit">แก้ไข</td>
+                    <td>ราคาจาก 20 → 22 บาท</td>
+                </tr>
+                <tr>
+                    <td>2025-05-17 19:10</td>
+                    <td>superadmin</td>
+                    <td>ปลากระป๋องโรซ่า</td>
+                    <td class="action-delete">ลบ</td>
+                    <td>ลบสินค้าถาวร</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
@@ -602,9 +661,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                     <div class="form-group">
                         <label for="productImage">
-                            <span class="material-icons">add_photo_alternate</span> รูปภาพสินค้า :
+                            <span class="material-icons" style="vertical-align: middle;">add_photo_alternate</span> รูปภาพสินค้า :
                         </label>
-                        <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required>
+                        <div class="input-clear-wrapper">
+                            <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required autocomplete="on"   
+                            oninput="toggleClearBtn()">
+                            <button type="button" class="clear-btn" data-tooltip="ลบ URL" onclick="clearInput()"><span class="material-icons">close</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -1021,6 +1085,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
+    <div id="confirmDeleteProductModal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <span class="material-icons">feedback</span>
+            <p id="confirmDeleteMessage"></p>
+            <div class="modal-actions">
+                <button id="btnConfirmDeleteProduct" class="btn-Confirm btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>ลบสินค้า
+                </button>
+                <button id="btnCancelDeleteProduct" class="btn-Confirm btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>ยกเลิก
+                </button>
+            </div>
+        </div>
+    </div>
+
+
     <div id="deleteConfirmModal" class="custom-modal hidden">
         <div class="custom-modal-content">
             <span class="material-icons">feedback</span>
@@ -1038,12 +1122,32 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     <div id="addProductConfirmModal" class="custom-modal hidden">
         <div class="custom-modal-content">
+            <span class="material-icons">trolley</span>
             <p id="confirmMessage">คุณต้องการเพิ่มสินค้าที่เลือกหรือไม่?</p>
             <div class="modal-actions">
-                <button id="confirmAddProductBtn" class="btn-Confirm btn-danger">เพิ่มสินค้า</button>
+                <button id="confirmAddProductBtn" class="btn-Confirm btn-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+                    </svg>เพิ่มสินค้า</button>
                 <button id="cancelAddProductBtn" class="btn-Confirm btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="logoutConfirmModal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <span class="material-icons">warning</span>
+            <p id="confirmMessage">คุณต้องการออกจากระบบหรือไม่?</p>
+            <div class="modal-actions">
+                <button id="confirmLogoutBtn" class="btn-Confirm btn-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+                    </svg>ยืนยันออกจากระบบ</button>
+                <button id="cancelLogoutBtn" class="btn-Confirm btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>ยกเลิก
+                </button>
             </div>
         </div>
     </div>
@@ -1967,18 +2071,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        showAlertToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว', icons.success, 'success');
+                        setTimeout(() => location.reload(), 1000);
                         // ปิด panel
                         document.getElementById('editPanel').style.right = '-100%';
                         document.getElementById('overlay').style.display = 'none';
                         document.body.style.overflow = '';
                     } else {
-                        alert('เกิดข้อผิดพลาด: ' + data.message);
+                        showAlertToast('เกิดข้อผิดพลาด: ' + data.message, icons.error, 'alert-toast');
                     }
                 })
                 .catch(error => {
                     console.error('เกิดข้อผิดพลาด:', error);
-                    alert('ไม่สามารถส่งข้อมูลไปยังเซิร์ฟเวอร์ได้');
+                    showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
                 });
         });
 
@@ -2042,18 +2147,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        showAlertToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว', icons.success, 'success');
+                        setTimeout(() => location.reload(), 1000);
                         // ปิด panel
                         document.getElementById('editPanelSoftDrink').style.right = '-100%';
                         document.getElementById('overlaySoftDrink').style.display = 'none';
                         document.body.style.overflow = '';
                     } else {
-                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                        showAlertToast('เกิดข้อผิดพลาด: ' + data.message, icons.error, 'alert-toast');
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                    showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
                 });
         });
 
@@ -2119,18 +2225,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        showAlertToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว', icons.success, 'success');
+                        setTimeout(() => location.reload(), 1000);
                         // ปิด panel
                         document.getElementById('editPanelFreshFood').style.right = '-100%';
                         document.getElementById('overlayFreshFood').style.display = 'none';
                         document.body.style.overflow = '';
                     } else {
-                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                        showAlertToast('เกิดข้อผิดพลาด: ' + data.message, icons.error, 'alert-toast');
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                    showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
                 });
         });
 
@@ -2194,18 +2301,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว');
+                        showAlertToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว', icons.success, 'success');
+                        setTimeout(() => location.reload(), 1000);
                         // ปิด panel
                         document.getElementById('editPanelSnackFood').style.right = '-100%';
                         document.getElementById('overlaySnackFood').style.display = 'none';
                         document.body.style.overflow = '';
                     } else {
-                        alert('❌ เกิดข้อผิดพลาด: ' + data.message);
+                        showAlertToast('เกิดข้อผิดพลาด: ' + data.message, icons.error, 'alert-toast');
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์');
+                    showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
                 });
         });
 
@@ -2256,6 +2364,73 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             // เปิดการเลื่อนหน้าจอเมื่อปิด editPanel
             document.body.style.overflow = 'auto';
         }
+
+        function deleteProduct(id, type) {
+            const modal = document.getElementById("confirmDeleteProductModal");
+            const message = document.getElementById("confirmDeleteMessage");
+            const confirmBtn = document.getElementById("btnConfirmDeleteProduct");
+            const cancelBtn = document.getElementById("btnCancelDeleteProduct");
+
+            const endpoints = {
+                dried: "/sci-next/product/delete_product/delete_dried_food.php",
+                soft: "/sci-next/product/delete_product/delete_soft_drink.php",
+                fresh: "/sci-next/product/delete_product/delete_fresh_food.php",
+                snack: "/sci-next/product/delete_product/delete_snack.php",
+            };
+
+            // ตรวจสอบว่าประเภทสินค้ามี endpoint รองรับ
+            if (!endpoints[type]) {
+                console.error("ไม่พบประเภทสินค้า:", type);
+                showAlertToast("ประเภทสินค้าที่เลือกไม่ถูกต้อง", icons.error, "alert-toast");
+                return;
+            }
+
+            message.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้?";
+            modal.classList.remove("hidden");
+
+            // รีเซ็ต event listener
+            confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+            cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+            const newConfirmBtn = document.getElementById("btnConfirmDeleteProduct");
+            const newCancelBtn = document.getElementById("btnCancelDeleteProduct");
+
+            newConfirmBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+
+                fetch(endpoints[type], {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `id=${encodeURIComponent(id)}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showAlertToast(data.message, icons.success, "success-toast");
+                            setTimeout(() => location.reload(), 1000);
+                        } else {
+                            showAlertToast(data.message, icons.error, "alert-toast");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Delete failed:", err);
+                        showAlertToast("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", icons.error, "alert-toast");
+                    });
+            });
+
+            newCancelBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    modal.classList.add("hidden");
+                }
+            });
+        }
+
 
         function toggleMenu() {
             const filterMenu = document.getElementById('filterMenu');
@@ -2366,9 +2541,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                                     <a onclick="openEditPanel(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</a>
-                                    <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                        </svg>ลบ</a>
+                                    <a onclick="deleteProduct(${item.id}, 'dried'); return false;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                    </svg>
+                                    ลบ
+                                    </a>
                                 </div>
                             </div>
                         </td>
@@ -2415,7 +2593,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                                 <button onclick="openEditPanel(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</button>
-                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <a onclick="deleteProduct(${item.id}, 'dried'); return false;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                             </div>
@@ -2461,20 +2640,34 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         }
 
         function filterProducts() {
-            searchText = document.getElementById('searchInput').value.trim().toLowerCase();
+            const searchText = document.getElementById('searchInput').value.trim().toLowerCase();
 
-            if (searchText === '') {
+            if (!searchText) {
                 filteredProducts = [...products];
             } else {
-                filteredProducts = products.filter(item =>
-                    item.product_name.toLowerCase().includes(searchText) ||
-                    item.barcode.toLowerCase().includes(searchText)
-                );
+                filteredProducts = products.filter(item => {
+                    const name = (item.product_name || '').toLowerCase();
+                    const barcode = (item.barcode || '').toLowerCase();
+
+                    const nameMatch = name.includes(searchText);
+                    const barcodeMatch = barcode.includes(searchText); // ค้นหาง่ายขึ้น: ไม่จำกัดแค่ท้าย
+
+                    return nameMatch || barcodeMatch;
+                });
+
+                // จัดลำดับ: barcode ที่ endsWith จะมาก่อน
+                filteredProducts.sort((a, b) => {
+                    const aEnds = a.barcode.toLowerCase().endsWith(searchText);
+                    const bEnds = b.barcode.toLowerCase().endsWith(searchText);
+                    return (bEnds - aEnds); // true = 1, false = 0
+                });
             }
 
             currentPage = 1;
             displayProducts();
         }
+
+
 
         function switchView(viewType) {
             currentView = viewType; // บันทึกมุมมองที่เลือก
@@ -2587,7 +2780,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                                 <a onclick="openEditPanelSoftDrink(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</a>
-                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <a onclick="deleteProduct(${item.id}, 'soft'); return false;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                             </div>
@@ -2629,7 +2823,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</button>
-                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <a onclick="deleteProduct(${item.id}, 'soft'); return false;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                         </div>
@@ -2676,13 +2871,22 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         function filterProductsSoftDrink() {
             searchTextSoftDrink = searchInputSoftDrink.value.trim().toLowerCase();
 
-            if (searchTextSoftDrink === '') {
+            if (!searchTextSoftDrink) {
                 filteredProductsSoftDrink = [...productsSoftDrink];
             } else {
-                filteredProductsSoftDrink = productsSoftDrink.filter(item =>
-                    item.product_name.toLowerCase().includes(searchTextSoftDrink) ||
-                    item.barcode.toLowerCase().includes(searchTextSoftDrink)
-                );
+                filteredProductsSoftDrink = productsSoftDrink.filter(item => {
+                    const name = (item.product_name || '').toLowerCase();
+                    const barcode = (item.barcode || '').toLowerCase();
+
+                    return name.includes(searchTextSoftDrink) || barcode.includes(searchTextSoftDrink);
+                });
+
+                // เรียงลำดับให้ barcode ที่ลงท้ายด้วย searchText แสดงก่อน
+                filteredProductsSoftDrink.sort((a, b) => {
+                    const aEnds = a.barcode.toLowerCase().endsWith(searchTextSoftDrink) ? 1 : 0;
+                    const bEnds = b.barcode.toLowerCase().endsWith(searchTextSoftDrink) ? 1 : 0;
+                    return bEnds - aEnds;
+                });
             }
 
             currentPageSoftDrink = 1;
@@ -2797,7 +3001,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                                 <a onclick="openEditPanelFreshFood(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</a>
-                                <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <a onclick="deleteProduct(${item.id}, 'fresh'); return false;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                             </div>  
@@ -2839,7 +3044,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <button onclick="openEditPanelFreshFood(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</button>
-                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <a onclick="deleteProduct(${item.id}, 'fresh'); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                         </div>
@@ -2885,13 +3090,21 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         function filterProductsFreshFood() {
             searchTextFreshFood = searchInputFreshFood.value.trim().toLowerCase();
 
-            if (searchTextFreshFood === '') {
+            if (!searchTextFreshFood) {
                 filteredProductsFreshFood = [...productsFreshFood];
             } else {
-                filteredProductsFreshFood = productsFreshFood.filter(item =>
-                    item.product_name.toLowerCase().includes(searchTextFreshFood) ||
-                    item.barcode.toLowerCase().includes(searchTextFreshFood)
-                );
+                filteredProductsFreshFood = productsFreshFood.filter(item => {
+                    const name = (item.product_name || '').toLowerCase();
+                    const barcode = (item.barcode || '').toLowerCase();
+
+                    return name.includes(searchTextFreshFood) || barcode.includes(searchTextFreshFood);
+                });
+
+                filteredProductsFreshFood.sort((a, b) => {
+                    const aEnds = a.barcode.toLowerCase().endsWith(searchTextFreshFood) ? 1 : 0;
+                    const bEnds = b.barcode.toLowerCase().endsWith(searchTextFreshFood) ? 1 : 0;
+                    return bEnds - aEnds;
+                });
             }
 
             currentPageFreshFood = 1;
@@ -3002,7 +3215,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <a onclick="openEditPanelSnackFood(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</a>
-                            <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <a onclick="deleteProduct(${item.id}, 'snack'); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                         </div>  
@@ -3044,7 +3257,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <button onclick="openEditPanelSnackFood(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
                                         </svg>แก้ไข</button>
-                        <a href="delete.php?id=${item.id}" onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบ?')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <a onclick="deleteProduct(${item.id}, 'snack'); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                             <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                                         </svg>ลบ</a>
                     </div>
@@ -3090,13 +3303,21 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         function filterProductsSnackFood() {
             searchTextSnackFood = searchInputSnackFood.value.trim().toLowerCase();
 
-            if (searchTextSnackFood === '') {
+            if (!searchTextSnackFood) {
                 filteredProductsSnackFood = [...productsSnackFood];
             } else {
-                filteredProductsSnackFood = productsSnackFood.filter(item =>
-                    item.product_name.toLowerCase().includes(searchTextSnackFood) ||
-                    item.barcode.toLowerCase().includes(searchTextSnackFood)
-                );
+                filteredProductsSnackFood = productsSnackFood.filter(item => {
+                    const name = (item.product_name || '').toLowerCase();
+                    const barcode = (item.barcode || '').toLowerCase();
+
+                    return name.includes(searchTextSnackFood) || barcode.includes(searchTextSnackFood);
+                });
+
+                filteredProductsSnackFood.sort((a, b) => {
+                    const aEnds = a.barcode.toLowerCase().endsWith(searchTextSnackFood) ? 1 : 0;
+                    const bEnds = b.barcode.toLowerCase().endsWith(searchTextSnackFood) ? 1 : 0;
+                    return bEnds - aEnds;
+                });
             }
 
             currentPageSnackFood = 1;
@@ -3145,6 +3366,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         function selectCategory(event, category) {
             selectedCategory = category;
+            showAlertToast(`เลือกหมวดหมู่สินค้า : ${category}`, icons.success, 'success');
             console.log("หมวดหมู่ที่เลือก:", selectedCategory);
 
             // ล้าง class 'active' ออกจากปุ่มทั้งหมด
@@ -3160,7 +3382,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             event.preventDefault(); // ป้องกันการรีเฟรชหน้า
 
             if (!selectedCategory) {
-                alert("กรุณาเลือกหมวดหมู่สินค้า");
+                showAlertToast("กรุณาเลือกหมวดหมู่สินค้าก่อน!", icons.error, 'error');
                 return;
             }
 
@@ -3173,22 +3395,35 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             const productReorderLevel = document.getElementById('productReorderLevel').value;
 
             if (productName && productImage && barcode && productPrice && productCost && productStock && productReorderLevel) {
-                sendDataToTable(selectedCategory, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel);
+                sendDataToTable(
+                    selectedCategory,
+                    productName,
+                    productImage,
+                    barcode,
+                    productPrice,
+                    productCost,
+                    productStock,
+                    productReorderLevel
+                );
 
                 document.getElementById('uploadForm').reset(); // รีเซ็ตฟอร์ม
+
+                showAlertToast("อัปโหลดสินค้าสำเร็จ!", icons.success, 'success'); // ✅ แสดง Toast
+
                 setTimeout(() => {
-                    history.replaceState(null, null, location.href);
-                }, 500); // ลบข้อมูล session หลัง 0.5 วิ
+                    location.reload(); // ✅ รีเฟรชหลัง 1 วิ
+                }, 1000);
             } else {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วน!");
+                showAlertToast("กรุณากรอกข้อมูลให้ครบถ้วน!", icons.error, 'error');
             }
         }
+
 
         function sendDataToTable(category, productName, productImage, barcode, productPrice, productCost, productStock, productReorderLevel) {
             const tableBody = document.getElementById(`${category}_table`);
 
             if (!tableBody) {
-                alert(`ไม่พบตารางที่ตรงกับหมวดหมู่ที่เลือก: ${category}_table`);
+                showAlertToast("ไม่พบตารางสำหรับหมวดหมู่นี้!", icons.error, 'error');
                 return;
             }
 
@@ -3269,7 +3504,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             });
         }
 
-
         // ฟังก์ชันที่ใช้ในการอัปเดตสถานะของ checkbox ใน localStorage
         function updateCheckboxStatus(event, category) {
             const checkbox = event.target;
@@ -3305,60 +3539,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             });
         }
 
-        document.querySelectorAll(".btn-dried-food").forEach(button => {
-            button.addEventListener("click", () => {
-                let selectedProducts = [];
-
-                document.querySelectorAll(".row-checkbox:checked").forEach(checkbox => {
-                    let row = checkbox.closest("tr");
-                    let productData = {
-                        productName: row.children[1].textContent.trim(),
-                        productImage: row.children[2].querySelector("img")?.src || "",
-                        barcode: row.children[3].textContent.trim(),
-                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
-                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
-                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
-                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
-                    };
-                    selectedProducts.push(productData);
-                });
-
-                if (selectedProducts.length === 0) {
-                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
-                    return;
-                }
-
-                // แสดง modal confirm
-                const modal = document.getElementById("addProductConfirmModal");
-                modal.classList.remove("hidden");
-
-                // ปุ่ม confirm และ cancel
-                const confirmBtn = document.getElementById("confirmAddProductBtn");
-                const cancelBtn = document.getElementById("cancelAddProductBtn");
-
-                // ลบ event listener เก่า (ถ้ามี)
-                confirmBtn.replaceWith(confirmBtn.cloneNode(true));
-                cancelBtn.replaceWith(cancelBtn.cloneNode(true));
-
-                // ดึงปุ่มใหม่หลัง clone
-                const newConfirmBtn = document.getElementById("confirmAddProductBtn");
-                const newCancelBtn = document.getElementById("cancelAddProductBtn");
-
-                newConfirmBtn.addEventListener("click", () => {
-                    modal.classList.add("hidden");
-                    sendProductsToServer(selectedProducts);
-                });
-
-                newCancelBtn.addEventListener("click", () => {
-                    modal.classList.add("hidden");
-                });
-            });
-        });
-
-        function sendProductsToServer(selectedProducts) {
+        function sendProductsToServer(selectedProducts, url, storageKey) {
             console.log("ส่งข้อมูลสินค้า:", selectedProducts);
 
-            fetch("/sci-next/product/upload_product/add_food_all/add_dried_food.php", {
+            fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -3370,223 +3554,90 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert("เพิ่มสินค้าสำเร็จ!");
-                        // ลบแถวที่ถูกเลือกออกจากตาราง
+                        showAlertToast("เพิ่มสินค้าสำเร็จ!", icons.success, "success-toast");
+
+                        // ✅ ลบข้อมูลใน localStorage หลังเพิ่มสำเร็จ
+                        localStorage.removeItem(storageKey);
+
+                        setTimeout(() => location.reload(), 1000);
                         document.querySelectorAll(".row-checkbox:checked").forEach(cb => cb.closest("tr").remove());
                     } else {
-                        alert("เกิดข้อผิดพลาด: " + data.message);
+                        showAlertToast("เกิดข้อผิดพลาด: " + data.message, icons.error, "alert-toast");
                     }
                 })
                 .catch(err => {
-                    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+                    showAlertToast("เกิดข้อผิดพลาดในการส่งข้อมูล", icons.error, "alert-toast");
                     console.error(err);
                 });
         }
 
+        function setupProductButton(className, storageKey, postUrl) {
+            document.querySelectorAll(className).forEach(button => {
+                button.addEventListener("click", () => {
+                    let storedData = JSON.parse(localStorage.getItem(storageKey) || "[]");
 
-        document.querySelectorAll(".btn-soft-drink").forEach(button => {
-            button.addEventListener("click", function() {
-                let selectedProducts = [];
+                    if (!Array.isArray(storedData) || storedData.length === 0) {
+                        showAlertToast("ไม่มีข้อมูลที่จะเพิ่มสินค้า", icons.error, "alert-toast");
+                        return;
+                    }
 
-                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
-                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                    let row = checkbox.closest("tr");
-                    let productData = {
-                        productName: row.children[1].textContent.trim(),
-                        productImage: row.children[2].querySelector("img").src,
-                        barcode: row.children[3].textContent.trim(),
-                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
-                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
-                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
-                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
-                    };
-                    selectedProducts.push(productData);
+                    let selectedProducts = [];
+                    document.querySelectorAll(".row-checkbox:checked").forEach(checkbox => {
+                        let row = checkbox.closest("tr");
+                        selectedProducts.push({
+                            productName: row.children[1].textContent.trim(),
+                            productImage: row.children[2].querySelector("img")?.src || "",
+                            barcode: row.children[3].textContent.trim(),
+                            productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
+                            productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
+                            productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
+                            productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
+                        });
+                    });
+
+                    if (selectedProducts.length === 0) {
+                        showAlertToast("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ", icons.select, "alert-toast");
+                        return;
+                    }
+
+                    const modal = document.getElementById("addProductConfirmModal");
+                    modal.classList.remove("hidden");
+
+                    const confirmBtn = document.getElementById("confirmAddProductBtn");
+                    const cancelBtn = document.getElementById("cancelAddProductBtn");
+
+                    confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+                    cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+                    const newConfirmBtn = document.getElementById("confirmAddProductBtn");
+                    const newCancelBtn = document.getElementById("cancelAddProductBtn");
+
+                    newConfirmBtn.addEventListener("click", () => {
+                        modal.classList.add("hidden");
+                        sendProductsToServer(selectedProducts, postUrl, storageKey); // ✅ ส่ง storageKey ไปด้วย
+                    });
+
+                    newCancelBtn.addEventListener("click", () => {
+                        modal.classList.add("hidden");
+                    });
                 });
-
-                if (selectedProducts.length === 0) {
-                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
-                    return;
-                }
-
-                console.log("🛒 Sending data:", JSON.stringify({
-                    products: selectedProducts
-                }));
-
-                // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-next/product/upload_product/add_food_all/add_soft_drink.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            products: selectedProducts
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data);
-                        if (data.success) {
-                            alert("เพิ่มสินค้าสำเร็จ!");
-
-                            // ลบแถวที่ถูกเลือกออกจากตาราง
-                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                                let row = checkbox.closest("tr");
-                                row.remove();
-                            });
-
-                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
-                            selectedProducts.forEach(product => {
-                                const category = "soft_drink"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
-                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
-
-                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
-
-                                // บันทึกข้อมูลที่อัปเดตลง localStorage
-                                localStorage.setItem(category, JSON.stringify(savedData));
-                            });
-                        } else {
-                            alert("เกิดข้อผิดพลาด: " + data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
             });
+        }
+
+        // เรียกใช้งานกับประเภทต่าง ๆ
+        setupProductButton(".btn-dried-food", "dried_food", "/sci-next/product/upload_product/add_food_all/add_dried_food.php");
+        setupProductButton(".btn-soft-drink", "soft_drink", "/sci-next/product/upload_product/add_food_all/add_soft_drink.php");
+        setupProductButton(".btn-fresh-food", "fresh_food", "/sci-next/product/upload_product/add_food_all/add_fresh_food.php");
+        setupProductButton(".btn-snack", "snack", "/sci-next/product/upload_product/add_food_all/add_snack.php");
+
+        // ปิด modal เมื่อคลิกข้างนอก
+        window.addEventListener("click", function(event) {
+            const modal = document.getElementById("addProductConfirmModal");
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+            }
         });
 
-        document.querySelectorAll(".btn-fresh-food").forEach(button => {
-            button.addEventListener("click", function() {
-                let selectedProducts = [];
-
-                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
-                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                    let row = checkbox.closest("tr");
-                    let productData = {
-                        productName: row.children[1].textContent.trim(),
-                        productImage: row.children[2].querySelector("img").src,
-                        barcode: row.children[3].textContent.trim(),
-                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
-                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
-                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
-                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
-                    };
-                    selectedProducts.push(productData);
-                });
-
-                if (selectedProducts.length === 0) {
-                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
-                    return;
-                }
-
-                console.log("🛒 Sending data:", JSON.stringify({
-                    products: selectedProducts
-                }));
-
-                // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-next/product/upload_product/add_food_all/add_fresh_food.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            products: selectedProducts
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data);
-                        if (data.success) {
-                            alert("เพิ่มสินค้าสำเร็จ!");
-
-                            // ลบแถวที่ถูกเลือกออกจากตาราง
-                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                                let row = checkbox.closest("tr");
-                                row.remove();
-                            });
-
-                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
-                            selectedProducts.forEach(product => {
-                                const category = "fresh_food"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
-                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
-
-                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
-
-                                // บันทึกข้อมูลที่อัปเดตลง localStorage
-                                localStorage.setItem(category, JSON.stringify(savedData));
-                            });
-                        } else {
-                            alert("เกิดข้อผิดพลาด: " + data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
-            });
-        });
-
-        document.querySelectorAll(".btn-snack").forEach(button => {
-            button.addEventListener("click", function() {
-                let selectedProducts = [];
-
-                // ค้นหาสินค้าที่ถูก checkbox ไว้ในทุกตาราง
-                document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                    let row = checkbox.closest("tr");
-                    let productData = {
-                        productName: row.children[1].textContent.trim(),
-                        productImage: row.children[2].querySelector("img").src,
-                        barcode: row.children[3].textContent.trim(),
-                        productPrice: parseFloat(row.children[4].textContent.replace(" บาท", "").trim()),
-                        productCost: parseFloat(row.children[5].textContent.replace(" บาท", "").trim()),
-                        productStock: parseInt(row.children[6].textContent.replace(" ชิ้น", "").trim()),
-                        productReorderLevel: parseInt(row.children[7].textContent.replace(" ชิ้น", "").trim()),
-                    };
-                    selectedProducts.push(productData);
-                });
-
-                if (selectedProducts.length === 0) {
-                    alert("กรุณาเลือกสินค้าอย่างน้อยหนึ่งรายการ");
-                    return;
-                }
-
-                console.log("🛒 Sending data:", JSON.stringify({
-                    products: selectedProducts
-                }));
-
-                // ส่งข้อมูลไปยัง PHP
-                fetch("/sci-next/product/upload_product/add_food_all/add_snack.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            products: selectedProducts
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Response from server:", data);
-                        if (data.success) {
-                            alert("เพิ่มสินค้าสำเร็จ!");
-
-                            // ลบแถวที่ถูกเลือกออกจากตาราง
-                            document.querySelectorAll(".row-checkbox:checked").forEach((checkbox) => {
-                                let row = checkbox.closest("tr");
-                                row.remove();
-                            });
-
-                            // ลบข้อมูลที่ถูกเลือกออกจาก localStorage
-                            selectedProducts.forEach(product => {
-                                const category = "snack"; // เปลี่ยนชื่อหมวดหมู่หากจำเป็น
-                                let savedData = JSON.parse(localStorage.getItem(category)) || [];
-
-                                savedData = savedData.filter(data => data.productName !== product.productName); // ลบสินค้าที่เลือก
-
-                                // บันทึกข้อมูลที่อัปเดตลง localStorage
-                                localStorage.setItem(category, JSON.stringify(savedData));
-                            });
-                        } else {
-                            alert("เกิดข้อผิดพลาด: " + data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
-            });
-        });
 
         // ฟังก์ชันสำหรับเปิด Modal แก้ไขสินค้า localStorage
         let editingBarcode = null;
@@ -3599,7 +3650,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                 // ✅ ไม่มีข้อมูลใน localStorage
                 if (storedData.length === 0) {
-                    showAlertToast("ไม่มีข้อมูลใน localStorage ที่จะแก้ไข", icons.error, "alert-toast");
+                    showAlertToast("ไม่มีข้อมูลที่จะแก้ไข", icons.error, "alert-toast");
                     return;
                 }
 
@@ -3720,6 +3771,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
             // แสดง toast สำเร็จ
             showAlertToast(`แก้ไขสินค้าเรียบร้อยแล้ว`, icons.success, "success-toast");
+            setTimeout(() => {
+                location.reload();
+            }, 1000); // รีเฟรชหน้าใหม่หลังจาก 1 วินาที
         });
 
 
@@ -3743,7 +3797,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     .filter(Boolean); // กรองค่าที่เป็น null หรือ undefined
 
                 if (storedData.length === 0) {
-                    showAlertToast("ไม่มีข้อมูลใน localStorage ที่จะลบ", icons.error, "alert-toast");
+                    showAlertToast("ไม่มีข้อมูลที่จะลบ", icons.error, "alert-toast");
                     return;
                 }
 
@@ -3771,6 +3825,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     });
 
                     showAlertToast(`ลบสินค้า ${checkedBarcodes.length} รายการเรียบร้อยแล้ว`, icons.success, "success-toast");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000); // รีเฟรชหน้าใหม่หลังจาก 1 วินาที
 
                     closeModal();
                 };
@@ -3787,13 +3844,18 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         // ปุ่มยกเลิก
         document.getElementById("cancelDeleteBtn").addEventListener("click", closeModal);
 
+        window.addEventListener("click", function(e) {
+            const modal = document.getElementById("deleteConfirmModal");
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
         // ปิด Modal และล้าง callback
         function closeModal() {
             document.getElementById("deleteConfirmModal").style.display = "none";
             deleteCallback = null;
         }
-
-
 
         let loadingInterval; // สำหรับเก็บ interval ของ progress
 
@@ -4227,6 +4289,43 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 });
             }
         });
+
+        function showLogoutModal(event) {
+            event.preventDefault();
+            document.getElementById("logoutConfirmModal").classList.remove("hidden");
+        }
+
+        document.getElementById("confirmLogoutBtn").addEventListener("click", function() {
+            window.location.href = "/sci-next/Logout.php";
+        });
+
+        document.getElementById("cancelLogoutBtn").addEventListener("click", function() {
+            document.getElementById("logoutConfirmModal").classList.add("hidden");
+        });
+
+        // ปิด modal เมื่อคลิกนอก modal
+        window.addEventListener("click", function(event) {
+            const modal = document.getElementById("logoutConfirmModal");
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+
+        const input = document.getElementById('productImage');
+        const clearBtn = document.querySelector('.clear-btn');
+
+        function toggleClearBtn() {
+            clearBtn.style.display = input.value.trim() ? 'block' : 'none';
+        }
+
+        function clearInput() {
+            input.value = '';
+            clearBtn.style.display = 'none';
+            input.focus();
+        }
+
+        // เริ่มต้นตรวจสอบตอนโหลดหน้า (ถ้ามีค่าใน input)
+        toggleClearBtn();
     </script>
 </body>
 
