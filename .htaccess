@@ -1,5 +1,0 @@
-RewriteEngine On
-
-# กรณี URL ไม่มีนามสกุล และมีไฟล์ .php อยู่
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)$ $1.php [L]

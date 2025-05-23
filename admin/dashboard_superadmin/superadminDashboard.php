@@ -81,7 +81,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="main-tabs-upload">
             <h3>รายการอัพโหลด</h3>
             <div class="tab" data-tab="admin_signup">
-                <span class="material-icons">manage_accounts</span> สมัครแอดมิน
+                <span class="material-icons">group_add</span> สมัครแอดมิน
             </div>
 
             <div class="tab" data-tab="employee_signup">
@@ -323,56 +323,64 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
-                        <span class="material-icons">sell</span>
+                        <span class="material-icons">person</span>
                         <div>
-                            <span id="previewNamee"></span>
+                            <span id="previewFirstNameAdmin"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">person_outline</span>
                         <div>
-                            <span id="previewBarcodee"></span>
+                            <span id="previewLastNameAdmin"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">email</span>
                         <div>
-                            <span id="previewBarcodee"></span>
+                            <span id="previewGmailAdmin"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">lock</span>
                         <div>
-                            <span id="previewBarcodee"></span>
+                            <span id="previewPasswordAdmin"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <span class="material-icons">lock_open</span>
+                        <div>
+                            <span id="previewConfirmPasswordAdmin"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
-
-            <div id="alert" class="alert" style="display: none;">
-                <span id="alert-message"></span>
-            </div>
-
-
             <div class="form-container">
 
                 <h3 class="h-text-upload">เพิ่มแอดมินใหม่</h3>
 
-                <form class="form-upload" id="adminSignupForm" action="../admin_signup/admin_signup.php" method="POST" onsubmit="return submitAdminForm()" autocomplete="on">
+                <form class="form-upload" id="adminSignupForm" method="POST" enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <label for="upload-img">
+                        <label for="upload-img-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
                             </svg>
-                            รูปแอดมิน :</label>
+                            รูปแอดมิน :
                         </label>
+
                         <label for="upload-img-admin" class="custom-file-upload">เลือกไฟล์</label>
-                        <input type="file" id="upload-img-admin" name="upload-img" accept="image/*" required>
+                        <input type="file" id="upload-img-admin" accept="image/*" required>
+
+                        <!-- แสดงชื่อไฟล์ -->
+                        <div class="file-info-wrapper">
+                            <span id="file-name"></span>
+                            <small class="file-limit-note">* ไม่เกิน 1MB</small>
+                        </div>
                     </div>
 
                     <!-- แถวสำหรับชื่อและนามสกุล -->
@@ -395,11 +403,15 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <hr class="tab-divider-admin">
 
                     <div class="form-group">
-                        <label for="username-admin"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                        <label for="gmail-admin">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
-                            </svg>ชื่อผู้ใช้งาน :</label>
-                        <input type="text" id="username-admin" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+                            </svg>
+                            Gmail ผู้ใช้งาน :
+                        </label>
+                        <input type="gmail" id="gmail-admin" name="gmail" placeholder="กรอก Gmail ผู้ใช้งาน" required autocomplete="email">
                     </div>
+
 
                     <div class="form-group">
                         <label for="password-admin">
@@ -408,7 +420,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             </svg>รหัสผ่าน :
                         </label>
                         <input type="password" id="password-admin" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
-
 
                         <div id="password-strength-text" class="password-strength-text"></div>
 
@@ -427,17 +438,15 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="form-group">
                         <label for="confirmPassword-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
-                            </svg>ยืนยันรหัสผ่าน :</label>
+                                <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 40-26.5t34-39.5l-69-51-63 71-55-67-70 55 86 121q-14 52-44 77t-54 25q-14 0-23-8.5t-9-19.5q0-13 13-22t31-9q14 0 26.5 4t22.5 12l35-61Zm0-160Zm0-160Z" />
+                            </svg>ยืนยันรหัสผ่าน :
+                        </label>
                         <input type="password" id="confirmPassword-admin" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
                     </div>
 
-                    <div>
-                        <button type="submit" class="btn-upload">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                                <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
-                            </svg>สมัครแอดมิน</button>
-                    </div>
+                    <button type="submit" id="submitAdminBtn" class="btn-upload"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
+                        </svg>สมัครแอดมิน</button>
                 </form>
             </div>
         </div>
@@ -449,93 +458,108 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="upload-container">
             <div class="product-preview-box">
                 <div class="product-preview-image">
-                    <img id="previewImageEmployee" src="/sci-next/img/employee1.png" alt="รูปภาพพนักงาน">
+                    <img id="previewImageEmployee" src="/sci-next/img/product_food1.png" alt="รูปภาพพนักงาน">
                 </div>
                 <div class="product-details">
                     <div class="detail-group">
-                        <span class="material-icons">sell</span>
+                        <span class="material-icons">person</span>
                         <div>
-                            <span id="previewNameee"></span>
+                            <span id="previewFirstNameEmployee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">person_outline</span>
                         <div>
-                            <span id="previewBarcodeee"></span>
+                            <span id="previewLastNameEmployee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">email</span>
                         <div>
-                            <span id="previewBarcodeee"></span>
+                            <span id="previewGmailEmployee"></span>
                         </div>
                     </div>
 
                     <div class="detail-group">
-                        <span class="material-icons">qr_code</span>
+                        <span class="material-icons">lock</span>
                         <div>
-                            <span id="previewBarcodeee"></span>
+                            <span id="previewPasswordEmployee"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <span class="material-icons">lock_open</span>
+                        <div>
+                            <span id="previewConfirmPasswordEmployee"></span>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <div id="notify" class="notify-box" style="display: none;">
-                <span id="notify-message"></span>
-            </div>
-
 
             <div class="form-container">
 
                 <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
 
-                <form class="form-upload" id="employeeSignupForm" action="../../employee/employee_signup/employee_signup.php" method="POST" onsubmit="return submitemployeeForm()" autocomplete="on">
-                    <div class="form-group">
-                        <label for="upload-img">
+                <form class="form-upload" id="employeeSignupForm" method="POST" enctype="multipart/form-data">
+
+                    <div class="form-group"><label for="upload-img-employee">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
                             </svg>
-                            รูปแอดมิน :</label>
+                            รูปพนักงาน :
                         </label>
-                        <label for="upload-img" class="custom-file-upload">เลือกไฟล์</label>
-                        <input type="file" id="upload-img" name="upload-img" accept="image/*" required>
+
+                        <label for="upload-img-employee" class="custom-file-upload">เลือกไฟล์</label>
+                        <input type="file" id="upload-img-employee" accept="image/*" required>
+
+                        <!-- แสดงชื่อไฟล์ -->
+                        <div class="file-info-wrapper">
+                            <span id="file-name"></span>
+                            <small class="file-limit-note">* ไม่เกิน 1MB</small>
+                        </div>
                     </div>
 
                     <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
                         <div class="form-group">
-                            <label for="firstName"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <label for="firstName-employee">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
-                                </svg>ชื่อ :</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
+                                </svg>ชื่อ :
+                            </label>
+                            <input type="text" id="firstName-employee" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
                         </div>
                         <div class="form-group">
-                            <label for="lastName">
+                            <label for="lastName-employee">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M481-781q106 0 200 45.5T838-604q7 9 4.5 16t-8.5 12q-6 5-14 4.5t-14-8.5q-55-78-141.5-119.5T481-741q-97 0-182 41.5T158-580q-6 9-14 10t-14-4q-7-5-8.5-12.5T126-602q62-85 155.5-132T481-781Zm0 94q135 0 232 90t97 223q0 50-35.5 83.5T688-257q-51 0-87.5-33.5T564-374q0-33-24.5-55.5T481-452q-34 0-58.5 22.5T398-374q0 97 57.5 162T604-121q9 3 12 10t1 15q-2 7-8 12t-15 3q-104-26-170-103.5T358-374q0-50 36-84t87-34q51 0 87 34t36 84q0 33 25 55.5t59 22.5q34 0 58-22.5t24-55.5q0-116-85-195t-203-79q-118 0-203 79t-85 194q0 24 4.5 60t21.5 84q3 9-.5 16T208-205q-8 3-15.5-.5T182-217q-15-39-21.5-77.5T154-374q0-133 96.5-223T481-687Zm0-192q64 0 125 15.5T724-819q9 5 10.5 12t-1.5 14q-3 7-10 11t-17-1q-53-27-109.5-41.5T481-839q-58 0-114 13.5T260-783q-8 5-16 2.5T232-791q-4-8-2-14.5t10-11.5q56-30 117-46t124-16Zm0 289q93 0 160 62.5T708-374q0 9-5.5 14.5T688-354q-8 0-14-5.5t-6-14.5q0-75-55.5-125.5T481-550q-76 0-130.5 50.5T296-374q0 81 28 137.5T406-123q6 6 6 14t-6 14q-6 6-14 6t-14-6q-59-62-90.5-126.5T256-374q0-91 66-153.5T481-590Zm-1 196q9 0 14.5 6t5.5 14q0 75 54 123t126 48q6 0 17-1t23-3q9-2 15.5 2.5T744-191q2 8-3 14t-13 8q-18 5-31.5 5.5t-16.5.5q-89 0-154.5-60T460-374q0-8 5.5-14t14.5-6Z" />
-                                </svg>นามสกุล :</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
+                                </svg>นามสกุล :
+                            </label>
+                            <input type="text" id="lastName-employee" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
                         </div>
                     </div>
 
                     <hr class="tab-divider-admin">
 
                     <div class="form-group">
-                        <label for="username"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                        <label for="gmail-employee">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
-                            </svg>ชื่อผู้ใช้งาน :</label>
-                        <input type="text" id="username" name="username" placeholder="กรอกชื่อผู้ใช้งาน" required autocomplete="username">
+                            </svg>
+                            Gmail พนักงาน :
+                        </label>
+                        <input type="email" id="gmail-employee" name="gmail" placeholder="กรอก Gmail พนักงาน" required autocomplete="email">
                     </div>
 
                     <div class="form-group">
-                        <label for="password">
+                        <label for="password-employee">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
-                            </svg>รหัสผ่าน :</label>
-                        <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
+                            </svg>รหัสผ่าน :
+                        </label>
+                        <input type="password" id="password-employee" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
 
                         <div id="password-strength-text" class="password-strength-text"></div>
 
@@ -552,19 +576,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     </ul>
 
                     <div class="form-group">
-                        <label for="confirmPassword">
+                        <label for="confirmPassword-employee">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-                                <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Z" />
-                            </svg>ยืนยันรหัสผ่าน :</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
+                                <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 40-26.5t34-39.5l-69-51-63 71-55-67-70 55 86 121q-14 52-44 77t-54 25q-14 0-23-8.5t-9-19.5q0-13 13-22t31-9q14 0 26.5 4t22.5 12l35-61Zm0-160Zm0-160Z" />
+                            </svg>ยืนยันรหัสผ่าน :
+                        </label>
+                        <input type="password" id="confirmPassword-employee" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
                     </div>
 
-                    <div>
-                        <button type="submit" class="btn-upload">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                                <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
-                            </svg>สมัครพนักงาน</button>
-                    </div>
+                    <button type="submit" id="submitEmployeeBtn" class="btn-upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
+                            <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
+                        </svg>สมัครพนักงาน
+                    </button>
                 </form>
             </div>
         </div>
@@ -585,7 +609,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <path d="M856-390 570-104q-12 12-27 18t-30 6q-15 0-30-6t-27-18L103-457q-11-11-17-25.5T80-513v-287q0-33 23.5-56.5T160-880h287q16 0 31 6.5t26 17.5l352 353q12 12 17.5 27t5.5 30q0 15-5.5 29.5T856-390ZM260-640q25 0 42.5-17.5T320-700q0-25-17.5-42.5T260-760q-25 0-42.5 17.5T200-700q0 25 17.5 42.5T260-640Z" />
                         </svg>
                         <div>
-                            <span id="previewNameProduct"></span>
+                            <span class="text" id="previewNameProduct"></span>
                         </div>
                     </div>
 
@@ -664,8 +688,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <span class="material-icons" style="vertical-align: middle;">add_photo_alternate</span> รูปภาพสินค้า :
                         </label>
                         <div class="input-clear-wrapper">
-                            <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required autocomplete="on"   
-                            oninput="toggleClearBtn()">
+                            <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required autocomplete="on"
+                                oninput="toggleClearBtn()">
                             <button type="button" class="clear-btn" data-tooltip="ลบ URL" onclick="clearInput()"><span class="material-icons">close</span>
                             </button>
                         </div>
@@ -1690,53 +1714,51 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="sci_admin" class="content">
         <h3 class="h-text">🛠️ การจัดการ Admin</h3>
         <!-- ตารางข้อมูลผู้ใช้ -->
-        <table border="1" cellspacing="0" cellpadding="10">
+        <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th style="width: 150px;">รูปโปรไฟล์</th>
+                    <th style="width: 30%;">Gmail</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>การจัดการ</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($admins as $user): ?>
+                <?php foreach ($admins as $admin): ?>
                     <tr>
-                        <td><?php echo $user['ID']; ?></td>
-                        <td><?php echo $user['USERNAME']; ?></td>
                         <td>
-                            <!-- ปุ่มแก้ไขรหัสผ่าน -->
-                            <form action="edit_password.php" method="POST" id="edit-password-form-<?php echo $user['ID']; ?>" style="display: inline;">
-                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['ID']); ?>">
-                                <button class="btn-edit" type="button" onclick="showEditPasswordForm(<?php echo $user['ID']; ?>)">แก้ไขรหัสผ่าน</button>
-                            </form>
-
-                            <!-- ฟอร์มแก้ไขรหัสผ่านที่แสดงเมื่อคลิกปุ่ม -->
-                            <form action="../admin/update_password_admin/update_password_admin.php" method="POST" id="password-form-<?php echo $user['ID']; ?>" style="display: none;">
-                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['ID']); ?>">
-
-                                <!-- label ใช้ id ที่ไม่ซ้ำกับ input -->
-                                <label for="new_password-<?php echo $user['ID']; ?>">รหัสผ่านใหม่:</label>
-                                <input type="password" id="new_password-<?php echo $user['ID']; ?>" name="new_password" required>
-
-                                <button type="submit">บันทึก</button>
-                                <button type="button" onclick="hideEditPasswordForm(<?php echo $user['ID']; ?>)">ยกเลิก</button>
-                            </form>
+                            <?php if ($admin['profile_image']): ?>
+                                <img src="<?= $admin['profile_image'] ?>" width="80" height="auto" alt="Profile">
+                            <?php else: ?>
+                                ไม่มีภาพ
+                            <?php endif; ?>
                         </td>
-
-                        <td><?php echo $user['ROLE']; ?></td>
+                        <td><?= htmlspecialchars($admin['gmail']) ?></td>
+                        <td><?= htmlspecialchars($admin['first_name']) ?></td>
+                        <td><?= htmlspecialchars($admin['last_name']) ?></td>
                         <td>
-                            <!-- ปุ่มลบ -->
-                            <form action="../admin/delete_admin/delete_admin.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $user['ID']; ?>">
-                                <button type="submit" class="btn-delete">ลบผู้ดูแลระบบ</button>
-                            </form>
+                            <div class="action-dropdown">
+                                <button onclick="toggleDropdownAdmin(this)">⋮</button>
+                                <div class="dropdown-content">
+                                    <a href="#" onclick="openEditPanelAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg> แก้ไข
+                                    </a>
+                                    <a href="#" onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg> ลบ
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+
     </div>
 
     <div id="employee" class="content">
@@ -1901,6 +1923,75 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             }
         }
 
+        document.getElementById('upload-img-admin').addEventListener('change', function() {
+            const fileInput = this;
+            const fileNameSpan = document.getElementById('file-name');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                fileNameSpan.textContent = '';
+                return;
+            }
+
+            const maxSize = 1 * 1024 * 1024; // 1MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+            // ตรวจสอบขนาด
+            if (file.size > maxSize) {
+                fileNameSpan.textContent = 'ไฟล์ใหญ่เกิน 1MB';
+                fileNameSpan.style.color = '#DC143C';
+                fileInput.value = ''; // ล้างค่า input
+                return;
+            }
+
+            // ตรวจสอบประเภทไฟล์
+            if (!allowedTypes.includes(file.type)) {
+                fileNameSpan.textContent = 'ประเภทไฟล์ไม่รองรับ (รองรับ: JPG, PNG, WEBP)';
+                fileNameSpan.style.color = '#DC143C';
+                fileInput.value = ''; // ล้างค่า input
+                return;
+            }
+
+            // ถ้าผ่านทั้งหมด
+            fileNameSpan.textContent = file.name;
+            fileNameSpan.style.color = '#333';
+        });
+
+        document.getElementById('upload-img-employee').addEventListener('change', function() {
+            const fileInput = this;
+            const fileNameSpan = document.getElementById('file-name');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                fileNameSpan.textContent = '';
+                return;
+            }
+
+            const maxSize = 1 * 1024 * 1024; // 1MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+            // ตรวจสอบขนาด
+            if (file.size > maxSize) {
+                fileNameSpan.textContent = 'ไฟล์ใหญ่เกิน 1MB';
+                fileNameSpan.style.color = '#DC143C';
+                fileInput.value = ''; // ล้างค่า input
+                return;
+            }
+
+            // ตรวจสอบประเภทไฟล์
+            if (!allowedTypes.includes(file.type)) {
+                fileNameSpan.textContent = 'ประเภทไฟล์ไม่รองรับ (รองรับ: JPG, PNG, WEBP)';
+                fileNameSpan.style.color = '#DC143C';
+                fileInput.value = ''; // ล้างค่า input
+                return;
+            }
+
+            // ถ้าผ่านทั้งหมด
+            fileNameSpan.textContent = file.name;
+            fileNameSpan.style.color = '#333';
+        });
+
+
         document.getElementById("profile-form").addEventListener("submit", function(event) {
             event.preventDefault(); // ป้องกันการรีโหลดหน้า
 
@@ -2014,6 +2105,18 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         }
 
         function toggleDropdownSnackFood(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
+        function toggleDropdownAdmin(button) {
             // ปิด dropdown อื่นก่อน
             document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
                 if (dropdown !== button.parentElement) {
@@ -3981,196 +4084,274 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             return false;
         }
 
-
-        // ฟังก์ชันแสดงข้อความแจ้งเตือน (employee)
-        function showNotify(message, type) {
-            const notifyBox = document.getElementById('notify');
-            const notifyMessage = document.getElementById('notify-message');
-
-            notifyMessage.innerHTML = message; // ใส่ข้อความ
-            notifyBox.className = 'notify-box notify-' + type; // เช่น notify-success หรือ notify-error
-
-            notifyBox.style.display = 'flex';
-            setTimeout(() => {
-                notifyBox.style.opacity = 1;
-            }, 10);
-
-            setTimeout(() => {
-                notifyBox.style.opacity = 0;
-                setTimeout(() => {
-                    notifyBox.style.display = 'none';
-                }, 500);
-            }, 3000);
-        }
-
-        function addInputError(inputElement) {
-            inputElement.classList.add('input-error');
-        }
-
-        function clearInputErrors() {
-            document.querySelectorAll('.input-error').forEach(input => {
-                input.classList.remove('input-error');
-            });
-        }
-
-
         // ฟังก์ชั่นที่ทำงานเมื่อฟอร์มถูกส่ง (สำหรับการสร้าง admin)
-        function submitAdminForm() {
-            var form = document.getElementById('adminSignupForm');
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-            var isValid = true;
 
-            // ล้างเส้นขอบผิดพลาดจากฟอร์ม
-            clearErrorBorders();
-
-            // ตรวจสอบรหัสผ่านและยืนยันรหัสผ่าน
-            if (password !== confirmPassword) {
-                // ใส่ไอคอน SVG พร้อมข้อความแสดงเตือน
-                showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="M600-240v-120H488q-32 54-87 87t-121 33q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h272v80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47q66 0 106-40.5t48-79.5h246v120h80v80H600ZM280-400q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Zm600 240q-17 0-28.5-11.5T840-280q0-17 11.5-28.5T880-320q17 0 28.5 11.5T920-280q0 17-11.5 28.5T880-240Zm-40-160v-200h80v200h-80Z"/></svg> รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน', "error");
-                addErrorBorder(document.getElementById("confirmPassword")); // เพิ่มเส้นขอบสีแดงให้ที่ input confirmPassword
-                isValid = false;
-            }
-
-            // ถ้าฟอร์มไม่ถูกต้อง ให้ไม่ส่งข้อมูล
-            if (!isValid) {
-                return false;
-            }
-
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', form.action, true);
-            xhr.setRequestHeader("Accept", "application/json");
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    console.log("Raw Server Response:", xhr.responseText); // ดีบักข้อมูลที่ส่งมาจากเซิร์ฟเวอร์
-                    try {
-                        var response = JSON.parse(xhr.responseText); // ✅ แปลง JSON string เป็น Object
-
-                        if (response.status === "success") {
-                            // แจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
-                            showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/></svg> สมัครสมาชิกสำเร็จ', "success");
-                            // รีเฟรชหน้าหลังจากแสดงข้อความแจ้งเตือนแล้ว
-                            setTimeout(function() {
-                                form.reset();
-                                location.reload();
-                            }, 1000); // 3 วินาทีหลังจากแสดง alert
-                        } else if (response.status === "error") {
-                            // ตรวจสอบกรณีเมื่อชื่อผู้ใช้งานมีอยู่แล้วในระบบ
-                            if (response.message === 'ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ') {
-                                // ใส่ไอคอน SVG พร้อมข้อความแสดงเตือน
-                                showAlert('<svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#e3e3e3"><path d="M800-520q-17 0-28.5-11.5T760-560q0-17 11.5-28.5T800-600q17 0 28.5 11.5T840-560q0 17-11.5 28.5T800-520Zm-40-120v-200h80v200h-80ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/></svg> ชื่อผู้ใช้นี้มีอยู่แล้วในระบบ', "error");
-                            }
-                        }
-                    } catch (error) {
-                        console.error("Error parsing JSON:", error);
-                        showAlert("เกิดข้อผิดพลาดในการประมวลผลข้อมูล: " + error.message, "error");
-                    }
-                } else {
-                    showAlert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + xhr.responseText, "error");
-                }
-            };
-
-            xhr.send(formData);
-            return false;
-        }
-
-        const passwordInput = document.getElementById('password');
-        const progressBar = document.getElementById('password-progress-bar');
-        const strengthText = document.getElementById('password-strength-text');
-
-        const checklist = {
+        // ตรวจสอบความแข็งแรงของรหัสผ่าน
+        const passwordInputAdmin = document.getElementById('password-admin');
+        const checklistAdmin = {
             length: document.getElementById('length'),
             uppercase: document.getElementById('uppercase'),
             number: document.getElementById('number'),
             special: document.getElementById('special')
         };
+        const progressBarAdmin = document.getElementById('password-progress-bar');
 
-        // ฟังก์ชันเช็คแต่ละเงื่อนไข
-        function validateCondition(element, condition) {
-            const icon = element.querySelector('.icon');
-            if (condition) {
-                element.classList.add('valid');
-                element.classList.remove('invalid');
-                if (icon) icon.textContent = '✔';
-                return 1;
-            } else {
-                element.classList.add('invalid');
-                element.classList.remove('valid');
-                if (icon) icon.textContent = '✖';
-                return 0;
-            }
-        }
-
-        passwordInput.addEventListener('input', function() {
-            const password = passwordInput.value;
-
+        passwordInputAdmin.addEventListener('input', function() {
+            const value = this.value;
             let score = 0;
-            score += validateCondition(checklist.length, password.length >= 8);
-            score += validateCondition(checklist.uppercase, /[A-Z]/.test(password));
-            score += validateCondition(checklist.number, /[0-9]/.test(password));
-            score += validateCondition(checklist.special, /[^A-Za-z0-9]/.test(password));
 
-            // อัปเดต Progress Bar
-            const percentage = (score / 4) * 100;
-            progressBar.style.width = `${percentage}%`;
-
-            // เปลี่ยนสีและข้อความตามคะแนน
-            if (score <= 1) {
-                progressBar.style.backgroundColor = '#e74c3c'; // แดง
-                strengthText.textContent = 'รหัสผ่านอ่อนมาก';
-                strengthText.style.color = '#e74c3c';
-            } else if (score === 2 || score === 3) {
-                progressBar.style.backgroundColor = '#f39c12'; // ส้ม
-                strengthText.textContent = 'รหัสผ่านปานกลาง';
-                strengthText.style.color = '#f39c12';
+            if (value.length >= 8) {
+                checklistAdmin.length.classList.add('valid');
+                checklistAdmin.length.querySelector('.icon').textContent = '✔';
+                score++;
             } else {
-                progressBar.style.backgroundColor = '#27ae60'; // เขียว
-                strengthText.textContent = 'รหัสผ่านแข็งแรงมาก';
-                strengthText.style.color = '#27ae60';
+                checklistAdmin.length.classList.remove('valid');
+                checklistAdmin.length.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/[A-Z]/.test(value)) {
+                checklistAdmin.uppercase.classList.add('valid');
+                checklistAdmin.uppercase.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistAdmin.uppercase.classList.remove('valid');
+                checklistAdmin.uppercase.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/\d/.test(value)) {
+                checklistAdmin.number.classList.add('valid');
+                checklistAdmin.number.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistAdmin.number.classList.remove('valid');
+                checklistAdmin.number.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/[^A-Za-z0-9]/.test(value)) {
+                checklistAdmin.special.classList.add('valid');
+                checklistAdmin.special.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistAdmin.special.classList.remove('valid');
+                checklistAdmin.special.querySelector('.icon').textContent = '✖';
+            }
+
+            progressBarAdmin.style.width = `${(score / 4) * 100}%`;
+            progressBarAdmin.style.backgroundColor = score >= 3 ? '#4CAF50' : '#f44336';
+        });
+
+        document.getElementById('adminSignupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('upload-img-admin');
+            const file = fileInput.files[0];
+            const gmail = document.getElementById('gmail-admin').value.trim();
+            const password = document.getElementById('password-admin').value;
+            const confirmPassword = document.getElementById('confirmPassword-admin').value;
+            const firstName = document.getElementById('firstName-admin').value.trim();
+            const lastName = document.getElementById('lastName-admin').value.trim();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!gmail || !password || !confirmPassword || !firstName || !lastName) {
+                showAlertToast("กรุณากรอกข้อมูลให้ครบถ้วน", icons.error, "error-toast");
+                return;
+            }
+
+            if (!emailRegex.test(gmail)) {
+                showAlertToast("รูปแบบอีเมลไม่ถูกต้อง", icons.error, "error-toast");
+                return;
+            }
+
+            if (!file) {
+                showAlertToast("กรุณาเลือกไฟล์รูปภาพของแอดมิน", icons.error, "error-toast");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlertToast("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน", icons.error, "error-toast");
+                return;
+            }
+
+            try {
+                const base64 = await toBase64(file);
+                const formData = new FormData();
+                formData.append('gmail', gmail);
+                formData.append('password', password);
+                formData.append('confirmPassword', confirmPassword);
+                formData.append('firstName', firstName);
+                formData.append('lastName', lastName);
+                formData.append('profileImage', base64);
+
+                const response = await fetch('/sci-next/admin/dashboard_superadmin/manageAdmin/adminSignup.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const contentType = response.headers.get("content-type") || "";
+                const responseText = await response.text();
+                console.log("Response text:", responseText);
+
+                if (contentType.includes("application/json")) {
+                    const data = JSON.parse(responseText);
+
+                    if (data.status === 'error') {
+                        if (data.message.includes("อีเมล") && data.message.includes("ใช้ไปแล้ว")) {
+                            showAlertToast("อีเมลนี้ถูกใช้งานแล้ว", icons.error, "error-toast");
+                        } else {
+                            showAlertToast(data.message || "เกิดข้อผิดพลาด", icons.error, "error-toast");
+                        }
+                    }
+
+                    if (data.status === 'success') {
+                        showAlertToast("สมัครสมาชิกแอดมินสำเร็จ!", icons.success, "success-toast");
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                        this.reset();
+                        document.getElementById('file-name').textContent = '';
+                        if (typeof progressBar !== 'undefined') {
+                            progressBar.style.width = '0%';
+                        }
+                    }
+                } else {
+                    showAlertToast("ไม่สามารถประมวลผลข้อมูลได้", icons.error, "error-toast");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlertToast("เกิดข้อผิดพลาดในการส่งข้อมูล", icons.error, "error-toast");
             }
         });
 
 
-        // ฟังก์ชันแสดงข้อความแจ้งเตือน (admin)
-        function showAlert(message, type) {
-            const alertElement = document.getElementById('alert');
-            const alertMessage = document.getElementById('alert-message');
-
-            // ตั้งค่าข้อความและประเภท (success, error, warning)
-            alertMessage.innerHTML = message; // ใช้ innerHTML เพื่อแทรก HTML โดยตรง
-            alertElement.className = 'alert ' + type; // ตั้งค่าประเภทของ alert เช่น 'success', 'error'
-
-            // แสดง alert
-            alertElement.style.display = 'block';
-            setTimeout(() => {
-                alertElement.style.opacity = 1; // ทำให้ alert ค่อยๆ ปรากฏ
-            }, 10);
-
-            // ซ่อน alert หลังจาก 3 วินาที
-            setTimeout(() => {
-                alertElement.style.opacity = 0; // ทำให้ alert ค่อยๆ หายไป
-                setTimeout(() => {
-                    alertElement.style.display = 'none';
-                }, 500); // รอให้การ fade out เสร็จสิ้น
-            }, 3000);
-        }
-
-
-        // ฟังก์ชันเพิ่มเส้นขอบสีแดงให้กับ input ที่มีข้อผิดพลาด
-        function addErrorBorder(inputElement) {
-            inputElement.classList.add('error-input');
-        }
-
-        // ฟังก์ชันลบเส้นขอบสีแดงออกจาก input
-        function clearErrorBorders() {
-            var inputs = document.querySelectorAll('.error-input');
-            inputs.forEach(function(input) {
-                input.classList.remove('error-input');
+        // ฟังก์ชันแปลงไฟล์เป็น base64
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
             });
         }
+
+        const passwordInputEmpolyee = document.getElementById('password-employee');
+        const checklistEmpolyee = {
+            length: document.getElementById('length'),
+            uppercase: document.getElementById('uppercase'),
+            number: document.getElementById('number'),
+            special: document.getElementById('special')
+        };
+        const progressBarEmpolyee = document.getElementById('password-progress-bar');
+
+        passwordInputEmpolyee.addEventListener('input', function() {
+            const value = this.value;
+            let score = 0;
+
+            if (value.length >= 8) {
+                checklistEmpolyee.length.classList.add('valid');
+                checklistEmpolyee.length.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistEmpolyee.length.classList.remove('valid');
+                checklistEmpolyee.length.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/[A-Z]/.test(value)) {
+                checklistEmpolyee.uppercase.classList.add('valid');
+                checklistEmpolyee.uppercase.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistEmpolyee.uppercase.classList.remove('valid');
+                checklistEmpolyee.uppercase.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/\d/.test(value)) {
+                checklistEmpolyee.number.classList.add('valid');
+                checklistEmpolyee.number.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistEmpolyee.number.classList.remove('valid');
+                checklistEmpolyee.number.querySelector('.icon').textContent = '✖';
+            }
+
+            if (/[^A-Za-z0-9]/.test(value)) {
+                checklistEmpolyee.special.classList.add('valid');
+                checklistEmpolyee.special.querySelector('.icon').textContent = '✔';
+                score++;
+            } else {
+                checklistEmpolyee.special.classList.remove('valid');
+                checklistEmpolyee.special.querySelector('.icon').textContent = '✖';
+            }
+
+            progressBarEmpolyee.style.width = `${(score / 4) * 100}%`;
+            progressBarEmpolyee.style.backgroundColor = score >= 3 ? '#4CAF50' : '#f44336';
+        });
+
+
+        document.getElementById('employeeSignupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('upload-img-employee');
+            const file = fileInput.files[0];
+            const gmail = document.getElementById('gmail-employee').value.trim();
+            const password = document.getElementById('password-employee').value;
+            const confirmPassword = document.getElementById('confirmPassword-employee').value;
+            const firstName = document.getElementById('firstName-employee').value.trim();
+            const lastName = document.getElementById('lastName-employee').value.trim();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!gmail || !password || !confirmPassword || !firstName || !lastName || !file) {
+                showAlertToast("กรุณากรอกข้อมูลให้ครบถ้วน", icons.error, "error-toast");
+                return;
+            }
+
+            if (!emailRegex.test(gmail)) {
+                showAlertToast("รูปแบบอีเมลไม่ถูกต้อง", icons.warning, "warning-toast");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlertToast("รหัสผ่านไม่ตรงกัน", icons.warning, "warning-toast");
+                return;
+            }
+
+            // เช็คขนาดไฟล์
+            if (file.size > 1 * 1024 * 1024) { // 1MB
+                showAlertToast("ขนาดรูปภาพต้องไม่เกิน 1MB", icons.warning, "warning-toast");
+                return;
+            }
+
+            try {
+                // แปลงไฟล์เป็น base64
+                const base64 = await toBase64(file);
+                const formData = new FormData();
+                formData.append('gmail', gmail);
+                formData.append('password', password);
+                formData.append('confirmPassword', confirmPassword);
+                formData.append('firstName', firstName);
+                formData.append('lastName', lastName);
+                formData.append('profileImage', file);
+
+
+                const response = await fetch('/sci-next/admin/dashboard_superadmin/manageEmployee/employeeSignup.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlertToast("สมัครพนักงานสำเร็จ", icons.success, "success-toast");
+                    document.getElementById('employeeSignupForm').reset();
+                } else {
+                    showAlertToast(result.message || "เกิดข้อผิดพลาด", icons.error, "error-toast");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlertToast("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", icons.error, "error-toast");
+            }
+        });
 
         // ค้นหาเมนูทั้งหมดที่มีคลาส .tab
         const tabs = document.querySelectorAll('.tab');
@@ -4253,42 +4434,235 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
 
         document.addEventListener("DOMContentLoaded", () => {
-            // จับคู่ input กับ preview แล้วอัปเดตค่าทันทีเมื่อพิมพ์
-            [
-                ["productName", "previewNameProduct"],
-                ["barcode", "previewBarcodeProduct"],
-                ["productPrice", "previewPriceProduct"],
-                ["productCost", "previewCostProduct"],
-                ["productStock", "previewStockProduct"],
-                ["productReorderLevel", "previewReorderLevelProduct"]
-            ].forEach(([inputId, previewId]) => {
+            // debounce function
+            function debounce(func, wait = 200) {
+                let timeout;
+                return (...args) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func(...args), wait);
+                };
+            }
+
+            // helper validate functions
+            const validators = {
+                notEmpty: value => value.trim() !== "",
+                email: value => /^\S+@\S+\.\S+$/.test(value),
+                minLength: (value, len) => value.length >= len,
+                numberPositive: value => !isNaN(value) && Number(value) > 0,
+                passwordsMatch: (pass, confirm) => pass === confirm
+            };
+
+            // update error message element
+            function showError(input, message) {
+                let errorEl = input.nextElementSibling;
+                if (!errorEl || !errorEl.classList.contains("error-message")) {
+                    errorEl = document.createElement("small");
+                    errorEl.className = "error-message";
+                    input.parentNode.insertBefore(errorEl, input.nextSibling);
+                }
+                errorEl.textContent = message;
+                input.classList.toggle("input-error", !!message);
+            }
+
+            // clear error message
+            function clearError(input) {
+                const errorEl = input.nextElementSibling;
+                if (errorEl && errorEl.classList.contains("error-message")) {
+                    errorEl.textContent = "";
+                }
+                input.classList.remove("input-error");
+            }
+
+            // function bind input and preview with validation
+            function bindInputWithValidation(inputId, previewId, options = {}) {
                 const input = document.getElementById(inputId);
                 const preview = document.getElementById(previewId);
-                if (input && preview) {
-                    input.addEventListener("input", () => {
-                        preview.textContent = input.value;
+                if (!input || !preview) return;
+
+                // click on preview to focus input
+                preview.style.cursor = "pointer";
+                preview.addEventListener("click", () => {
+                    input.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
                     });
-                }
+                    input.focus();
+                });
+
+                const validateAndUpdate = () => {
+                    const value = input.value;
+                    let errorMsg = "";
+
+                    if (options.required && !validators.notEmpty(value)) {
+                        errorMsg = "กรุณากรอกข้อมูล";
+                    } else if (options.type === "email" && !validators.email(value)) {
+                        errorMsg = "รูปแบบอีเมลไม่ถูกต้อง";
+                    } else if (options.minLength && !validators.minLength(value, options.minLength)) {
+                        errorMsg = `ต้องมีอย่างน้อย ${options.minLength} ตัวอักษร`;
+                    } else if (options.type === "numberPositive" && !validators.numberPositive(value)) {
+                        errorMsg = "กรุณากรอกตัวเลขมากกว่า 0";
+                    } else if (options.matchWith) {
+                        // กรณีต้องเทียบกับ input ตัวอื่น เช่น password-confirm
+                        const otherInput = document.getElementById(options.matchWith);
+                        if (otherInput && !validators.passwordsMatch(value, otherInput.value)) {
+                            errorMsg = "รหัสผ่านไม่ตรงกัน";
+                        }
+                    }
+
+                    if (errorMsg) {
+                        showError(input, errorMsg);
+                        preview.classList.add("preview-error");
+                    } else {
+                        clearError(input);
+                        preview.classList.remove("preview-error");
+                    }
+
+                    // อัปเดตข้อความ preview (mask password ถ้าต้องการ)
+                    if (options.maskPassword && value) {
+                        preview.textContent = "●".repeat(value.length);
+                    } else if (options.formatNumber) {
+                        preview.textContent = Number(value).toLocaleString() || "";
+                    } else {
+                        preview.textContent = value;
+                    }
+                };
+
+                input.addEventListener("input", debounce(validateAndUpdate, 250));
+                validateAndUpdate();
+            }
+
+            // Bind product inputs
+            bindInputWithValidation("productName", "previewNameProduct", {
+                required: true
+            });
+            bindInputWithValidation("barcode", "previewBarcodeProduct", {
+                required: true
+            });
+            bindInputWithValidation("productPrice", "previewPriceProduct", {
+                type: "numberPositive",
+                required: true,
+                formatNumber: true
+            });
+            bindInputWithValidation("productCost", "previewCostProduct", {
+                type: "numberPositive",
+                required: true,
+                formatNumber: true
+            });
+            bindInputWithValidation("productStock", "previewStockProduct", {
+                type: "numberPositive",
+                required: true,
+                formatNumber: true
+            });
+            bindInputWithValidation("productReorderLevel", "previewReorderLevelProduct", {
+                type: "numberPositive",
+                required: true,
+                formatNumber: true
             });
 
-            // โหลดภาพตัวอย่างจาก URL ที่กรอก
-            const imageInput = document.getElementById("productImage");
-            const imagePreview = document.getElementById("previewImageProduct");
+            // Bind admin inputs with validation
+            bindInputWithValidation("firstName-admin", "previewFirstNameAdmin", {
+                required: true
+            });
+            bindInputWithValidation("lastName-admin", "previewLastNameAdmin", {
+                required: true
+            });
+            bindInputWithValidation("gmail-admin", "previewGmailAdmin", {
+                required: true,
+                type: "email"
+            });
+            bindInputWithValidation("password-admin", "previewPasswordAdmin", {
+                required: true,
+                minLength: 6,
+                maskPassword: true
+            });
+            bindInputWithValidation("confirmPassword-admin", "previewConfirmPasswordAdmin", {
+                required: true,
+                maskPassword: true,
+                matchWith: "password-admin"
+            });
 
-            if (imageInput && imagePreview) {
-                imageInput.addEventListener("input", () => {
-                    const url = imageInput.value.trim();
+            // Bind employee inputs with validation
+            bindInputWithValidation("firstName-employee", "previewFirstNameEmployee", {
+                required: true
+            });
+            bindInputWithValidation("lastName-employee", "previewLastNameEmployee", {
+                required: true
+            });
+            bindInputWithValidation("gmail-employee", "previewGmailEmployee", {
+                required: true,
+                type: "email"
+            });
+            bindInputWithValidation("password-employee", "previewPasswordEmployee", {
+                required: true,
+                minLength: 6,
+                maskPassword: true
+            });
+            bindInputWithValidation("confirmPassword-employee", "previewConfirmPasswordEmployee", {
+                required: true,
+                maskPassword: true,
+                matchWith: "password-employee"
+            });
 
-                    // เช็คว่าเป็น URL ที่น่าจะใช้ได้ไหม
-                    if (url && (url.startsWith("http") || url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg"))) {
-                        // เพิ่ม timestamp เพื่อป้องกัน cache
-                        imagePreview.src = `${url}?t=${new Date().getTime()}`;
-                    } else {
-                        imagePreview.src = "/sci-next/img/product_food1.png";
+
+            // image input preview from URL with basic validation + error message
+            const productImageInput = document.getElementById("productImage");
+            const productImagePreview = document.getElementById("previewImageProduct");
+            const productImageErrorEl = document.createElement("small");
+            productImageErrorEl.className = "error-message";
+            productImageInput.parentNode.appendChild(productImageErrorEl);
+
+            productImageInput.addEventListener("input", () => {
+                const url = productImageInput.value.trim();
+
+                if (!url) {
+                    productImageErrorEl.textContent = "";
+                    productImagePreview.src = "/sci-next/img/product_food1.png";
+                    return;
+                }
+
+                // ลองโหลดรูปทันทีแบบไม่ตรวจ regex
+                productImageErrorEl.textContent = "";
+                productImagePreview.onerror = () => {
+                    productImageErrorEl.textContent = "ไม่สามารถโหลดรูปภาพจาก URL นี้ได้";
+                    productImagePreview.src = "/sci-next/img/product_food1.png";
+                };
+                productImagePreview.onload = () => {
+                    productImageErrorEl.textContent = "";
+                };
+                productImagePreview.src = `${url}?t=${Date.now()}`;
+            });
+
+
+            // image admin preview from file input
+            const adminImageInput = document.getElementById("upload-img-admin");
+            const adminImagePreview = document.getElementById("previewImageAdmin");
+            if (adminImageInput && adminImagePreview) {
+                adminImageInput.addEventListener("change", () => {
+                    const file = adminImageInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = e => adminImagePreview.src = e.target.result;
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // image employee preview from file input
+            const employeeImageInput = document.getElementById("upload-img-employee");
+            const employeeImagePreview = document.getElementById("previewImageEmployee");
+            if (employeeImageInput && employeeImagePreview) {
+                employeeImageInput.addEventListener("change", () => {
+                    const file = employeeImageInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = e => employeeImagePreview.src = e.target.result;
+                        reader.readAsDataURL(file);
                     }
                 });
             }
         });
+
+
 
         function showLogoutModal(event) {
             event.preventDefault();

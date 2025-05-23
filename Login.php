@@ -14,6 +14,10 @@ require_once __DIR__ . '/config/auth.php';
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="Login-Register/Login.css">
+
+    <link rel="manifest" href="/sci-next/manifest.json">
+    <meta name="theme-color" content="#31393C">
+    <link rel="apple-touch-icon" href="/sci-next/img/next.256.png">
 </head>
 
 <body>
@@ -28,8 +32,8 @@ require_once __DIR__ . '/config/auth.php';
         <form method="POST">
             <div class="input-group">
                 <span class="material-icons input-icon">person</span>
-                <input type="text" name="username" id="username" placeholder=" " required>
-                <label for="username">ชื่อผู้ใช้</label>
+                <input type="email" name="gmail" id="gmail" placeholder=" " required>
+                <label for="gmail">ชื่อผู้ใช้</label>
             </div>
 
             <div class="input-group">

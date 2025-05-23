@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 require 'config/db.php';
 
 if ($conn->connect_error) {
@@ -8,37 +7,53 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $gmail = isset($_POST['gmail']) ? trim($_POST['gmail']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-    if (empty($username) || empty($password)) {
+    if (empty($gmail) || empty($password)) {
         $_SESSION['error'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
         header("Location: index.php");
         exit();
     } else {
-        $sql = "SELECT * FROM admins WHERE username = ?";
+        // JOIN ตาราง users กับ roles เพื่อดึง role name
+        $sql = "
+            SELECT users.*, roles.name AS role_name 
+            FROM users 
+            LEFT JOIN roles ON users.role_id = roles.id 
+            WHERE users.gmail = ?
+        ";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $username);
+        $stmt->bind_param("s", $gmail);
         $stmt->execute();
         $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $user = $result->fetch_assoc();
         $stmt->close();
 
-        if ($row && password_verify($password, $row['PASSWORD'])) {
+        if ($user && password_verify($password, $user['password'])) {
             session_regenerate_id(true);
-            $_SESSION['admin_id'] = $row['ID'];
-            $_SESSION['user'] = $row['USERNAME'];
-            $_SESSION['role'] = $row['ROLE'];
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['gmail'] = $user['gmail'];
+            $_SESSION['role'] = $user['role_name']; // <-- ได้จากตาราง roles
+            $_SESSION['full_name'] = $user['first_name'] . ' ' . $user['last_name'];
 
-            if ($row['ROLE'] == 'superadmin') {
-                header("Location: /sci-next/admin/dashboard_superadmin/superadminDashboard.php");
-                exit();
-            } else {
-                header("Location: /sci-next/admin/dashboard_admin/adminDashboard.php");
-                exit();
+            // เปลี่ยนหน้าไปตาม role
+            switch ($user['role_name']) {
+                case 'superadmin':
+                    header("Location: /sci-next/admin/dashboard_superadmin/superadminDashboard.php");
+                    break;
+                case 'admin':
+                    header("Location: /sci-next/admin/dashboard_admin/adminDashboard.php");
+                    break;
+                case 'employee':
+                    header("Location: /sci-next/employee/employeeDashboard.php");
+                    break;
+                default:
+                    header("Location: /sci-next/index.php");
+                    break;
             }
+            exit();
         } else {
-            $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+            $_SESSION['error'] = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
             header("Location: index.php");
             exit();
         }

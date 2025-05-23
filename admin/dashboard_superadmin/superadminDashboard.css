@@ -2030,110 +2030,44 @@ button .material-icons {
     border-radius: 50%;
 }
 
-/* สไตล์พื้นฐานสำหรับ alert */
-.alert {
-    font-weight: bold;
-    text-align: left;
-    padding: 15px;
-    border-radius: 10px;
-    color: white;
-    position: fixed;
-    top: 18%;
-    right: 20px;
-    transform: translateY(-50%);
-    width: auto;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    min-width: 200px;
-    line-height: 24px;
-}
-
-/* สไตล์สำหรับ svg ใน alert */
-.alert svg {
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-/* สไตล์สำหรับ error */
-.alert.error {
-    background-color: #ff4b4b;
-}
-
-/* สไตล์สำหรับ success */
-.alert.success {
-    background-color: #4CAF50;
-}
-
-/* เส้นขอบสีแดงเมื่อมีข้อผิดพลาด */
-.error-input {
-    border: 2px solid #ff4b4b transparent;
-    border-radius: 20px;
-    box-shadow: inset 0 0 5px rgba(255, 75, 78, 0.7);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-/* เมื่อ input ถูกโฟกัสหรือมีข้อผิดพลาด */
-.error-input:focus {
-    border-color: #ff4b4bed !important;
-    box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
-    outline: 2px solid #ff4b4bed;
-}
-
-/* สไตล์พื้นฐานสำหรับ alert box */
-.notify-box {
-    font-weight: bold;
-    text-align: left;
-    padding: 15px;
-    border-radius: 10px;
-    color: white;
-    position: fixed;
-    top: 18%;
-    right: 20px;
-    transform: translateY(-50%);
-    width: auto;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-    display: flex;
-    align-items: center;
-    min-width: 200px;
-    line-height: 24px;
-}
-
-/* สไตล์สำหรับ svg ใน alert */
-.notify-box svg {
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-/* สีของแจ้งเตือน */
-.notify-error {
-    background-color: #ff4b4b;
-}
-
-.notify-success {
-    background-color: #4CAF50;
-}
-
-/* เส้นขอบสีแดงเมื่อมีข้อผิดพลาด */
 .input-error {
-    border: 2px solid #ff4b4b transparent;
-    border-radius: 20px;
-    box-shadow: inset 0 0 5px rgba(255, 75, 78, 0.7);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    box-sizing: border-box;
+    border-color: #e53935;
+    outline-color: #e53935;
 }
 
-/* เมื่อ input โฟกัส + มี error */
-.input-error:focus {
-    border-color: #ff4b4bed !important;
-    box-shadow: inset 0 0 8px rgba(255, 75, 78, 0.9);
-    outline: 2px solid #ff4b4bed;
+.error-message {
+    color: #e53935;
+    font-size: 0.8rem;
+    margin-top: 2px;
+    display: block;
 }
+
+.preview-error {
+    color: #e53935;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
 
 
 th input[type="checkbox"] {
@@ -2238,10 +2172,13 @@ th input[type="checkbox"]:hover {
     border-radius: 10px;
     box-shadow: inset 0 0 0 1px #dddddd;
     transition: background 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .detail-group svg {
-    margin-right: 12px;
+    margin-right: 10px;
     fill: #000000;
     flex-shrink: 0;
 }
@@ -2272,6 +2209,12 @@ th input[type="checkbox"]:hover {
 }
 
 .detail-inline .material-icons {
+    margin-right: 10px;
+    font-size: 24px;
+    color: #000000;
+}
+
+.detail-group .material-icons {
     margin-right: 10px;
     font-size: 24px;
     color: #000000;
@@ -3236,20 +3179,20 @@ body.side-panel-open {
 }
 
 #password-checklist li.valid {
-    color: green;
+    color: #4CAF50;
 }
 
 #password-checklist li.valid .icon {
-    color: green;
+    color: #4CAF50;
     content: "✔";
 }
 
 #password-checklist li.invalid {
-    color: red;
+    color: #DC143C;
 }
 
 #password-checklist li.invalid .icon {
-    color: red;
+    color: #DC143C;
 }
 
 .password-strength-text {
@@ -3258,6 +3201,39 @@ body.side-panel-open {
     font-size: 14px;
     min-height: 20px;
     transition: color 0.3s ease;
+}
+
+#upload-img-admin {
+    display: none;
+}
+
+.file-info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 36px;
+    flex-wrap: nowrap;
+}
+
+#file-name {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+}
+
+.file-limit-note {
+    font-weight: 500;
+    font-size: 14px;
+    color: #DC143C;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .custom-modal {

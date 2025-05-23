@@ -41,7 +41,7 @@ $confirmPassword = $_POST['confirmPassword'];
 $firstNameRaw = trim($_POST['firstName']);
 $lastNameRaw = trim($_POST['lastName']);
 $profileImageBase64 = $_POST['profileImage'];
-$roleId = 2; // กำหนด role_id เป็น 2 ตามที่ต้องการ
+$roleId = 3; // กำหนด role_id เป็น 2 ตามที่ต้องการ
 
 // Validate email format
 if (!filter_var($gmailRaw, FILTER_VALIDATE_EMAIL)) {
