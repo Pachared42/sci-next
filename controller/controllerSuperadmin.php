@@ -55,7 +55,7 @@ checkConnection($conn);
 // ฟังก์ชันดึงข้อมูลสินค้าแบบปลอดภัย
 function fetchProducts($conn, $table)
 {
-    $allowedTables = ['dried_food', 'soft_drink', 'fresh_food', 'snack'];
+    $allowedTables = ['dried_food', 'soft_drink', 'fresh_food', 'snack', 'stationery'];
     if (!in_array($table, $allowedTables)) {
         logError("มีการร้องขอเข้าถึงตารางที่ไม่ได้รับอนุญาต: " . htmlspecialchars($table));
         return [];
@@ -129,5 +129,6 @@ $dried_food = fetchProducts($conn, 'dried_food');
 $soft_drink = fetchProducts($conn, 'soft_drink');
 $fresh_food = fetchProducts($conn, 'fresh_food');
 $snack = fetchProducts($conn, 'snack');
+$stationery = fetchProducts($conn, 'stationery');
 $admins = fetchAdmins($conn);
 ?>

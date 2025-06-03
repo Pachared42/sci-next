@@ -2010,7 +2010,7 @@ button .material-icons {
 
 /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
 .menu.active {
-    max-height: 200px;
+    max-height: 250px;
     padding: 0 0 0 15px;
 }
 

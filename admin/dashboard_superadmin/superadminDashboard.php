@@ -17,12 +17,3465 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <link rel="stylesheet" href="superadminDashboard.css">
+    <!-- <link rel="stylesheet" href="superadminDashboard.css"> -->
 
 </head>
 
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans Thai", "Noto Sans", sans-serif;
+    }
+
+    body {
+        background-color: #111111;
+        margin-left: 220px;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: margin-left 0.5s ease;
+    }
+
+    body.sidebar-collapsed {
+        margin-left: 0;
+    }
+
+    .h-text-upload {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: clamp(16px, 4vw, 30px);
+        font-weight: bold;
+        color: #F79824;
+    }
+
+    .h2-text-upload {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #F79824;
+        margin-bottom: 15px;
+    }
+
+    .tab-divider-category {
+        border: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        margin: 15px 0px 15px 0px;
+    }
+
+    .tab-divider-admin {
+        border: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        margin: 0px 0px 15px 0px;
+    }
+
+    /* เนื้อหาภายใน .container จะอยู่ทับพื้นหลัง */
+    .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    #tabLoadingBar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #2176FF, #00f2fe);
+        width: 0;
+        transition: width 0.4s ease, opacity 0.4s ease;
+        z-index: 9999;
+    }
+
+    /* Navbar */
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #000000;
+        color: #ffffff;
+        padding: 10px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .hamburger {
+        position: absolute;
+        left: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .hamburger svg {
+        transition: transform 0.3s ease-out, fill 0.3s ease-out;
+        cursor: pointer;
+    }
+
+    .hamburger:hover svg {
+        transform: scale(1.1);
+        fill: #ff006e;
+    }
+
+    .logo-name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo {
+        width: 40px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+
+    .site-name {
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    .user-settings {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0 20px 0;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #222222;
+    }
+
+    .online-status {
+        position: absolute;
+        bottom: 20px;
+        right: 14px;
+        width: 22px;
+        height: 22px;
+        background-color: #00ff00;
+        border-radius: 50%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        width: 220px;
+        height: calc(100vh - 68px);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+        background-color: #000000;
+        border-right: 2px solid rgba(255, 255, 255, 0.2);
+        transform: translateX(0);
+        opacity: 1;
+        transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .sidebar::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: #000000;
+        border-radius: 50px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar .content {
+        display: block;
+    }
+
+    .sidebar.closed {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.closed .content {
+        display: none;
+    }
+
+    .main-tabs {
+        margin-bottom: 5px;
+    }
+
+    .main-tabs h3 {
+        font-size: 12px;
+        font-weight: bold;
+        color: #F79824;
+    }
+
+    /* กำหนดลักษณะของเส้น hr */
+    .tab-divider {
+        border: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        margin: 1px;
+    }
+
+    .main-tabs-upload {
+        margin-bottom: 5px;
+    }
+
+    .main-tabs-upload h3 {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #F79824;
+    }
+
+    .main-tabs-products {
+        margin-bottom: 5px;
+    }
+
+    .main-tabs-products h3 {
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #F79824;
+    }
+
+    /* ปุ่มเมนู */
+    .tab {
+        padding: 10px 0 10px 15px;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        border-radius: 10px;
+        margin: 2px 0px;
+    }
+
+    .tab i,
+    .tab span.material-icons {
+        margin-right: 8px;
+    }
+
+    /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
+    .tab:hover {
+        background-color: rgba(211, 211, 211, 0.4);
+    }
+
+    /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
+    .tab:active,
+    .tab.active {
+        background-color: #ffffff;
+        color: black;
+        position: relative;
+    }
+
+    .tab:active .material-icons,
+    .tab.active .material-icons {
+        color: #000000;
+    }
+
+    .tab.account:hover:active,
+    .tab.account.active:hover {
+        color: white;
+    }
+
+    .tab.account:hover:active .material-icons,
+    .tab.account.active:hover .material-icons {
+        color: #000000;
+    }
+
+    /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab 
+        .tab:active::after,
+        .tab.selected::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        } */
+
+    /* ปุ่มออกจากระบบ */
+    .logout {
+        padding: 10px 15px;
+        background: #ff4b4b;
+        text-align: center;
+        font-weight: 600;
+        color: white;
+        border-radius: 10px;
+        border: none;
+        transition: 0.3s ease;
+        margin-top: 5px;
+        text-decoration: none;
+    }
+
+    .logout:hover {
+        background: #ff0000;
+    }
+
+    .account {
+        padding: 10px 15px;
+        background: #33A1FD;
+        text-align: center;
+        font-weight: 600;
+        color: white;
+        border-radius: 10px;
+        border: none;
+        transition: 0.3s ease;
+        margin-top: 5px;
+        text-decoration: none;
+    }
+
+    .account:hover {
+        background: #1980C6;
+    }
+
+    .content {
+        display: none;
+        padding: 0px 15px 0px 15px;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px;
+        width: 200px;
+        text-align: center;
+    }
+
+    .product-card img {
+        width: 100%;
+        height: auto;
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .highlight {
+        background: linear-gradient(270deg, #FF6347, #FF4500, #FF6347);
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientAnimation 3s ease infinite;
+    }
+
+    .pagination {
+        text-align: center;
+    }
+
+    .page-btn {
+        font-size: 16px;
+        color: #000000;
+        font-weight: bold;
+        padding: 5px 12px;
+        margin: 4px;
+        cursor: pointer;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .page-btn:hover {
+        background-color: #dddddd;
+        color: #000000;
+    }
+
+    .page-btn.active {
+        background-color: #555555;
+        color: #ffffff;
+    }
+
+    #scrollTopBtn {
+        display: none;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        z-index: 99;
+        background-color: #2176FF;
+        padding: 10px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+        overflow: visible;
+    }
+
+    #scrollTopBtn:hover {
+        background-color: #1056CC;
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+
+    #scrollTopBtn svg {
+        display: block;
+        margin: auto;
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    #scrollTopBtn::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    #scrollTopBtn:hover::after {
+        opacity: 1;
+    }
+
+    #scrollTopBtnSoftDrink {
+        display: none;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        z-index: 99;
+        background-color: #2176FF;
+        padding: 10px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+        overflow: visible;
+    }
+
+    #scrollTopBtnSoftDrink:hover {
+        background-color: #1056CC;
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+
+    #scrollTopBtnSoftDrink svg {
+        display: block;
+        margin: auto;
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    #scrollTopBtnSoftDrink::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    #scrollTopBtnSoftDrink:hover::after {
+        opacity: 1;
+    }
+
+    #scrollTopBtnFreshFood {
+        display: none;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        z-index: 99;
+        background-color: #2176FF;
+        padding: 10px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+        overflow: visible;
+    }
+
+    #scrollTopBtnFreshFood:hover {
+        background-color: #1056CC;
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+
+    #scrollTopBtnFreshFood svg {
+        display: block;
+        margin: auto;
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    #scrollTopBtnFreshFood::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    #scrollTopBtnFreshFood:hover::after {
+        opacity: 1;
+    }
+
+    #scrollTopBtnSnackFood {
+        display: none;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        z-index: 99;
+        background-color: #2176FF;
+        padding: 10px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+        overflow: visible;
+    }
+
+    #scrollTopBtnSnackFood:hover {
+        background-color: #1056CC;
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+
+    #scrollTopBtnSnackFood svg {
+        display: block;
+        margin: auto;
+        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    #scrollTopBtnSnackFood::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    #scrollTopBtnSnackFood:hover::after {
+        opacity: 1;
+    }
+
+
+    /* สไตล์ของตาราง */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        margin: 10px 0 20px 0;
+    }
+
+    th {
+        background: #333333;
+        color: #ffffff;
+        padding: 12px;
+        font-size: 16px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.8);
+        color: #000000;
+        padding: 12px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    tbody tr {
+        cursor: pointer;
+    }
+
+    tbody tr:hover {
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    td img {
+        border-radius: 10px;
+    }
+
+    .center-checkbox {
+        text-align: center;
+        padding: 12px 0 12px 0;
+    }
+
+    .center-checkbox input {
+        transform: scale(1);
+        vertical-align: middle;
+    }
+
+    td input[type="checkbox"].checkbox-select-item {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 2px solid #000000;
+        border-radius: 5px;
+        background-color: #ffffff;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    td input[type="checkbox"].checkbox-select-item:checked {
+        background-color: #000000;
+        border-color: #000000;
+        background-image: url('/sci-next/img/check.png');
+        background-size: 20px 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    td input[type="checkbox"].checkbox-select-item:hover {
+        border-color: #000000;
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+        gap: 20px;
+        padding: 20px 0 20px 0;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s;
+
+        .label {
+            font-weight: bold;
+            font-size: 16px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 16px;
+            color: #000000;
+        }
+    }
+
+    .name-grid {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card:hover {
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .product-image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .out-of-stock-label-table {
+        top: 10px;
+        left: 50%;
+        background-color: rgba(255, 0, 0, 0.8);
+        color: #ffffff;
+        padding: 5px 10px;
+        font-weight: bold;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .out-of-stock-label {
+        position: absolute;
+        top: 45px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(255, 0, 0, 0.8);
+        color: #ffffff;
+        padding: 5px 10px;
+        font-weight: bold;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .product-image {
+        width: 50%;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-content {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        color: #000000;
+
+        h3 {
+            text-align: center;
+        }
+    }
+
+    .barcode {
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+
+        svg {
+            width: 45px;
+            height: 45px;
+        }
+    }
+
+    .card-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .card-actions button,
+    .card-actions a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding: 8px;
+        border: none;
+        background: #2176FF;
+        color: #ffffff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        gap: 8px;
+
+        svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+    }
+
+    .card-actions a {
+        background: #F79824;
+    }
+
+    .card-actions button:hover,
+    .card-actions a:hover {
+        opacity: 0.9;
+    }
+
+    #uplord_prodect {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .form-container {
+        flex: 1;
+    }
+
+    .form-upload {
+        margin-top: 15px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-container-product {
+        display: flex;
+        column-gap: 10px;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .from-container-stock {
+        display: flex;
+        column-gap: 10px;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        background: #f4f4f4;
+        padding: 8px 12px;
+        border-radius: 10px;
+        flex: 1;
+        min-width: 340px;
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #000000;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .form-group input {
+        border: none;
+        outline: none;
+        padding: 6px 8px 6px 4px;
+        font-size: 14px;
+        flex: 1;
+        background: transparent;
+        min-width: 120px;
+    }
+
+    label svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        width: 100%;
+        display: inline-block;
+        padding: 6px;
+        color: #ffffff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .name-group {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .half-width {
+        width: 48%;
+    }
+
+    .full-width {
+        width: 100%;
+    }
+
+    .btn-upload {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        background: #2176FF;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-upload:hover {
+        background: #1056CC;
+    }
+
+    /* Style for the popup */
+    .edit-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    /* Content inside the popup */
+    .popup-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+    }
+
+    /* Heading inside the popup */
+    .popup-content h3 {
+        margin: 15px 0px 30px 0px;
+        color: #333;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    /* Label for inputs */
+    .popup-content label {
+        display: block;
+        margin: 10px 0 5px;
+        font-size: 16px;
+    }
+
+    /* Style for input fields */
+    .popup-content input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        position: sticky;
+        top: 64px;
+        background: #111111;
+        z-index: 1000;
+        padding: 8px 0 8px 0;
+    }
+
+    .no-items-message {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 16px;
+        color: #000000;
+        padding: 20px;
+        gap: 8px;
+
+        svg {
+            fill: #333333;
+            width: 24px;
+            height: 24px;
+            ;
+        }
+    }
+
+    .search-container {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        padding: 4px;
+        transition: box-shadow 0.2s ease;
+    }
+
+    .search-container:focus-within {
+        border-color: #000000;
+    }
+
+    .search-input {
+        border: none;
+        outline: none;
+        padding: 8px 12px;
+        font-size: 14px;
+        flex: 1;
+        background: transparent;
+    }
+
+    .search-button {
+        background: #000000;
+        border: none;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease;
+    }
+
+    .search-button:hover {
+        background: #333333;
+    }
+
+    .search-button svg {
+        width: 24px;
+        height: 24px;
+        fill: #ffffff;
+    }
+
+    #dried-food-selected-count,
+    #soft-drink-selected-count,
+    #fresh-food-selected-count,
+    #snack-food-selected-count,
+    #stationery-selected-count {
+        font-weight: bold;
+        color: #4caf50;
+        margin-left: 10px;
+    }
+
+    .btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .btn-container {
+        margin-top: 5px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .btn svg {
+        width: 35px;
+        height: 35px;
+        transition: 0.3s;
+    }
+
+    .btn-dried-food svg {
+        fill: #4CAF50;
+    }
+
+    .btn-soft-drink svg {
+        fill: #4CAF50;
+    }
+
+    .btn-fresh-food svg {
+        fill: #4CAF50;
+    }
+
+    .btn-snack svg {
+        fill: #4CAF50;
+    }
+
+    .btn-stationery svg {
+        fill: #4CAF50;
+    }
+
+    .btn-edit-product-localStorage svg {
+        fill: #FFA500;
+    }
+
+    /* Modal background */
+    .modal-flex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        background-color: #F4F4F4;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    /* รูปภาพฝั่งซ้าย */
+    .modal-image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 320px;
+        height: 100%;
+        flex-shrink: 0;
+    }
+
+    #editImagePreview {
+        width: 250px;
+        height: auto;
+    }
+
+    .image-warning {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #DC143C;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #f8d7da;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+
+        svg {
+            width: 18px;
+            height: 18px;
+            fill: #DC143C;
+        }
+    }
+
+    .modal-fields {
+        color: #000000;
+        flex: 1;
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #888888;
+
+            span {
+                color: #444444;
+            }
+        }
+
+        p {
+            color: #DC143C;
+        }
+
+    }
+
+    .field-row {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .field-row div {
+        flex: 1;
+    }
+
+    #editModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Modal box */
+    .modal-content {
+        background: #ffffff;
+        padding: 15px;
+        border-radius: 10px;
+        animation: bounceIn 0.4s ease;
+    }
+
+    /* Headline */
+    .modal-content h3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 26px;
+        color: #000000;
+
+        svg {
+            width: 35px;
+            height: 35px;
+            fill: #000000;
+        }
+    }
+
+    /* Input styling */
+    .modal-content input[type="text"],
+    .modal-content input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .modal-content input:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    /* ปุ่ม */
+    .modal-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+    }
+
+    .modal-btn-save {
+        width: 70%;
+        background-color: #000000;
+        color: #ffffff;
+        gap: 8px;
+
+        svg {
+            fill: #ffffff;
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .modal-btn-save:hover {
+        background-color: #222222;
+    }
+
+    .modal-btn-cancel {
+        width: 30%;
+        background-color: #DC143C;
+        color: #ffffff;
+        gap: 4px;
+
+        svg {
+            fill: #ffffff;
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .modal-btn-cancel:hover {
+        background-color: #E05268;
+    }
+
+    .btn-delete-product svg {
+        fill: #DC143C;
+    }
+
+    .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+        animation: fadeInBackground 0.3s ease;
+    }
+
+    .highlight-text {
+        color: #DC143C;
+        font-weight: bold;
+        display: inline;
+        text-decoration: underline;
+        text-decoration-color: #DC143C;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 2px;
+    }
+
+    .custom-modal-content {
+        width: 400px;
+        max-width: 90%;
+        height: auto;
+        max-height: 80%;
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        animation: bounceIn 0.4s ease;
+        transform-origin: center;
+
+        p {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+            margin-bottom: 40px;
+        }
+
+        span {
+            font-size: 80px;
+            color: #DC143C;
+            margin-bottom: 40px;
+        }
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .btn-Confirm {
+        font-size: 16px;
+        gap: 8px;
+        padding: 15px 20px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .btn-danger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #DC143C;
+        color: #ffffff;
+
+        svg {
+            width: 24px;
+            fill: #ffffff;
+        }
+    }
+
+    .btn-danger:hover {
+        background-color: #E05268;
+    }
+
+    .btn-success {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #4CAF50;
+        color: #ffffff;
+
+        svg {
+            width: 24px;
+            fill: #ffffff;
+        }
+    }
+
+    .btn-success:hover {
+        background-color: #45a049;
+    }
+
+    .btn-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555555;
+
+        svg {
+            width: 24px;
+            fill: #555555;
+        }
+    }
+
+    .btn-secondary:hover {
+        background-color: #dddddd;
+    }
+
+    .custom-toast {
+        display: none;
+        position: fixed;
+        top: 30px;
+        right: 20px;
+        background-color: #ffffff;
+        color: #4CAF50;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-weight: bold;
+        z-index: 9999;
+        animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
+
+        p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            span {
+                width: 24px;
+                height: 24px;
+                fill: #4CAF50;
+            }
+        }
+    }
+
+    .alert-toast {
+        display: none;
+        position: fixed;
+        top: 10px;
+        right: 8px;
+        background-color: #ffffff;
+        color: #DC143C;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        z-index: 9999;
+        animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
+        gap: 8px;
+
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    .alert-toast.success-toast {
+        display: none;
+        position: fixed;
+        top: 10px;
+        right: 8px;
+        background-color: #ffffff;
+        color: #4CAF50;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        z-index: 9999;
+        animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
+        gap: 8px;
+
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    .alert-toast.success {
+        display: none;
+        position: fixed;
+        top: 10px;
+        right: 8px;
+        background-color: #ffffff;
+        color: #4CAF50;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        z-index: 9999;
+        animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
+        gap: 8px;
+
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.7);
+        }
+
+        60% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        80% {
+            transform: scale(0.95);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeOut {
+
+        0%,
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes fadeInBackground {
+        0% {
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        100% {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    .btn-filter svg {
+        fill: #FFA500;
+    }
+
+    .btn-grid svg {
+        fill: #1E90FF;
+    }
+
+    .btn-table svg {
+        fill: #DC143C;
+    }
+
+    .btn:hover svg {
+        opacity: 0.7;
+    }
+
+    .btn::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 6px 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        border-radius: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .btn:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-5px);
+    }
+
+    .download-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .download-template {
+        color: #000000;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transition: transform 0.2s ease;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 50px;
+        }
+    }
+
+    .btn-download {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: #F79824;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-download::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 6px 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        border-radius: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .btn-download:hover {
+        background-color: #E57300;
+    }
+
+    .btn-download svg {
+        fill: #ffffff;
+    }
+
+
+    .filter-menu {
+        display: none;
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 10px;
+        padding: 0 10px 10px 10px;
+        position: absolute;
+        top: 78px;
+        right: 75px;
+        width: 150px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        option {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        optgroup {
+            background-color: #000000;
+            font-weight: 600;
+            color: #ffffff;
+        }
+    }
+
+    .filter-menu select,
+    .filter-menu input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        background: #f9f9f9;
+    }
+
+    .filter-menu button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px;
+        background-color: #2176FF;
+        color: #ffffff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+
+        svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+    }
+
+    .filter-menu button:hover {
+        background-color: #1056CC;
+    }
+
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    /* กำหนดตำแหน่ง */
+    .div1 {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .div2 {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .div3 {
+        grid-area: 1 / 3 / 2 / 4;
+    }
+
+    .div4 {
+        grid-area: 1 / 4 / 2 / 5;
+    }
+
+    .div5 {
+        grid-area: 2 / 1 / 5 / 4;
+    }
+
+    .div6 {
+        grid-area: 2 / 4 / 5 / 5;
+    }
+
+    /* Card ยอดขายแต่ละช่อง */
+    .stat-card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        transition: transform 0.2s ease;
+    }
+
+    .stat-card .icon {
+        background-color: var(--accent);
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 18px;
+        margin-right: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stat-card .icon i {
+        font-size: 20px;
+    }
+
+    .stat-card .info h5 {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .stat-card .info p {
+        margin: 4px 0 0;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .chart-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .chart-container h4 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 12px;
+    }
+
+    #order {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #graph {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #update_product {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #upload_prodect {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #upload_file_excal {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #admin_signup {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #employee_signup {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #dried_food {
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    #soft_drink {
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    #fresh_food {
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    #snack_food {
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    #stationery {
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    #customer {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #sci_admin {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #employee {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #account {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #food_bank_check {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #local_drink_check {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #fastfood_check {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #snack_check {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    #stationery_check {
+        margin-top: 68px;
+        padding: 20px;
+    }
+
+    .category-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .category-btn {
+        display: flex;
+        align-items: center;
+        padding: 13px 15px;
+        background-color: #eee;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .category-btn:hover {
+        background-color: #ddd;
+    }
+
+    .category-btn.selected {
+        background-color: #F79824;
+        color: white;
+    }
+
+    .collapsible-toggle {
+        display: flex;
+        align-items: center;
+        color: white;
+        padding: 10px 20px 10px 15px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 190px;
+        justify-content: space-between;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+    }
+
+    button .material-icons {
+        margin-right: 8px;
+    }
+
+    .collapsible-toggle:hover {
+        background-color: #555555;
+    }
+
+    .collapsible-toggle svg {
+        transition: transform 0.3s ease;
+    }
+
+    /* ทำให้ลูกศรหมุนเมื่อเมนูเปิด */
+    .collapsible-toggle[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+    }
+
+    /* ปรับสไตล์ของเมนู */
+    .menu {
+        display: block;
+        overflow: hidden;
+        max-height: 0;
+        padding: 0 0 0 15px;
+        border-radius: 5px;
+        transition: max-height 0.3s ease-out, padding 0.3s ease;
+    }
+
+    /* แสดงเมนูเมื่อคลาส active ถูกเพิ่ม */
+    .menu.active {
+        max-height: 250px;
+        padding: 0 0 0 15px;
+    }
+
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 138px;
+        background-color: #ff4b4b;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .input-error {
+        border-color: #e53935;
+        outline-color: #e53935;
+    }
+
+    .error-message {
+        color: #e53935;
+        font-size: 0.8rem;
+        margin-top: 2px;
+        display: block;
+    }
+
+    .preview-error {
+        color: #e53935;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        20%,
+        60% {
+            transform: translateX(-5px);
+        }
+
+        40%,
+        80% {
+            transform: translateX(5px);
+        }
+    }
+
+
+
+    th input[type="checkbox"] {
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 2px solid #000000;
+        border-radius: 50%;
+        background-color: #ffffff;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+    }
+
+    th input[type="checkbox"]:checked {
+        background-color: #000000;
+        border-color: #000000;
+        background-image: url('/sci-next/img/done_all.png');
+        background-size: 20px 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    td input[type="checkbox"].row-checkbox {
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 2px solid #000000;
+        border-radius: 50%;
+        background-color: #ffffff;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    td input[type="checkbox"].row-checkbox:checked {
+        background-color: #000000;
+        border-color: #000000;
+        background-image: url('/sci-next/img/check.png');
+        background-size: 20px 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    td input[type="checkbox"].row-checkbox:hover {
+        border-color: #000000;
+    }
+
+    th input[type="checkbox"]:hover {
+        border-color: #000000;
+    }
+
+    .upload-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .product-preview-box {
+        width: 280px;
+        height: 540px;
+        color: #000000;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-preview-image img {
+        max-width: 280px;
+        max-height: 280px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-details {
+        margin-top: 10px;
+        max-width: 500px;
+        color: #333;
+    }
+
+    .detail-group {
+        display: flex;
+        text-align: left;
+        align-items: center;
+        margin-bottom: 5px;
+        padding: 10px 14px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: inset 0 0 0 1px #dddddd;
+        transition: background 0.3s;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .detail-group svg {
+        margin-right: 10px;
+        fill: #000000;
+        flex-shrink: 0;
+    }
+
+    .detail-group div {
+        flex: 1;
+        font-size: 16px;
+        color: #222222;
+    }
+
+    .detail-inline {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+        margin: 5px 0 5px 0;
+        flex-wrap: wrap;
+    }
+
+    .detail-inline p {
+        flex: 1 1 48%;
+        background: #ffffff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        box-shadow: inset 0 0 0 1px #ddd;
+        transition: background 0.3s;
+    }
+
+    .detail-inline .material-icons {
+        margin-right: 10px;
+        font-size: 24px;
+        color: #000000;
+    }
+
+    .detail-group .material-icons {
+        margin-right: 10px;
+        font-size: 24px;
+        color: #000000;
+    }
+
+    #previewName,
+    #previewBarcode,
+    #previewPrice,
+    #previewCost,
+    #previewStock,
+    #previewReorderLevel {
+        color: #222;
+    }
+
+
+    .profile-container {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea, #764ba2, #a855f7, #d946ef);
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+
+    .cover {
+        padding: 50px;
+    }
+
+    .profile-card {
+        background: #111111;
+        padding: 90px 15px 15px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        position: relative;
+        align-items: center;
+    }
+
+    .profile-image {
+        position: absolute;
+        top: -85px;
+        left: 40px;
+    }
+
+    .profile-image img {
+        width: 160px;
+        height: 160px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 8px solid #111111;
+    }
+
+    .upload-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #111111;
+        color: #ffffff;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .upload-btn:hover {
+        background: #222222;
+    }
+
+    .upload-btn i {
+        font-size: 22px;
+    }
+
+    #file-input {
+        display: none;
+    }
+
+    .profile-details {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000000;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+
+    .profile-title::after {
+        content: "";
+        width: 50px;
+        height: 4px;
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+
+    .profile-row {
+        display: flex;
+        gap: 15px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 45%;
+    }
+
+    .profile-info label {
+        display: flex;
+        font-weight: bold;
+        color: #333333;
+        gap: 8px;
+    }
+
+    .profile-info label .material-icons {
+        font-size: 24px;
+        color: #000000;
+    }
+
+    .profile-info input {
+        padding: 10px;
+        border: 1px solid #ffffff;
+        border-radius: 10px;
+        width: 100%;
+        font-size: 14px;
+        transition: 0.3s;
+        margin-bottom: 20px;
+    }
+
+    .profile-info input:focus {
+        border-color: #111111;
+        outline: none;
+    }
+
+    .confirm-btn {
+        margin-top: 5px;
+        width: auto;
+        padding: 10px 15px;
+        background: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.3s;
+    }
+
+    .confirm-btn:hover {
+        background: #5a0ba5;
+    }
+
+    .confirm-btn .material-icons {
+        font-size: 24px;
+    }
+
+    .action-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .action-dropdown button {
+        background-color: #eeeeee;
+        border: none;
+        font-size: 25px;
+        padding: 5px 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .action-dropdown button:hover {
+        background-color: #dddddd;
+    }
+
+    .dropdown-content {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        right: -20px;
+        top: calc(-50% + 5px);
+        background-color: #ffffff;
+        min-width: 85px;
+        z-index: 1;
+        border-radius: 10px;
+        overflow: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .dropdown-content a {
+        color: #000000;
+        padding: 10px 5px 10px 5px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: background 0.2s;
+        white-space: nowrap;
+        gap: 4px;
+        font-weight: bold;
+
+        svg {
+            width: 20px;
+            height: 20px;
+            fill: #000000;
+
+        }
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f0f0f0;
+    }
+
+    .action-dropdown.show .dropdown-content {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .barcode-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .barcode-cell svg {
+        width: 45px;
+        height: 45px;
+        fill: #000000;
+    }
+
+    #overlay {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    #overlaySoftDrink {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    #overlayFreshFood {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    #overlaySnackFood {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    #overlayStationery {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .side-panel {
+        position: fixed;
+        top: 0;
+        right: -500px;
+        width: 500px;
+        height: 100%;
+        background-color: #ffffff;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+        transition: right 0.3s ease;
+        z-index: 1001;
+        display: none;
+    }
+
+    /* แสดง panel */
+    .side-panel.show {
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+
+    .side-panel-content {
+        height: 100%;
+        overflow-y: auto;
+        padding: 15px;
+        position: relative;
+    }
+
+    .side-panel-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 40px;
+        cursor: pointer;
+        color: #ffffff;
+        background-color: #444444;
+        border: none;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .side-panel-close-btn:hover {
+        background-color: #555555;
+        color: #ffffff;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        border-radius: 10px;
+    }
+
+    body.side-panel-open {
+        overflow: hidden;
+    }
+
+    #imagePreviewContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreview {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductForm {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+
+        p {
+            color: #DC143C;
+        }
+    }
+
+    #editProductForm label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductForm input[type="text"],
+    #editProductForm input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductForm input[type="text"]:focus,
+    #editProductForm input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductForm button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductForm button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductForm button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+
+    /* edit Soft Drink */
+    #imagePreviewContainerSoftDrink {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewSoftDrink {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductFormSoftDrink {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+    }
+
+    #editProductFormSoftDrink label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductFormSoftDrink input[type="text"],
+    #editProductFormSoftDrink input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductFormSoftDrink input[type="text"]:focus,
+    #editProductFormSoftDrink input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductFormSoftDrink button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductFormSoftDrink button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductFormSoftDrink button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+    /* edit Soft Drink */
+    #imagePreviewContainerSoftDrink {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewSoftDrink {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductFormSoftDrink {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+
+        p {
+            color: #DC143C;
+        }
+    }
+
+    #editProductFormSoftDrink label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductFormSoftDrink input[type="text"],
+    #editProductFormSoftDrink input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductFormSoftDrink input[type="text"]:focus,
+    #editProductFormSoftDrink input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductFormSoftDrink button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductFormSoftDrink button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductFormSoftDrink button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+    /* edit Fresh Food */
+    #imagePreviewContainerFreshFood {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewFreshFood {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductFormFreshFood {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+
+        p {
+            color: #DC143C;
+        }
+    }
+
+    #editProductFormFreshFood label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductFormFreshFood input[type="text"],
+    #editProductFormFreshFood input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductFormFreshFood input[type="text"]:focus,
+    #editProductFormFreshFood input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductFormFreshFood button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductFormFreshFood button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductFormFreshFood button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+    /* edit Snack Food */
+    #imagePreviewContainerSnackFood {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewSnackFood {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductFormSnackFood {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+
+        p {
+            color: #DC143C;
+        }
+    }
+
+    #editProductFormSnackFood label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductFormSnackFood input[type="text"],
+    #editProductFormSnackFood input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductFormSnackFood input[type="text"]:focus,
+    #editProductFormSnackFood input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductFormSnackFood button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductFormSnackFood button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductFormSnackFood button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+    /* edit Stationery */
+    #imagePreviewContainerStationery {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewStationery {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #editProductFormStationery {
+        max-width: 500px;
+        padding: 15px;
+        background-color: #f4f4f4;
+        border-radius: 10px;
+
+        p {
+            color: #DC143C;
+        }
+    }
+
+    #editProductFormStationery label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #888888;
+        gap: 8px;
+
+        span {
+            color: #444444;
+        }
+
+    }
+
+    #editProductFormStationery input[type="text"],
+    #editProductFormStationery input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #DC143C;
+        border-radius: 10px;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    #editProductFormStationery input[type="text"]:focus,
+    #editProductFormStationery input[type="number"]:focus {
+        border-color: #000000;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        outline: none;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .form-group-row .group-item {
+        flex: 1;
+    }
+
+    #editProductFormStationery button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 15px 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editProductFormStationery button:hover {
+        background-color: #222222;
+    }
+
+
+    #editProductFormStationery button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+    .excel-grid-upload {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 1200px) {
+        .excel-grid-upload {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 900px) {
+        .excel-grid-upload {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .excel-grid-upload {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .excel-upload-form {
+        background: #f8f9fa;
+        padding: 24px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .excel-type-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 8px;
+        font-size: 20px;
+        margin-bottom: 16px;
+        color: #333333;
+    }
+
+    .excel-upload-group {
+        margin-bottom: 16px;
+    }
+
+    .excel-upload-input {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+        display: block !important;
+        z-index: 999 !important;
+        background: #ffffff;
+        cursor: pointer;
+    }
+
+    .file-name-text {
+        margin-top: 15px;
+        font-size: 15px;
+        color: #555555;
+        text-align: center;
+    }
+
+    .excel-upload-button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #33A1FD;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.25s ease, transform 0.2s ease;
+    }
+
+    .excel-upload-button:hover {
+        background-color: #1980C6;
+    }
+
+    .password-progress {
+        width: 35%;
+        height: 10px;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    #password-progress-bar {
+        height: 100%;
+        width: 0%;
+        background-color: red;
+        transition: width 0.3s, background-color 0.3s;
+    }
+
+    #password-checklist {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px 16px;
+        list-style: none;
+        padding: 0;
+        margin-bottom: 15px;
+    }
+
+    #password-checklist li {
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        color: #777;
+        gap: 8px;
+    }
+
+    #password-checklist .icon {
+        display: inline-block;
+        width: 20px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    #password-checklist li.valid {
+        color: #4CAF50;
+    }
+
+    #password-checklist li.valid .icon {
+        color: #4CAF50;
+        content: "✔";
+    }
+
+    #password-checklist li.invalid {
+        color: #DC143C;
+    }
+
+    #password-checklist li.invalid .icon {
+        color: #DC143C;
+    }
+
+    .password-strength-text {
+        padding-right: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        min-height: 20px;
+        transition: color 0.3s ease;
+    }
+
+    #upload-img-admin {
+        display: none;
+    }
+
+    .file-info-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 36px;
+        flex-wrap: nowrap;
+    }
+
+    #file-name {
+        color: #333;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+    }
+
+    .file-limit-note {
+        font-weight: 500;
+        font-size: 14px;
+        color: #DC143C;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .custom-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .custom-modal.hidden {
+        display: none;
+    }
+
+    .update-dashboard-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .update-filters {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filter-input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .action-edit {
+        color: #FFA500;
+        font-weight: bold;
+    }
+
+    .action-delete {
+        color: #FF4B4B;
+        font-weight: bold;
+    }
+
+    .action-add {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+
+    .input-clear-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    #productImage {
+        width: 100%;
+        padding-right: 40px;
+        box-sizing: border-box;
+    }
+
+    .clear-btn {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        right: -7px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #000000;
+        border: none;
+        cursor: pointer;
+        color: #ffffff;
+        display: none;
+        padding: 5px;
+        border-radius: 10px;
+        line-height: 1;
+
+        span {
+            font-size: 30px;
+            margin: 0;
+        }
+    }
+
+    .clear-btn:hover {
+        color: #FF4B4B;
+    }
+</style>
+
 <body>
-    <div class="navbar">
+    <nav class="navbar">
         <!-- แฮมเบอร์เกอร์ -->
         <div class="hamburger" onclick="toggleSidebar()">
             <span class="open-icon">
@@ -42,7 +3495,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <img src="\sci-next\img\NEXT.png" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
-    </div>
+    </nav>
 
     <div id="tabLoadingBar"></div>
 
@@ -113,8 +3566,11 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 <div class="tab" data-tab="fastfood_check">
                     <span class="material-icons">fastfood</span> หมวดแช่แข็ง
                 </div>
-                <div class="tab" data-tab="snack">
+                <div class="tab" data-tab="snack_check">
                     <span class="material-icons">cookie</span> หมวดขนม
+                </div>
+                <div class="tab" data-tab="stationery_check">
+                    <span class="material-icons">create</span> หมวดเครื่องเขียน
                 </div>
             </div>
         </div>
@@ -134,6 +3590,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
             <div class="tab" data-tab="snack_food">
                 <span class="material-icons">cookie</span> ประเภทขนม
+            </div>
+            <div class="tab" data-tab="stationery">
+                <span class="material-icons">create</span> ประเภทเครื่องเขียน
             </div>
         </div>
         <hr class="tab-divider">
@@ -162,7 +3621,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     </div>
 
     <!-- ^^ ส่วนของ Tabs ^^ -->
-
 
     <!-- แสดงหน้าของ Tabs -->
     <!-- แสดงข้อมูลสถิติ -->
@@ -677,6 +4135,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <span class="material-icons">cookie</span>
                             หมวดขนม
                         </button>
+
+                        <button type="button" class="category-btn" data-category="stationery" onclick="selectCategory(event, 'stationery')">
+                            <span class="material-icons">cookie</span>
+                            หมวดเครื่องเขียน
+                        </button>
+
                     </div>
 
                     <input type="hidden" id="productCategory" name="productCategory">
@@ -1001,10 +4465,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </table>
     </div>
 
-    <div id="snack" class="content">
+    <div id="snack_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทขนมขบเคี้ยว
-                <span id="fresh-food-selected-count">เลือกแล้ว +0</span>
+                <span id="snack-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -1042,6 +4506,50 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </tr>
             </thead>
             <tbody id="snack_table"></tbody>
+        </table>
+    </div>
+
+    <div id="stationery_check" class="content">
+        <div class="header-container">
+            <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องเขียน
+                <span id="stationery-selected-count">เลือกแล้ว +0</span>
+            </h3>
+
+            <div class="btn-container">
+                <button id="add_stationery" class="btn btn-stationery" data-tooltip="เพิ่มสินค้า">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-edit-product-localStorage" data-tooltip="แก้ไขสินค้า" data-key="stationery">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                    </svg>
+                </button>
+
+                <button class="btn btn-delete-product" data-tooltip="ลบสินค้า" data-key="stationery">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="center-checkbox"><input type="checkbox" onclick="toggleSelectAllForTable(this, 'stationery_table')"></th>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปภาพ</th>
+                    <th>บาร์โค้ด</th>
+                    <th>ราคาขาย</th>
+                    <th>ราคาต้นทุน</th>
+                    <th>จำนวนสต็อก</th>
+                    <th>สต็อกต่ำสุด</th>
+                </tr>
+            </thead>
+            <tbody id="stationery_table"></tbody>
         </table>
     </div>
 
@@ -1711,6 +5219,132 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
+    <div id="stationery" class="content">
+        <div class="header-container">
+            <h3 class="h-text-upload">
+                <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#ffffff">
+                    <path d="M400-240h40v-160q25 0 42.5-17.5T500-460v-120h-40v120h-20v-120h-40v120h-20v-120h-40v120q0 25 17.5 42.5T400-400v160Zm160 0h40v-340q-33 0-56.5 23.5T520-500v120h40v140ZM160-120v-480l320-240 320 240v480H160Z" />
+                </svg>
+                สินค้าเครื่องเขียน
+            </h3>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputStationery" oninput="filterProductsStationery()">
+                <button class="search-button" onclick="filterProductsStationery()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-filter" data-tooltip="แสดง Filter" onclick="toggleMenuStationery()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
+                    </svg>
+                </button>
+
+                <div id="filterMenuStationery" class="filter-menu">
+                    <select id="filterCategoryStationery" onchange="applyFiltersStationery()">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="lowStock">สินค้าใกล้หมด</option>
+                    </select>
+
+                    <select id="itemsPerPageSelectStationery" onchange="changeItemsPerPageStationery(this.value)">
+                        <option value="25">แสดง 25 ชิ้น</option>
+                        <option value="50">แสดง 50 ชิ้น</option>
+                        <option value="100">แสดง 100 ชิ้น</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-table" data-tooltip="แสดง Table" onclick="switchViewStationery('table')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M320-80q-33 0-56.5-23.5T240-160v-480q0-33 23.5-56.5T320-720h480q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H320Zm0-80h200v-120H320v120Zm280 0h200v-120H600v120ZM80-240v-560q0-33 23.5-56.5T160-880h560v80H160v560H80Zm240-120h200v-120H320v120Zm280 0h200v-120H600v120ZM320-560h480v-80H320v80Z" />
+                    </svg>
+                </button>
+                <button class="btn btn-grid" data-tooltip="แสดง Grid" onclick="switchViewStationery('grid')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="containerStationery">
+            <table id="productTableStationery" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูปภาพ</th>
+                        <th>บาร์โค้ด</th>
+                        <th>ราคาขาย</th>
+                        <th>ราคาต้นทุน</th>
+                        <th>จำนวนสต็อก</th>
+                        <th>สต็อกต่ำสุด</th>
+                        <th>จัดการสินค้า</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBodyStationery"></tbody>
+            </table>
+
+            <div id="productGridStationery" class="card-grid"></div>
+        </div>
+
+        <button id="scrollTopBtnStationery" onclick="scrollToTopStationery()" data-tooltip="เลื่อนขึ้น"><svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#e3e3e3">
+                <path d="M440-320h80v-168l64 64 56-56-160-160-160 160 56 56 64-64v168Zm40 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+            </svg></button>
+
+        <div id="paginationStationery" class="pagination"></div>
+
+        <div id="overlayStationery" class="overlay" onclick="closeEditPanelStationery()"></div>
+
+        <div id="editPanelStationery" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanelStationery()">&times;</span>
+
+                <div id="side-panel-form-content-Stationery">
+                    <!-- ฟอร์มที่ใช้แก้ไขสินค้า -->
+                    <form id="editProductFormStationery" method="POST" action="">
+                        <input type="hidden" id="edit_product_id_stationery" name="id">
+
+                        <div id="imagePreviewContainerStationery">
+                            <img id="imagePreviewStationery" alt="รูปสินค้า">
+                        </div>
+
+                        <label for="product_name_stationery"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <input type="text" id="product_name_stationery" name="product_name" required>
+
+                        <label for="barcode_stationery"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
+                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                            </svg>บาร์โค้ด<p>*</p></label>
+                        <input type="text" id="barcode_stationery" name="barcode" maxlength="17" />
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="price_stationery"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <input type="number" id="price_stationery" name="price" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="cost_stationery"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <input type="number" id="cost_stationery" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="stock_stationery"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <input type="number" id="stock_stationery" name="stock" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="reorder_level_stationery"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <input type="number" id="reorder_level_stationery" name="reorder_level" required>
+                            </div>
+                        </div>
+
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="sci_admin" class="content">
         <h3 class="h-text">🛠️ การจัดการ Admin</h3>
         <!-- ตารางข้อมูลผู้ใช้ -->
@@ -2116,9 +5750,21 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             button.parentElement.classList.toggle('show');
         }
 
+        function toggleDropdownStationery(button) {
+            // ปิด dropdown อื่นก่อน
+            document.querySelectorAll('.action-dropdown-stationery').forEach(dropdown => {
+                if (dropdown !== button.parentElement) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // toggle อันที่คลิก
+            button.parentElement.classList.toggle('show');
+        }
+
         function toggleDropdownAdmin(button) {
             // ปิด dropdown อื่นก่อน
-            document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
+            document.querySelectorAll('.action-dropdown-admin').forEach(dropdown => {
                 if (dropdown !== button.parentElement) {
                     dropdown.classList.remove('show');
                 }
@@ -2156,6 +5802,22 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         window.addEventListener('click', function(e) {
             if (!e.target.matches('.action-dropdown-snack button')) {
                 document.querySelectorAll('.action-dropdown-snack').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown-stationery button')) {
+                document.querySelectorAll('.action-dropdown-stationery').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.action-dropdown-admin button')) {
+                document.querySelectorAll('.action-dropdown-admin').forEach(dropdown => {
                     dropdown.classList.remove('show');
                 });
             }
@@ -2468,6 +6130,97 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             document.body.style.overflow = 'auto';
         }
 
+        document.getElementById('editProductFormStationery').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('../../product/edit_product/edit_food_all/edit_stationery.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showAlertToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว', icons.success, 'success');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+
+                    // ปิด panel
+                    document.getElementById('editPanelStationery').style.right = '-100%';
+                    document.getElementById('overlayStationery').style.display = 'none';
+                    document.body.style.overflow = '';
+                } else {
+                    showAlertToast('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่ทราบสาเหตุ'), icons.error, 'alert-toast');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
+            }
+        });
+
+        async function openEditPanelStationery(id) {
+            const overlay = document.getElementById('overlayStationery');
+            const editPanel = document.getElementById('editPanelStationery');
+
+            if (!overlay || !editPanel) {
+                console.error("ไม่พบ overlay หรือ editPanel ใน DOM");
+                return;
+            }
+
+            overlay.style.display = 'block';
+            editPanel.style.display = 'block';
+            setTimeout(() => {
+                editPanel.style.right = '0';
+            }, 10);
+            document.body.style.overflow = 'hidden';
+
+            try {
+                const response = await fetch(`../../product/edit_product/get_food_all/get_stationery.php?id=${id}`);
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.message || 'เกิดข้อผิดพลาดในการโหลดข้อมูล');
+
+                // แสดงข้อมูลในฟอร์ม
+                document.getElementById('edit_product_id_stationery').value = data.id || '';
+                document.getElementById('product_name_stationery').value = data.product_name || '';
+                document.getElementById('barcode_stationery').value = data.barcode || '';
+                document.getElementById('price_stationery').value = data.price || '';
+                document.getElementById('cost_stationery').value = data.cost || '';
+                document.getElementById('stock_stationery').value = data.stock || '';
+                document.getElementById('reorder_level_stationery').value = data.reorder_level || '';
+
+                const imagePreview = document.getElementById('imagePreviewStationery');
+                imagePreview.src = data.image_url ? data.image_url : 'path/to/default-image.jpg';
+
+            } catch (error) {
+                console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:', error);
+                showAlertToast('ไม่สามารถโหลดข้อมูลสินค้าได้', icons.error, 'alert-toast');
+            }
+        }
+
+        function closeEditPanelStationery() {
+            const overlay = document.getElementById('overlayStationery');
+            const editPanel = document.getElementById('editPanelStationery');
+
+            if (!overlay || !editPanel) return;
+
+            overlay.style.display = 'none';
+            editPanel.style.right = '-500px';
+
+            setTimeout(() => {
+                editPanel.style.display = 'none';
+            }, 300);
+
+            document.body.style.overflow = 'auto';
+        }
+
+
         function deleteProduct(id, type) {
             const modal = document.getElementById("confirmDeleteProductModal");
             const message = document.getElementById("confirmDeleteMessage");
@@ -2479,6 +6232,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 soft: "/sci-next/product/delete_product/delete_soft_drink.php",
                 fresh: "/sci-next/product/delete_product/delete_fresh_food.php",
                 snack: "/sci-next/product/delete_product/delete_snack.php",
+                stationery: "/sci-next/product/delete_product/delete_stationery.php",
             };
 
             // ตรวจสอบว่าประเภทสินค้ามี endpoint รองรับ
@@ -2566,6 +6320,30 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         function applyFiltersFreshFood() {
             const category = document.getElementById('filterCategoryFreshFood').value;
+            const price = document.getElementById('filterPrice').value;
+
+            console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
+        }
+
+        function toggleMenuSnackFood() {
+            const filterMenu = document.getElementById('filterMenuSnackFood');
+            filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function applyFiltersSnackFood() {
+            const category = document.getElementById('filterCategorySnackFood').value;
+            const price = document.getElementById('filterPrice').value;
+
+            console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
+        }
+
+        function toggleMenuStationery() {
+            const filterMenu = document.getElementById('filterMenuStationery');
+            filterMenu.style.display = (filterMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function applyFiltersStationery() {
+            const category = document.getElementById('filterCategoryStationery').value;
             const price = document.getElementById('filterPrice').value;
 
             console.log(`Applied Filters - Category: ${category}, Max Price: ${price}`);
@@ -3464,6 +7242,222 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         document.addEventListener("DOMContentLoaded", toggleScrollButtonSnackFood);
 
+
+        const productsStationery = <?php echo json_encode($stationery); ?>;
+        const tableBodyStationery = document.getElementById('productTableBodyStationery');
+        const gridStationery = document.getElementById('productGridStationery');
+        const paginationStationery = document.getElementById('paginationStationery');
+        const containerStationery = document.getElementById('containerStationery');
+        const searchInputStationery = document.getElementById('searchInputStationery');
+        let filteredProductsStationery = [...productsStationery];
+        let currentPageStationery = 1;
+        const itemsPerPageStationery = 10;
+        let searchTextStationery = '';
+        let currentViewStationery = localStorage.getItem('viewModeStationery') || 'table';
+
+        function highlightTextStationery(text, keyword) {
+            if (!keyword) return text;
+            const pattern = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(pattern, '<span class="highlight">$1</span>');
+        }
+
+        function displayProductsStationery() {
+            tableBodyStationery.innerHTML = '';
+            gridStationery.innerHTML = '';
+
+            const startIndex = (currentPageStationery - 1) * itemsPerPageStationery;
+            const endIndex = startIndex + itemsPerPageStationery;
+            const paginatedItems = filteredProductsStationery.slice(startIndex, endIndex);
+
+            if (currentViewStationery === 'table') {
+                document.getElementById('productTableStationery').style.display = 'table';
+                gridStationery.style.display = 'none';
+
+                if (paginatedItems.length === 0) {
+                    tableBodyStationery.innerHTML = `
+        <tr><td colspan="8" class="no-items-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </td></tr>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        tableBodyStationery.innerHTML += `
+            <tr>
+                <td style="text-align:left; font-weight: bold;">${highlightTextStationery(item.product_name, searchTextStationery)}</td>
+                <td>
+                    <div class="product-image-container">
+                        <img src="${item.image_url}" alt="${item.product_name}" width="100">
+                        ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label-table">สินค้าใกล้หมด</div>` : ''}
+                    </div>
+                </td>
+                <td style="text-align:center;">
+                    <div class="barcode-cell">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg>
+                        <span>${highlightTextStationery(item.barcode, searchTextStationery)}</span>
+                    </div>
+                </td>
+                <td>${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                <td>${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</td>
+                <td>${item.stock} ชิ้น</td>
+                <td>${item.reorder_level} ชิ้น</td>
+                <td>
+                    <div class="action-dropdown">
+                        <button onclick="toggleDropdownStationery(this)">⋮</button>
+                        <div class="dropdown-content">
+                            <a onclick="openEditPanelStationery(${item.id}); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</a>
+                            <a onclick="deleteProduct(${item.id}, 'stationery'); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                        </div>  
+                    </div>
+                </td>
+            </tr>`;
+                    });
+                }
+            } else {
+                document.getElementById('productTableStationery').style.display = 'none';
+                gridStationery.style.display = 'grid';
+
+                if (paginatedItems.length === 0) {
+                    gridStationery.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 2px; ">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333" style="margin-right: 10px;">
+                <path d="M280-80q-83 0-141.5-58.5T80-280q0-83 58.5-141.5T280-480q83 0 141.5 58.5T480-280q0 83-58.5 141.5T280-80Zm544-40L568-376q-12-13-25.5-26.5T516-428q38-24 61-64t23-88q0-75-52.5-127.5T420-760q-75 0-127.5 52.5T240-580q0 6 .5 11.5T242-557q-18 2-39.5 8T164-535q-2-11-3-22t-1-23q0-109 75.5-184.5T420-840q109 0 184.5 75.5T680-580q0 43-13.5 81.5T629-428l251 252-56 56Zm-615-61 71-71 70 71 29-28-71-71 71-71-28-28-71 71-71-71-28 28 71 71-71 71 28 28Z"/>
+            </svg>
+            ไม่พบสินค้าที่ค้นหา
+        </p>`;
+                } else {
+                    paginatedItems.forEach(item => {
+                        gridStationery.innerHTML += `
+            <div class="card">
+                <div class="product-image-container">
+                    <img class="product-image" src="${item.image_url}" alt="${item.product_name}">
+                    ${item.stock <= item.reorder_level ? `<div class="out-of-stock-label">สินค้าใกล้หมด</div>` : ''}
+                </div>
+                <div class="card-content">
+                    <h3 class="name-grid">${highlightTextStationery(item.product_name, searchTextStationery)}</h3>
+                    <div class="barcode">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                    <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                                </svg><span>${highlightTextStationery(item.barcode, searchTextStationery)}</span></div>
+                    <p><span class="label">ราคา:</span> ${Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                    <p><span class="label">ต้นทุน:</span> ${Number(item.cost).toLocaleString(undefined, { minimumFractionDigits: 2 })} บาท</p>
+                    <p><span class="label">สต็อก:</span> ${item.stock} ชิ้น</p>
+                    <p><span class="label">เกณฑ์สั่งซื้อ:</span> ${item.reorder_level} ชิ้น</p>
+                    <div class="card-actions">
+                        <button onclick="openEditPanelStationery(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg>แก้ไข</button>
+                        <a onclick="deleteProduct(${item.id}, 'stationery'); return false;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>ลบ</a>
+                    </div>
+                </div>
+            </div>`;
+                    });
+                }
+            }
+            renderPaginationStationery();
+        }
+
+        function renderPaginationStationery() {
+            paginationStationery.innerHTML = '';
+
+            const totalPages = Math.ceil(filteredProductsStationery.length / itemsPerPageStationery);
+            if (totalPages <= 1) return;
+
+            if (currentPageStationery > 1) {
+                paginationStationery.innerHTML += `<button class="page-btn" onclick="goToPageStationery(${currentPageStationery - 1})">ก่อนหน้า</button>`;
+            }
+
+            let startPage = Math.max(1, currentPageStationery - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationStationery.innerHTML += `<button class="page-btn ${i === currentPageStationery ? 'active' : ''}" onclick="goToPageStationery(${i})">${i}</button>`;
+            }
+
+            if (currentPageStationery < totalPages) {
+                paginationStationery.innerHTML += `<button class="page-btn" onclick="goToPageStationery(${currentPageStationery + 1})">ถัดไป</button>`;
+            }
+        }
+
+        function goToPageStationery(page) {
+            currentPageStationery = page;
+            displayProductsStationery();
+        }
+
+        function filterProductsStationery() {
+            searchTextStationery = searchInputStationery.value.trim().toLowerCase();
+
+            if (!searchTextStationery) {
+                filteredProductsStationery = [...productsStationery];
+            } else {
+                filteredProductsStationery = productsStationery.filter(item => {
+                    const name = (item.product_name || '').toLowerCase();
+                    const barcode = (item.barcode || '').toLowerCase();
+
+                    return name.includes(searchTextStationery) || barcode.includes(searchTextStationery);
+                });
+
+                filteredProductsStationery.sort((a, b) => {
+                    const aEnds = a.barcode.toLowerCase().endsWith(searchTextStationery) ? 1 : 0;
+                    const bEnds = b.barcode.toLowerCase().endsWith(searchTextStationery) ? 1 : 0;
+                    return bEnds - aEnds;
+                });
+            }
+
+            currentPageStationery = 1;
+            displayProductsStationery();
+        }
+
+        function switchViewStationery(viewType) {
+            currentViewStationery = viewType;
+            localStorage.setItem('viewModeStationery', viewType);
+            containerStationery.scrollIntoView({
+                behavior: 'smooth'
+            });
+            displayProductsStationery();
+        }
+
+        displayProductsStationery();
+
+        window.onscroll = function() {
+            toggleScrollButtonStationery();
+        };
+
+        // ฟังก์ชันโชว์/ซ่อนปุ่ม
+        function toggleScrollButtonStationery() {
+            const btn = document.getElementById("scrollTopBtnStationery");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        }
+
+        // ฟังก์ชันเลื่อนขึ้นบนสุด
+        function scrollToTopStationery() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        window.addEventListener("scroll", toggleScrollButtonStationery);
+
+        document.addEventListener("DOMContentLoaded", toggleScrollButtonStationery);
+
+
         // ฟังก์ชันสำหรับการเลือกหมวดหมู่สินค้า
         let selectedCategory = '';
 
@@ -3574,7 +7568,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         }
 
         function loadFromLocalStorage() {
-            const categories = ['dried_food', 'soft_drink', 'fresh_food', 'snack'];
+            const categories = ['dried_food', 'soft_drink', 'fresh_food', 'snack', 'stationery'];
             categories.forEach(category => {
                 const savedData = JSON.parse(localStorage.getItem(category)) || [];
                 const tableBody = document.getElementById(`${category}_table`);
@@ -3732,6 +7726,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         setupProductButton(".btn-soft-drink", "soft_drink", "/sci-next/product/upload_product/add_food_all/add_soft_drink.php");
         setupProductButton(".btn-fresh-food", "fresh_food", "/sci-next/product/upload_product/add_food_all/add_fresh_food.php");
         setupProductButton(".btn-snack", "snack", "/sci-next/product/upload_product/add_food_all/add_snack.php");
+        setupProductButton(".btn-stationery", "stationery", "/sci-next/product/upload_product/add_food_all/add_stationery.php");
 
         // ปิด modal เมื่อคลิกข้างนอก
         window.addEventListener("click", function(event) {
