@@ -44,6 +44,44 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         margin-left: 0;
     }
 
+    .form-header-upload {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .tooltip {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffffff;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        font-family: "Noto Sans Thai", "Noto Sans", sans-serif;
+        z-index: 1000;
+        min-width: 300px;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.6;
+    }
+
+    .tooltip:hover::after {
+        opacity: 1;
+    }
+
     .h-text-upload {
         display: flex;
         align-items: center;
@@ -51,6 +89,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         font-size: clamp(16px, 4vw, 30px);
         font-weight: bold;
         color: #F79824;
+    }
+
+    .p-text-upload {
+        color: #ff0000;
     }
 
     .h2-text-upload {
@@ -123,7 +165,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .hamburger:hover svg {
         transform: scale(1.1);
-        fill: #ff006e;
+        fill: #f1f1f1;
     }
 
     .logo-name {
@@ -1978,7 +2020,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .category-buttons {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         gap: 10px;
         margin-bottom: 15px;
     }
@@ -1986,8 +2029,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .category-btn {
         display: flex;
         align-items: center;
-        padding: 13px 15px;
-        background-color: #eee;
+        padding: 15px 12px;
+        background-color: #eeeeee;
         border: none;
         border-radius: 10px;
         cursor: pointer;
@@ -1997,7 +2040,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .category-btn:hover {
-        background-color: #ddd;
+        background-color: #dddddd;
     }
 
     .category-btn.selected {
@@ -4112,33 +4155,37 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
 
             <div class="form-container">
-                <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
+                <div class="form-header-upload">
+                    <h3 class="h-text-upload">เพิ่มสินค้าใหม่</h3>
+                    <p class="p-text-upload">*โปรดเลือกหมวดหมู่ก่อนดำเนินการเพิ่มสินค้า*</p>
+                    <span class="material-icons tooltip" data-tooltip="เพราะระบบต้องรู้ว่าสินค้าใหม่จะถูกจัดไว้ในหมวดหมู่ใด หากไม่เลือกจะไม่สามารถดำเนินการต่อได้">library_books</span>
+                </div>
 
                 <form class="form-upload" id="uploadForm" method="POST" action="" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
                     <div class="category-buttons">
                         <button type="button" class="category-btn" data-category="dried_food" onclick="selectCategory(event, 'dried_food')">
                             <span class="material-icons">food_bank</span>
-                            หมวดของแห้ง
+                            ของแห้ง
                         </button>
 
                         <button type="button" class="category-btn" data-category="soft_drink" onclick="selectCategory(event, 'soft_drink')">
                             <span class="material-icons">local_drink</span>
-                            หมวดเครื่องดื่ม
+                            เครื่องดื่ม
                         </button>
 
                         <button type="button" class="category-btn" data-category="fresh_food" onclick="selectCategory(event, 'fresh_food')">
                             <span class="material-icons">fastfood</span>
-                            หมวดของแช่แข็ง
+                            ของแช่แข็ง
                         </button>
 
                         <button type="button" class="category-btn" data-category="snack" onclick="selectCategory(event, 'snack')">
                             <span class="material-icons">cookie</span>
-                            หมวดขนม
+                            ขนม
                         </button>
 
                         <button type="button" class="category-btn" data-category="stationery" onclick="selectCategory(event, 'stationery')">
-                            <span class="material-icons">cookie</span>
-                            หมวดเครื่องเขียน
+                            <span class="material-icons">create</span>
+                            เครื่องเขียน
                         </button>
 
                     </div>

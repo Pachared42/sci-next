@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 if ($conn->connect_error) {
     die("เชื่อมต่อฐานข้อมูลล้มเหลว: " . $conn->connect_error);
@@ -39,13 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // เปลี่ยนหน้าไปตาม role
             switch ($user['role_name']) {
                 case 'superadmin':
-                    header("Location: /sci-next/admin/dashboard_superadmin/superadminDashboard.php");
+                    header("Location: /sci-next/Auth/pageAuth.php");
                     break;
                 case 'admin':
-                    header("Location: /sci-next/admin/dashboard_admin/adminDashboard.php");
+                    header("Location: /sci-next/Auth/pageAuth.php");
                     break;
                 case 'employee':
-                    header("Location: /sci-next/employee/employeeDashboard.php");
+                    header("Location: /sci-next/Auth/pageAuth.php");
                     break;
                 default:
                     header("Location: /sci-next/index.php");
