@@ -13,7 +13,7 @@ require_once __DIR__ . '/Auth/auth.php';
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link rel="stylesheet" href="Login/Login.css">
+    <link rel="stylesheet" href="Login/Login.css?v=1">
 
     <link rel="manifest" href="/sci-next/manifest.json">
     <meta name="theme-color" content="#31393C">

@@ -122,6 +122,37 @@ function fetchAdmins($conn)
     return $admins;
 }
 
+function fetchLoggedInAdmin($conn, $gmail) {
+    $sql = "
+        SELECT gmail, password, first_name, last_name, profile_image
+        FROM users
+        WHERE gmail = ?
+        LIMIT 1
+    ";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        logError("เตรียม SQL ไม่สำเร็จ: " . $conn->error);
+        return null;
+    }
+
+    $stmt->bind_param("s", $gmail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        // แปลงรูปเป็น base64 ถ้ามี
+        if (!empty($row['profile_image'])) {
+            $row['profile_image'] = 'data:image/jpeg;base64,' . base64_encode($row['profile_image']);
+        } else {
+            $row['profile_image'] = null;
+        }
+        return $row;
+    }
+
+    return null;
+}
+
+
 
 
 // ดึงข้อมูลจากหลายๆ ตาราง
@@ -131,4 +162,5 @@ $fresh_food = fetchProducts($conn, 'fresh_food');
 $snack = fetchProducts($conn, 'snack');
 $stationery = fetchProducts($conn, 'stationery');
 $admins = fetchAdmins($conn);
+$currentAdmin = fetchLoggedInAdmin($conn, $username);
 ?>

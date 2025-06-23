@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php");
         exit();
     } else {
-        // JOIN ตาราง users กับ roles เพื่อดึง role name
+
         $sql = "
             SELECT users.*, roles.name AS role_name 
             FROM users 
@@ -33,10 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['gmail'] = $user['gmail'];
-            $_SESSION['role'] = $user['role_name']; // <-- ได้จากตาราง roles
+            $_SESSION['role'] = $user['role_name'];
             $_SESSION['full_name'] = $user['first_name'] . ' ' . $user['last_name'];
 
-            // เปลี่ยนหน้าไปตาม role
             switch ($user['role_name']) {
                 case 'superadmin':
                     header("Location: /sci-next/Auth/pageAuth.php");

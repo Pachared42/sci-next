@@ -8,6 +8,24 @@
 
 #E57300 (เข้มกว่าสี #F79824)
 
+#8739F9
+#5419B5
+#F2F5F5
+#37B9F1
+#1789BD
+
+Text #565360
+Label #908E9B
+Disabled #E1DFE9
+
+background: transparent;
+
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+
 food_bank
 local_drink
 fastfood

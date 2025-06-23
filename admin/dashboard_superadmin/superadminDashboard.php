@@ -30,7 +30,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     body {
-        background-color: #111111;
+        background-color: #000000;
         margin-left: 220px;
         color: white;
         min-height: 100vh;
@@ -61,10 +61,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         bottom: 125%;
         left: 50%;
         transform: translateX(-50%);
-        background: #000000;
+        background-color: #000000;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: #ffffff;
         padding: 10px;
-        border-radius: 10px;
+        border-radius: 15px;
         font-size: 14px;
         white-space: nowrap;
         opacity: 0;
@@ -85,10 +88,25 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .h-text-upload {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 12px;
         font-size: clamp(16px, 4vw, 30px);
         font-weight: bold;
-        color: #F79824;
+        color: #8739F9;
+
+        p {
+            font-size: 14px;
+            color: #E1DFE9;
+        }
+    }
+
+    .center-screen {
+        height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        color: #333333;
     }
 
     .p-text-upload {
@@ -101,23 +119,22 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         gap: 12px;
         font-size: 28px;
         font-weight: bold;
-        color: #F79824;
+        color: #8739F9;
         margin-bottom: 15px;
     }
 
     .tab-divider-category {
         border: none;
-        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
         margin: 15px 0px 15px 0px;
     }
 
     .tab-divider-admin {
         border: none;
-        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
         margin: 0px 0px 15px 0px;
     }
 
-    /* เนื้อหาภายใน .container จะอยู่ทับพื้นหลัง */
     .container {
         position: relative;
         z-index: 1;
@@ -147,7 +164,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         left: 0;
         width: 100%;
         z-index: 1000;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
     }
 
@@ -165,7 +182,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .hamburger:hover svg {
         transform: scale(1.1);
-        fill: #f1f1f1;
+        fill: #908E9B;
     }
 
     .logo-name {
@@ -186,36 +203,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         font-weight: bold;
     }
 
-    .user-settings {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 15px 0 20px 0;
-    }
-
-    .avatar-wrapper {
-        position: relative;
-        display: inline-block;
-    }
-
-    .avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #222222;
-    }
-
-    .online-status {
-        position: absolute;
-        bottom: 20px;
-        right: 14px;
-        width: 22px;
-        height: 22px;
-        background-color: #00ff00;
-        border-radius: 50%;
-    }
-
     /* Sidebar */
     .sidebar {
         position: fixed;
@@ -227,9 +214,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
         background-color: #000000;
-        border-right: 2px solid rgba(255, 255, 255, 0.2);
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
         transform: translateX(0);
         opacity: 1;
         transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease;
@@ -269,13 +255,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .main-tabs h3 {
         font-size: 12px;
         font-weight: bold;
-        color: #F79824;
+        color: #8739F9;
     }
 
     /* กำหนดลักษณะของเส้น hr */
     .tab-divider {
         border: none;
-        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
         margin: 1px;
     }
 
@@ -287,7 +273,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         margin-top: 5px;
         font-size: 12px;
         font-weight: bold;
-        color: #F79824;
+        color: #8739F9;
     }
 
     .main-tabs-products {
@@ -298,7 +284,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         margin-top: 5px;
         font-size: 12px;
         font-weight: bold;
-        color: #F79824;
+        color: #8739F9;
     }
 
     /* ปุ่มเมนู */
@@ -313,7 +299,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         gap: 8px;
         position: relative;
-        border-radius: 10px;
+        border-radius: 15px;
         margin: 2px 0px;
     }
 
@@ -322,47 +308,36 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         margin-right: 8px;
     }
 
-    /* เมื่อเมาส์ hover เปลี่ยนพื้นหลัง */
     .tab:hover {
-        background-color: rgba(211, 211, 211, 0.4);
+        background-color: rgba(211, 211, 211, 0.3);
     }
 
-    /* กำหนดสีพื้นหลังสำหรับสถานะที่ถูกเลือก (active) */
     .tab:active,
     .tab.active {
-        background-color: #ffffff;
-        color: black;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         position: relative;
+        border-radius: 15px;
     }
+
 
     .tab:active .material-icons,
     .tab.active .material-icons {
-        color: #000000;
+        color: #ffffff;
     }
 
     .tab.account:hover:active,
     .tab.account.active:hover {
-        color: white;
+        color: #ffffff;
     }
 
     .tab.account:hover:active .material-icons,
     .tab.account.active:hover .material-icons {
-        color: #000000;
+        color: #ffffff;
     }
-
-    /* เพิ่มจุดเขียวๆ กลมๆ ที่ขวาสุดของ tab 
-        .tab:active::after,
-        .tab.selected::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            width: 10px;
-            height: 10px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            transform: translateY(-50%);
-        } */
 
     /* ปุ่มออกจากระบบ */
     .logout {
@@ -371,7 +346,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         text-align: center;
         font-weight: 600;
         color: white;
-        border-radius: 10px;
+        border-radius: 15px;
         border: none;
         transition: 0.3s ease;
         margin-top: 5px;
@@ -384,11 +359,11 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .account {
         padding: 10px 15px;
-        background: #33A1FD;
+        background: #37B9F1;
         text-align: center;
         font-weight: 600;
         color: white;
-        border-radius: 10px;
+        border-radius: 15px;
         border: none;
         transition: 0.3s ease;
         margin-top: 5px;
@@ -396,7 +371,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .account:hover {
-        background: #1980C6;
+        background: #1789BD;
     }
 
     .content {
@@ -676,14 +651,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     table {
         width: 100%;
         border-collapse: collapse;
-        border-radius: 10px;
+        border-radius: 25px;
         overflow: hidden;
         text-align: center;
         margin: 10px 0 20px 0;
     }
 
     th {
-        background: #333333;
+        background-color: rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 12px;
         font-size: 16px;
@@ -712,49 +687,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     td img {
-        border-radius: 10px;
+        border-radius: 20px;
     }
 
     .center-checkbox {
         text-align: center;
-        padding: 12px 0 12px 0;
+        padding: 12px 0 12px 6px;
     }
 
     .center-checkbox input {
         transform: scale(1);
         vertical-align: middle;
-    }
-
-    td input[type="checkbox"].checkbox-select-item {
-        width: 25px;
-        height: 25px;
-        cursor: pointer;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border: 2px solid #000000;
-        border-radius: 5px;
-        background-color: #ffffff;
-        position: relative;
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        outline: none;
-        vertical-align: middle;
-        text-align: center;
-    }
-
-    td input[type="checkbox"].checkbox-select-item:checked {
-        background-color: #000000;
-        border-color: #000000;
-        background-image: url('/sci-next/img/check.png');
-        background-size: 20px 20px;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    td input[type="checkbox"].checkbox-select-item:hover {
-        border-color: #000000;
     }
 
     .card-grid {
@@ -766,21 +709,22 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .card {
         background: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
+        border-radius: 30px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
         transition: transform 0.2s;
 
         .label {
-            font-weight: bold;
-            font-size: 16px;
-            color: #000000;
+            font-weight: 400;
+            font-size: 18px;
+            color: #565360;
         }
 
         p {
-            font-size: 16px;
+            font-size: 14px;
             color: #000000;
+            font-weight: bold;
         }
     }
 
@@ -807,7 +751,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         padding: 5px 10px;
         font-weight: bold;
         font-size: 15px;
-        border-radius: 10px;
+        border-radius: 12.5px;
     }
 
     .out-of-stock-label {
@@ -820,7 +764,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         padding: 5px 10px;
         font-weight: bold;
         font-size: 16px;
-        border-radius: 5px;
+        border-radius: 12.5px;
     }
 
     .product-image {
@@ -849,12 +793,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         justify-content: center;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         font-size: 16px;
+        font-weight: bold;
 
         svg {
-            width: 45px;
-            height: 45px;
+            width: 30px;
+            height: 30px;
+            fill: #565360;
         }
     }
 
@@ -872,11 +818,11 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         flex: 1;
         padding: 8px;
         border: none;
-        background: #2176FF;
+        background: #37B9F1;
         color: #ffffff;
         text-align: center;
         text-decoration: none;
-        border-radius: 10px;
+        border-radius: 15px;
         font-size: 16px;
         cursor: pointer;
         font-weight: bold;
@@ -890,12 +836,15 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .card-actions a {
-        background: #F79824;
+        background: #DC143C;
     }
 
-    .card-actions button:hover,
+    .card-actions button:hover {
+        background: #1789BD;
+    }
+
     .card-actions a:hover {
-        opacity: 0.9;
+        background-color: #ff0000;
     }
 
     #uplord_prodect {
@@ -920,10 +869,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .form-group input,
     .form-group select {
         width: 100%;
-        padding: 8px;
+        padding: 12px;
         font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        border-radius: 10px;
     }
 
     .form-container-product {
@@ -943,9 +891,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .form-group {
         display: flex;
         align-items: center;
-        background: #f4f4f4;
-        padding: 8px 12px;
-        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 20px;
         flex: 1;
         min-width: 340px;
         margin-bottom: 15px;
@@ -956,24 +908,30 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         gap: 8px;
         font-size: 14px;
-        color: #000000;
-        font-weight: bold;
+        color: #777777;
         white-space: nowrap;
     }
 
     .form-group input {
         border: none;
         outline: none;
-        padding: 6px 8px 6px 4px;
         font-size: 14px;
         flex: 1;
         background: transparent;
         min-width: 120px;
+        color: #ffffff;
     }
 
     label svg {
         width: 24px;
         height: 24px;
+        margin: 0 2px 0 8px;
+        fill: #ffffff;
+    }
+
+    label span {
+        color: #ffffff;
+        margin: 0 2px 0 8px;
     }
 
     input[type="file"] {
@@ -983,7 +941,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .custom-file-upload {
         width: 100%;
         display: inline-block;
-        padding: 6px;
+        padding: 12px;
         color: #ffffff;
         font-size: 14px;
         cursor: pointer;
@@ -1010,19 +968,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         justify-content: center;
         align-items: center;
         gap: 8px;
-        background: #2176FF;
+        background: #8739F9;
         color: white;
         border: none;
-        padding: 14px 20px;
+        padding: 20px;
         font-size: 20px;
-        font-weight: bold;
-        border-radius: 10px;
+        font-weight: 500;
+        border-radius: 20px;
         cursor: pointer;
         transition: 0.3s;
     }
 
     .btn-upload:hover {
-        background: #1056CC;
+        background: #5419B5;
     }
 
     /* Style for the popup */
@@ -1087,8 +1045,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         width: 100%;
         position: sticky;
-        top: 64px;
-        background: #111111;
+        top: 62.5px;
+        background: #000000;
         z-index: 1000;
         padding: 8px 0 8px 0;
     }
@@ -1156,16 +1114,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         fill: #ffffff;
     }
 
-    #dried-food-selected-count,
-    #soft-drink-selected-count,
-    #fresh-food-selected-count,
-    #snack-food-selected-count,
-    #stationery-selected-count {
-        font-weight: bold;
-        color: #4caf50;
-        margin-left: 10px;
-    }
-
     .btn {
         position: relative;
         background: none;
@@ -1217,9 +1165,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         justify-content: center;
         gap: 30px;
-        background-color: #F4F4F4;
-        padding: 15px;
-        border-radius: 10px;
     }
 
     /* รูปภาพฝั่งซ้าย */
@@ -1236,6 +1181,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editImagePreview {
         width: 250px;
         height: auto;
+        border-radius: 40px;
     }
 
     .image-warning {
@@ -1247,9 +1193,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         color: #DC143C;
         font-size: 16px;
         font-weight: bold;
-        background-color: #f8d7da;
         padding: 10px;
-        border-radius: 10px;
         text-align: center;
 
         svg {
@@ -1264,22 +1208,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         flex: 1;
 
         label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             font-size: 15px;
-            font-weight: 500;
-            color: #888888;
-
-            span {
-                color: #444444;
-            }
+            font-weight: 200;
+            color: #ffffff;
         }
-
-        p {
-            color: #DC143C;
-        }
-
     }
 
     .field-row {
@@ -1307,13 +1239,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     /* Modal box */
     .modal-content {
-        background: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 30px;
         animation: bounceIn 0.4s ease;
     }
 
-    /* Headline */
     .modal-content h3 {
         display: flex;
         align-items: center;
@@ -1322,35 +1257,34 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         text-align: center;
         margin-bottom: 15px;
         font-size: 26px;
-        color: #000000;
+        color: #ffffff;
 
         svg {
             width: 35px;
             height: 35px;
-            fill: #000000;
+            fill: #ffffff;
         }
     }
 
-    /* Input styling */
     .modal-content input[type="text"],
     .modal-content input[type="number"] {
         width: 100%;
-        padding: 10px;
+        padding: 15px;
         margin-top: 5px;
         margin-bottom: 10px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        border-radius: 15px;
         font-size: 14px;
+        font-weight: bold;
         transition: border-color 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     .modal-content input:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
-    /* ปุ่ม */
     .modal-btn {
         display: flex;
         justify-content: center;
@@ -1367,9 +1301,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .modal-btn-save {
         width: 70%;
-        background-color: #000000;
+        background-color: #4CAF50;
         color: #ffffff;
         gap: 8px;
+        border-radius: 20px;
 
         svg {
             fill: #ffffff;
@@ -1379,7 +1314,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .modal-btn-save:hover {
-        background-color: #222222;
+        background-color: #45a049;
     }
 
     .modal-btn-cancel {
@@ -1387,6 +1322,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: #DC143C;
         color: #ffffff;
         gap: 4px;
+        border-radius: 20px;
 
         svg {
             fill: #ffffff;
@@ -1401,20 +1337,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .btn-delete-product svg {
         fill: #DC143C;
-    }
-
-    .custom-modal {
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-        justify-content: center;
-        align-items: center;
-        animation: fadeInBackground 0.3s ease;
     }
 
     .highlight-text {
@@ -1432,9 +1354,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         max-width: 90%;
         height: auto;
         max-height: 80%;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 25px;
-        border-radius: 10px;
+        border-radius: 40px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         text-align: center;
         animation: bounceIn 0.4s ease;
@@ -1443,13 +1369,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         p {
             font-size: 16px;
             font-weight: 500;
-            color: #000000;
             margin-bottom: 40px;
         }
 
         span {
-            font-size: 80px;
-            color: #DC143C;
+            font-size: 160px;
+            color: #F2F5F5;
             margin-bottom: 40px;
         }
     }
@@ -1467,7 +1392,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         padding: 15px 20px;
         font-weight: bold;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
     }
 
@@ -1526,11 +1451,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         position: fixed;
         top: 30px;
         right: 20px;
-        background-color: #ffffff;
-        color: #4CAF50;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 15px 25px;
-        border-radius: 10px;
-        font-weight: bold;
+        border-radius: 15px;
+        font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
 
@@ -1551,13 +1477,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .alert-toast {
         display: none;
         position: fixed;
-        top: 10px;
+        top: 8px;
         right: 8px;
-        background-color: #ffffff;
-        color: #DC143C;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 10px 15px;
-        border-radius: 10px;
-        font-weight: bold;
+        border-radius: 15px;
+        font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
         gap: 8px;
@@ -1573,13 +1500,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .alert-toast.success-toast {
         display: none;
         position: fixed;
-        top: 10px;
+        top: 8px;
         right: 8px;
-        background-color: #ffffff;
-        color: #4CAF50;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 10px 15px;
-        border-radius: 10px;
-        font-weight: bold;
+        border-radius: 15px;
+        font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
         gap: 8px;
@@ -1595,13 +1523,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .alert-toast.success {
         display: none;
         position: fixed;
-        top: 10px;
+        top: 8px;
         right: 8px;
-        background-color: #ffffff;
-        color: #4CAF50;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 10px 15px;
-        border-radius: 10px;
-        font-weight: bold;
+        border-radius: 15px;
+        font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
         gap: 8px;
@@ -1697,16 +1626,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .download-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-        margin-top: 8px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-top: 15px;
     }
 
     .download-template {
-        color: #000000;
-        background: #ffffff;
-        border-radius: 10px;
-        padding: 24px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 15px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1714,14 +1646,18 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         text-align: center;
         transition: transform 0.2s ease;
 
-        h3 {
-            display: flex;
-            align-items: center;
+        p {
             justify-content: center;
-            text-align: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 12px;
+            font-weight: 500;
             margin-bottom: 50px;
+        }
+
+        svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
         }
     }
 
@@ -1730,8 +1666,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         justify-content: center;
         width: 100%;
-        background-color: #F79824;
-        border-radius: 10px;
+        background-color: #37B9F1;
+        border-radius: 15px;
         text-decoration: none;
         transition: background-color 0.3s ease;
     }
@@ -1742,25 +1678,21 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         bottom: 110%;
         left: 50%;
         transform: translateX(-50%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         background: #000000;
         color: #ffffff;
         padding: 6px 10px;
         font-size: 14px;
         white-space: nowrap;
-        border-radius: 10px;
+        border-radius: 12.5px;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     }
 
     .btn-download:hover {
-        background-color: #E57300;
+        background-color: #1789BD;
     }
-
-    .btn-download svg {
-        fill: #ffffff;
-    }
-
 
     .filter-menu {
         display: none;
@@ -1864,28 +1796,28 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     /* Card ยอดขายแต่ละช่อง */
     .stat-card {
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
         border-radius: 10px;
-        padding: 16px;
+        padding: 10px;
         display: flex;
         align-items: center;
         transition: transform 0.2s ease;
     }
 
     .stat-card .icon {
-        background-color: var(--accent);
-        color: #fff;
+        color: var(--accent);
         padding: 10px;
-        border-radius: 8px;
-        font-size: 18px;
-        margin-right: 12px;
+        margin-right: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .stat-card .icon i {
-        font-size: 20px;
+        font-size: 40px;
     }
 
     .stat-card .info h5 {
@@ -1898,7 +1830,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         margin: 4px 0 0;
         font-size: 18px;
         font-weight: bold;
-        color: #333;
+        color: #ffffff;
     }
 
     .chart-container {
@@ -1935,7 +1867,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     #upload_file_excal {
-        margin-top: 68px;
+        margin-top: 60px;
         padding: 20px;
     }
 
@@ -1995,63 +1927,67 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     #food_bank_check {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
     }
 
     #local_drink_check {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
     }
 
     #fastfood_check {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
     }
 
     #snack_check {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
     }
 
     #stationery_check {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
     }
 
     .category-buttons {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        gap: 15px;
         margin-bottom: 15px;
     }
 
     .category-btn {
         display: flex;
         align-items: center;
+        justify-content: center;
         padding: 15px 12px;
-        background-color: #eeeeee;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 15px;
         cursor: pointer;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 500;
         transition: background 0.3s;
     }
 
     .category-btn:hover {
-        background-color: #dddddd;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .category-btn.selected {
-        background-color: #F79824;
-        color: white;
+        background-color: #E57300;
+        color: #ffffff;
     }
 
     .collapsible-toggle {
         display: flex;
         align-items: center;
-        color: white;
+        color: #ffffff;
         padding: 10px 20px 10px 15px;
         border: none;
         border-radius: 10px;
@@ -2102,7 +2038,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         top: 2px;
         right: 138px;
         background-color: #ff4b4b;
-        color: white;
+        color: #ffffff;
         font-size: 12px;
         font-weight: bold;
         width: 25px;
@@ -2151,8 +2087,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         }
     }
 
-
-
     th input[type="checkbox"] {
         width: 28px;
         height: 28px;
@@ -2160,9 +2094,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        border: 2px solid #000000;
         border-radius: 50%;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.2);
         position: relative;
         box-sizing: border-box;
         padding: 0;
@@ -2172,7 +2105,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     th input[type="checkbox"]:checked {
         background-color: #000000;
-        border-color: #000000;
         background-image: url('/sci-next/img/done_all.png');
         background-size: 20px 20px;
         background-position: center;
@@ -2186,9 +2118,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        border: 2px solid #000000;
         border-radius: 50%;
-        background-color: #ffffff;
+        background-color: #111111;
         position: relative;
         box-sizing: border-box;
         padding: 0;
@@ -2200,19 +2131,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     td input[type="checkbox"].row-checkbox:checked {
         background-color: #000000;
-        border-color: #000000;
         background-image: url('/sci-next/img/check.png');
         background-size: 20px 20px;
         background-position: center;
         background-repeat: no-repeat;
     }
 
-    td input[type="checkbox"].row-checkbox:hover {
-        border-color: #000000;
-    }
-
     th input[type="checkbox"]:hover {
-        border-color: #000000;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .upload-container {
@@ -2223,20 +2149,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .product-preview-box {
         width: 280px;
-        height: 540px;
-        color: #000000;
+        height: auto;
         font-size: 16px;
         font-weight: bold;
         text-align: center;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .product-preview-image img {
         max-width: 280px;
         max-height: 280px;
         object-fit: cover;
-        border-radius: 10px;
+        border-radius: 20px;
     }
 
     .product-details {
@@ -2249,11 +2172,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         text-align: left;
         align-items: center;
-        margin-bottom: 5px;
+        margin-bottom: 15px;
         padding: 10px 14px;
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: inset 0 0 0 1px #dddddd;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
         transition: background 0.3s;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -2262,45 +2187,48 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .detail-group svg {
         margin-right: 10px;
-        fill: #000000;
+        fill: #ffffff;
         flex-shrink: 0;
     }
 
     .detail-group div {
         flex: 1;
         font-size: 16px;
-        color: #222222;
+        color: #ffffff;
     }
 
     .detail-inline {
         display: flex;
         justify-content: space-between;
-        gap: 5px;
-        margin: 5px 0 5px 0;
+        gap: 10px;
+        margin-bottom: 15px;
         flex-wrap: wrap;
     }
 
     .detail-inline p {
         flex: 1 1 48%;
-        background: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         padding: 10px 14px;
-        border-radius: 10px;
+        border-radius: 15px;
         display: flex;
         align-items: center;
-        box-shadow: inset 0 0 0 1px #ddd;
         transition: background 0.3s;
     }
 
     .detail-inline .material-icons {
         margin-right: 10px;
         font-size: 24px;
-        color: #000000;
+        color: #ffffff;
     }
 
     .detail-group .material-icons {
         margin-right: 10px;
         font-size: 24px;
-        color: #000000;
+        color: #ffffff;
     }
 
     #previewName,
@@ -2315,9 +2243,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .profile-container {
         width: 100%;
-        background: linear-gradient(135deg, #667eea, #764ba2, #a855f7, #d946ef);
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 40px;
         position: relative;
     }
 
@@ -2326,11 +2253,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .profile-card {
-        background: #111111;
         padding: 90px 15px 15px;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
         position: relative;
         align-items: center;
     }
@@ -2347,7 +2272,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: #ffffff;
         border-radius: 50%;
         object-fit: cover;
-        border: 8px solid #111111;
+        border: 6px solid #111111;
     }
 
     .upload-btn {
@@ -2383,16 +2308,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         flex-direction: column;
         gap: 20px;
-        background: #f4f4f4;
         padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 30px;
     }
 
     .profile-title {
         font-size: 24px;
         font-weight: bold;
-        color: #000000;
+        color: #E1DFE9;
         text-transform: uppercase;
         letter-spacing: 1.5px;
         position: relative;
@@ -2429,55 +2352,53 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .profile-info label {
         display: flex;
-        font-weight: bold;
-        color: #333333;
-        gap: 8px;
+        font-weight: 200;
+        color: #908E9B;
+        gap: 4px;
     }
 
     .profile-info label .material-icons {
         font-size: 24px;
-        color: #000000;
+        color: #E1DFE9;
     }
 
     .profile-info input {
-        padding: 10px;
-        border: 1px solid #ffffff;
-        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #000000;
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
         width: 100%;
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: bold;
         transition: 0.3s;
         margin-bottom: 20px;
     }
 
     .profile-info input:focus {
-        border-color: #111111;
+        border: 1px solid #DC143C;
         outline: none;
     }
 
     .confirm-btn {
         margin-top: 5px;
         width: auto;
-        padding: 10px 15px;
-        background: #6a0dad;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
+        padding: 20px;
+        background-color: #8739F9;
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 500;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
         transition: 0.3s;
     }
 
     .confirm-btn:hover {
-        background: #5a0ba5;
-    }
-
-    .confirm-btn .material-icons {
-        font-size: 24px;
+        background-color: #5419B5;
     }
 
     .action-dropdown {
@@ -2625,14 +2546,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         right: -500px;
         width: 500px;
         height: 100%;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
         transition: right 0.3s ease;
         z-index: 1001;
         display: none;
     }
 
-    /* แสดง panel */
     .side-panel.show {
         transform: translateX(0);
         pointer-events: auto;
@@ -2652,7 +2576,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         font-size: 40px;
         cursor: pointer;
         color: #ffffff;
-        background-color: #444444;
         border: none;
         transition: transform 0.2s ease, background-color 0.2s ease;
         display: flex;
@@ -2685,12 +2608,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #imagePreview {
         height: 150px;
         object-fit: cover;
+        border-radius: 20px;
     }
 
     #editProductForm {
         max-width: 500px;
         padding: 15px;
-        background-color: #f4f4f4;
         border-radius: 10px;
 
         p {
@@ -2702,30 +2625,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
     }
 
     #editProductForm input[type="text"],
     #editProductForm input[type="number"] {
         width: 100%;
-        padding: 10px 12px;
+        padding: 15px;
         margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        border-radius: 15px;
+        font-weight: bold;
         transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     #editProductForm input[type="text"]:focus,
     #editProductForm input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
@@ -2742,24 +2661,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editProductForm button {
         width: 100%;
         font-size: 20px;
-        font-weight: bold;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 15px 20px;
+        padding: 20px;
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
 
     #editProductForm button:hover {
-        background-color: #222222;
+        background-color: #111111;
     }
-
 
     #editProductForm button svg {
         width: 28px;
@@ -2780,12 +2698,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #imagePreviewSoftDrink {
         height: 150px;
         object-fit: cover;
+        border-radius: 20px;
     }
 
     #editProductFormSoftDrink {
         max-width: 500px;
         padding: 15px;
-        background-color: #f4f4f4;
         border-radius: 10px;
     }
 
@@ -2793,30 +2711,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
     }
 
     #editProductFormSoftDrink input[type="text"],
     #editProductFormSoftDrink input[type="number"] {
         width: 100%;
-        padding: 10px 12px;
+        padding: 15px;
         margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        font-weight: bold;
+        border-radius: 15px;
         transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     #editProductFormSoftDrink input[type="text"]:focus,
     #editProductFormSoftDrink input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
@@ -2833,110 +2747,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editProductFormSoftDrink button {
         width: 100%;
         font-size: 20px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 15px 20px;
-        background-color: #000000;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    #editProductFormSoftDrink button:hover {
-        background-color: #222222;
-    }
-
-
-    #editProductFormSoftDrink button svg {
-        width: 28px;
-        height: 28px;
-        fill: #ffffff;
-    }
-
-    /* edit Soft Drink */
-    #imagePreviewContainerSoftDrink {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-    }
-
-    #imagePreviewSoftDrink {
-        height: 150px;
-        object-fit: cover;
-    }
-
-    #editProductFormSoftDrink {
-        max-width: 500px;
-        padding: 15px;
-        background-color: #f4f4f4;
-        border-radius: 10px;
-
-        p {
-            color: #DC143C;
-        }
-    }
-
-    #editProductFormSoftDrink label {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
         font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
-    }
-
-    #editProductFormSoftDrink input[type="text"],
-    #editProductFormSoftDrink input[type="number"] {
-        width: 100%;
-        padding: 10px 12px;
-        margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
-        transition: border 0.3s, box-shadow 0.3s;
-    }
-
-    #editProductFormSoftDrink input[type="text"]:focus,
-    #editProductFormSoftDrink input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
-        outline: none;
-    }
-
-    .form-group-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-    }
-
-    .form-group-row .group-item {
-        flex: 1;
-    }
-
-    #editProductFormSoftDrink button {
-        width: 100%;
-        font-size: 20px;
-        font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 15px 20px;
+        padding: 20px;
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
@@ -2964,12 +2784,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #imagePreviewFreshFood {
         height: 150px;
         object-fit: cover;
+        border-radius: 20px;
     }
 
     #editProductFormFreshFood {
         max-width: 500px;
         padding: 15px;
-        background-color: #f4f4f4;
         border-radius: 10px;
 
         p {
@@ -2981,30 +2801,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
     }
 
     #editProductFormFreshFood input[type="text"],
     #editProductFormFreshFood input[type="number"] {
         width: 100%;
-        padding: 10px 12px;
+        padding: 15px;
         margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        font-weight: bold;
+        border-radius: 15px;
         transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     #editProductFormFreshFood input[type="text"]:focus,
     #editProductFormFreshFood input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
@@ -3021,16 +2837,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editProductFormFreshFood button {
         width: 100%;
         font-size: 20px;
-        font-weight: bold;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 15px 20px;
+        padding: 20px;
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
@@ -3058,12 +2874,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #imagePreviewSnackFood {
         height: 150px;
         object-fit: cover;
+        border-radius: 20px;
     }
 
     #editProductFormSnackFood {
         max-width: 500px;
         padding: 15px;
-        background-color: #f4f4f4;
         border-radius: 10px;
 
         p {
@@ -3075,30 +2891,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
     }
 
     #editProductFormSnackFood input[type="text"],
     #editProductFormSnackFood input[type="number"] {
         width: 100%;
-        padding: 10px 12px;
+        padding: 15px;
         margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        border-radius: 15px;
+        font-weight: bold;
         transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     #editProductFormSnackFood input[type="text"]:focus,
     #editProductFormSnackFood input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
@@ -3115,16 +2927,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editProductFormSnackFood button {
         width: 100%;
         font-size: 20px;
-        font-weight: bold;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 15px 20px;
+        padding: 20px;
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
@@ -3152,12 +2964,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #imagePreviewStationery {
         height: 150px;
         object-fit: cover;
+        border-radius: 20px;
     }
 
     #editProductFormStationery {
         max-width: 500px;
         padding: 15px;
-        background-color: #f4f4f4;
         border-radius: 10px;
 
         p {
@@ -3169,30 +2981,26 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-        font-weight: 500;
-        color: #888888;
-        gap: 8px;
-
-        span {
-            color: #444444;
-        }
-
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
     }
 
     #editProductFormStationery input[type="text"],
     #editProductFormStationery input[type="number"] {
         width: 100%;
-        padding: 10px 12px;
+        padding: 15px;
         margin-bottom: 20px;
-        border: 1px solid #DC143C;
-        border-radius: 10px;
+        border: 1px solid #000000;
+        font-weight: bold;
+        border-radius: 15px;
         transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
     #editProductFormStationery input[type="text"]:focus,
     #editProductFormStationery input[type="number"]:focus {
-        border-color: #000000;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+        border-color: #DC143C;
         outline: none;
     }
 
@@ -3209,16 +3017,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     #editProductFormStationery button {
         width: 100%;
         font-size: 20px;
-        font-weight: bold;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 15px 20px;
+        padding: 20px;
         background-color: #000000;
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
@@ -3236,8 +3044,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .excel-grid-upload {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
         margin-top: 20px;
     }
 
@@ -3260,10 +3068,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .excel-upload-form {
-        background: #f8f9fa;
-        padding: 24px;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        padding: 15px;
+        border-radius: 20px;
     }
 
     .excel-type-title {
@@ -3272,30 +3083,28 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         justify-content: center;
         text-align: center;
         gap: 8px;
-        font-size: 20px;
+        font-size: 16px;
         margin-bottom: 16px;
-        color: #333333;
     }
 
     .excel-upload-group {
-        margin-bottom: 16px;
+        margin-bottom: 15px;
     }
 
     .excel-upload-input {
         width: 100%;
         padding: 8px;
-        font-size: 16px;
-        border: 1px solid #cccccc;
-        border-radius: 10px;
+        font-size: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12.5px;
         display: block !important;
         z-index: 999 !important;
-        background: #ffffff;
         cursor: pointer;
     }
 
     .file-name-text {
         margin-top: 15px;
-        font-size: 15px;
+        font-size: 10px;
         color: #555555;
         text-align: center;
     }
@@ -3306,40 +3115,25 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         justify-content: center;
         gap: 8px;
-        background-color: #33A1FD;
+        background-color: #8739F9;
         color: #ffffff;
         font-size: 16px;
         font-weight: 500;
         padding: 12px 24px;
         border: none;
-        border-radius: 10px;
+        border-radius: 15px;
         cursor: pointer;
         transition: background-color 0.25s ease, transform 0.2s ease;
     }
 
     .excel-upload-button:hover {
-        background-color: #1980C6;
-    }
-
-    .password-progress {
-        width: 35%;
-        height: 10px;
-        background-color: #e0e0e0;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    #password-progress-bar {
-        height: 100%;
-        width: 0%;
-        background-color: red;
-        transition: width 0.3s, background-color 0.3s;
+        background-color: #5419B5;
     }
 
     #password-checklist {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 8px 16px;
+        gap: 12px;
         list-style: none;
         padding: 0;
         margin-bottom: 15px;
@@ -3350,9 +3144,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         text-align: center;
         align-items: center;
         justify-content: center;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 12px;
-        border-radius: 10px;
+        border-radius: 15px;
         font-size: 12px;
         color: #777;
         gap: 8px;
@@ -3383,14 +3180,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         color: #DC143C;
     }
 
-    .password-strength-text {
-        padding-right: 10px;
-        font-weight: bold;
-        font-size: 14px;
-        min-height: 20px;
-        transition: color 0.3s ease;
-    }
-
     #upload-img-admin {
         display: none;
     }
@@ -3404,7 +3193,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     #file-name {
-        color: #333;
+        color: #ffffff;
         font-size: 16px;
         font-weight: 500;
         padding: 4px 10px;
@@ -3434,7 +3223,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 10000;
     }
 
     .custom-modal.hidden {
@@ -3494,7 +3283,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         width: 40px;
         height: 40px;
         position: absolute;
-        right: -7px;
+        right: 4px;
         top: 50%;
         transform: translateY(-50%);
         background: #000000;
@@ -3543,14 +3332,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="tabLoadingBar"></div>
 
     <div class="sidebar">
-
-        <!-- Avatar -->
-        <div class="user-settings">
-            <div class="avatar-wrapper">
-                <img src="\sci-next\img\pachara.jpg" alt="Avatar" class="avatar">
-                <span class="online-status"></span>
-            </div>
-        </div>
 
         <!-- รายการหลัก -->
         <div class="main-tabs">
@@ -3643,9 +3424,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         <div class="main-tabs-products">
             <h3>รายการจัดการ</h3>
-            <div class="tab" data-tab="customer">
-                <span class="material-icons">manage_accounts</span> จัดการลูกค้า
-            </div>
             <div class="tab" data-tab="sci_admin">
                 <span class="material-icons">manage_accounts</span> จัดการแอดมิน
             </div>
@@ -3761,8 +3539,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <!-- สรุปยอดขายเป็นตัวเลข -->
     <div id="graph" class="content">
         <!-- สรุปยอดขายรายวัน -->
-        <div class="parent ">
-            <div class="div1 stat-card" style="--accent: #6c5ce7;">
+        <div class="parent">
+            <div class="div1 stat-card" style="--accent: #37B9F1;">
                 <div class="icon"><i class="fas fa-calendar-day"></i></div>
                 <div class="info">
                     <h5>รายวัน</h5>
@@ -3771,7 +3549,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
 
             <!-- สรุปยอดขายรายเดือน -->
-            <div class="div2 stat-card" style="--accent: #00b894;">
+            <div class="div2 stat-card" style="--accent: #8739F9;">
                 <div class="icon"><i class="fas fa-calendar-alt"></i></div>
                 <div class="info">
                     <h5>รายเดือน</h5>
@@ -3780,7 +3558,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
 
             <!-- รายปี -->
-            <div class="div3 stat-card" style="--accent: #fdcb6e;">
+            <div class="div3 stat-card" style="--accent: #BFA3F9;">
                 <div class="icon"><i class="fas fa-chart-line"></i></div>
                 <div class="info">
                     <h5>รายปี</h5>
@@ -3789,7 +3567,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
 
             <!-- จำนวนคำสั่งซื้อ -->
-            <div class="div4 stat-card" style="--accent: #d63031;">
+            <div class="div4 stat-card" style="--accent: #565360;">
                 <div class="icon"><i class="fas fa-receipt"></i></div>
                 <div class="info">
                     <h5>คำสั่งซื้อ</h5>
@@ -3810,8 +3588,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
         </div>
     </div>
-
-
 
     <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
 
@@ -3862,7 +3638,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
             <div class="form-container">
 
-                <h3 class="h-text-upload">เพิ่มแอดมินใหม่</h3>
+                <h1 class="h-text-upload">เพิ่มแอดมินใหม่
+                    <p>Create New Admin Account</p>
+                </h1>
 
                 <form class="form-upload" id="adminSignupForm" method="POST" enctype="multipart/form-data">
 
@@ -3871,10 +3649,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
                             </svg>
-                            รูปแอดมิน :
                         </label>
 
-                        <label for="upload-img-admin" class="custom-file-upload">เลือกไฟล์</label>
+                        <label for="upload-img-admin" class="custom-file-upload">เลือกไฟล์รูปภาพ</label>
                         <input type="file" id="upload-img-admin" accept="image/*" required>
 
                         <!-- แสดงชื่อไฟล์ -->
@@ -3889,14 +3666,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <div class="form-group">
                             <label for="firstName-admin"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
-                                </svg>ชื่อ :</label>
+                                </svg></label>
                             <input type="text" id="firstName-admin" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
                         </div>
                         <div class="form-group">
                             <label for="lastName-admin">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M481-781q106 0 200 45.5T838-604q7 9 4.5 16t-8.5 12q-6 5-14 4.5t-14-8.5q-55-78-141.5-119.5T481-741q-97 0-182 41.5T158-580q-6 9-14 10t-14-4q-7-5-8.5-12.5T126-602q62-85 155.5-132T481-781Zm0 94q135 0 232 90t97 223q0 50-35.5 83.5T688-257q-51 0-87.5-33.5T564-374q0-33-24.5-55.5T481-452q-34 0-58.5 22.5T398-374q0 97 57.5 162T604-121q9 3 12 10t1 15q-2 7-8 12t-15 3q-104-26-170-103.5T358-374q0-50 36-84t87-34q51 0 87 34t36 84q0 33 25 55.5t59 22.5q34 0 58-22.5t24-55.5q0-116-85-195t-203-79q-118 0-203 79t-85 194q0 24 4.5 60t21.5 84q3 9-.5 16T208-205q-8 3-15.5-.5T182-217q-15-39-21.5-77.5T154-374q0-133 96.5-223T481-687Zm0-192q64 0 125 15.5T724-819q9 5 10.5 12t-1.5 14q-3 7-10 11t-17-1q-53-27-109.5-41.5T481-839q-58 0-114 13.5T260-783q-8 5-16 2.5T232-791q-4-8-2-14.5t10-11.5q56-30 117-46t124-16Zm0 289q93 0 160 62.5T708-374q0 9-5.5 14.5T688-354q-8 0-14-5.5t-6-14.5q0-75-55.5-125.5T481-550q-76 0-130.5 50.5T296-374q0 81 28 137.5T406-123q6 6 6 14t-6 14q-6 6-14 6t-14-6q-59-62-90.5-126.5T256-374q0-91 66-153.5T481-590Zm-1 196q9 0 14.5 6t5.5 14q0 75 54 123t126 48q6 0 17-1t23-3q9-2 15.5 2.5T744-191q2 8-3 14t-13 8q-18 5-31.5 5.5t-16.5.5q-89 0-154.5-60T460-374q0-8 5.5-14t14.5-6Z" />
-                                </svg>นามสกุล :</label>
+                                </svg></label>
                             <input type="text" id="lastName-admin" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
                         </div>
                     </div>
@@ -3908,7 +3685,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
                             </svg>
-                            Gmail ผู้ใช้งาน :
                         </label>
                         <input type="gmail" id="gmail-admin" name="gmail" placeholder="กรอก Gmail ผู้ใช้งาน" required autocomplete="email">
                     </div>
@@ -3918,15 +3694,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <label for="password-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
-                            </svg>รหัสผ่าน :
+                            </svg>
                         </label>
                         <input type="password" id="password-admin" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
-
-                        <div id="password-strength-text" class="password-strength-text"></div>
-
-                        <div class="password-progress">
-                            <div id="password-progress-bar"></div>
-                        </div>
                     </div>
 
                     <ul id="password-checklist">
@@ -3940,14 +3710,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <label for="confirmPassword-admin">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 40-26.5t34-39.5l-69-51-63 71-55-67-70 55 86 121q-14 52-44 77t-54 25q-14 0-23-8.5t-9-19.5q0-13 13-22t31-9q14 0 26.5 4t22.5 12l35-61Zm0-160Zm0-160Z" />
-                            </svg>ยืนยันรหัสผ่าน :
+                            </svg>
                         </label>
                         <input type="password" id="confirmPassword-admin" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
                     </div>
 
-                    <button type="submit" id="submitAdminBtn" class="btn-upload"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
-                        </svg>สมัครแอดมิน</button>
+                    <button type="submit" id="submitAdminBtn" class="btn-upload">สมัครแอดมิน</button>
                 </form>
             </div>
         </div>
@@ -4001,7 +3769,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
             <div class="form-container">
 
-                <h3 class="h-text-upload">เพิ่มพนักงานใหม่</h3>
+                <h2 class="h-text-upload">เพิ่มพนักงานใหม่
+                    <p>Create New Employee Account</p>
+                </h2>
 
                 <form class="form-upload" id="employeeSignupForm" method="POST" enctype="multipart/form-data">
 
@@ -4009,26 +3779,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M440-440v-160H280v-80h160v-160h80v160h160v80H520v160h-80Zm40 280q-16 0-28-12t-12-28q0-16 12-28t28-12q16 0 28 12t12 28q0 16-12 28t-28 12Zm-320 80q-33 0-56.5-23.5T80-160v-480q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v480q0 33-23.5 56.5T800-80H160Zm0-80h640v-480H160v480Z" />
                             </svg>
-                            รูปพนักงาน :
                         </label>
 
-                        <label for="upload-img-employee" class="custom-file-upload">เลือกไฟล์</label>
+                        <label for="upload-img-employee" class="custom-file-upload">เลือกไฟล์รูปภาพ</label>
                         <input type="file" id="upload-img-employee" accept="image/*" required>
 
-                        <!-- แสดงชื่อไฟล์ -->
                         <div class="file-info-wrapper">
                             <span id="file-name"></span>
                             <small class="file-limit-note">* ไม่เกิน 1MB</small>
                         </div>
                     </div>
 
-                    <!-- แถวสำหรับชื่อและนามสกุล -->
                     <div class="from-container-stock">
                         <div class="form-group">
                             <label for="firstName-employee">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M80-80v-120q0-33 23.5-56.5T160-280h640q33 0 56.5 23.5T880-200v120H80Zm80-80h640v-40H160v40Zm40-180v-460q0-33 23.5-56.5T280-880h400q33 0 56.5 23.5T760-800v460h-80v-460H280v460h-80Zm120-60h23q44 0 70.5-44T440-560q0-72-26.5-116T343-720h-23v320Zm240-80q33 0 56.5-23.5T640-560q0-33-23.5-56.5T560-640q-33 0-56.5 23.5T480-560q0 33 23.5 56.5T560-480Zm-80 320Zm0-410Z" />
-                                </svg>ชื่อ :
+                                </svg>
                             </label>
                             <input type="text" id="firstName-employee" name="firstName" placeholder="กรอกชื่อ" required autocomplete="given-name">
                         </div>
@@ -4036,7 +3803,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <label for="lastName-employee">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                     <path d="M481-781q106 0 200 45.5T838-604q7 9 4.5 16t-8.5 12q-6 5-14 4.5t-14-8.5q-55-78-141.5-119.5T481-741q-97 0-182 41.5T158-580q-6 9-14 10t-14-4q-7-5-8.5-12.5T126-602q62-85 155.5-132T481-781Zm0 94q135 0 232 90t97 223q0 50-35.5 83.5T688-257q-51 0-87.5-33.5T564-374q0-33-24.5-55.5T481-452q-34 0-58.5 22.5T398-374q0 97 57.5 162T604-121q9 3 12 10t1 15q-2 7-8 12t-15 3q-104-26-170-103.5T358-374q0-50 36-84t87-34q51 0 87 34t36 84q0 33 25 55.5t59 22.5q34 0 58-22.5t24-55.5q0-116-85-195t-203-79q-118 0-203 79t-85 194q0 24 4.5 60t21.5 84q3 9-.5 16T208-205q-8 3-15.5-.5T182-217q-15-39-21.5-77.5T154-374q0-133 96.5-223T481-687Zm0-192q64 0 125 15.5T724-819q9 5 10.5 12t-1.5 14q-3 7-10 11t-17-1q-53-27-109.5-41.5T481-839q-58 0-114 13.5T260-783q-8 5-16 2.5T232-791q-4-8-2-14.5t10-11.5q56-30 117-46t124-16Zm0 289q93 0 160 62.5T708-374q0 9-5.5 14.5T688-354q-8 0-14-5.5t-6-14.5q0-75-55.5-125.5T481-550q-76 0-130.5 50.5T296-374q0 81 28 137.5T406-123q6 6 6 14t-6 14q-6 6-14 6t-14-6q-59-62-90.5-126.5T256-374q0-91 66-153.5T481-590Zm-1 196q9 0 14.5 6t5.5 14q0 75 54 123t126 48q6 0 17-1t23-3q9-2 15.5 2.5T744-191q2 8-3 14t-13 8q-18 5-31.5 5.5t-16.5.5q-89 0-154.5-60T460-374q0-8 5.5-14t14.5-6Z" />
-                                </svg>นามสกุล :
+                                </svg>
                             </label>
                             <input type="text" id="lastName-employee" name="lastName" placeholder="กรอกนามสกุล" required autocomplete="family-name">
                         </div>
@@ -4049,7 +3816,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M560-440h200v-80H560v80Zm0-120h200v-80H560v80ZM200-320h320v-22q0-45-44-71.5T360-440q-72 0-116 26.5T200-342v22Zm160-160q33 0 56.5-23.5T440-560q0-33-23.5-56.5T360-640q-33 0-56.5 23.5T280-560q0 33 23.5 56.5T360-480ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
                             </svg>
-                            Gmail พนักงาน :
                         </label>
                         <input type="email" id="gmail-employee" name="gmail" placeholder="กรอก Gmail พนักงาน" required autocomplete="email">
                     </div>
@@ -4058,15 +3824,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <label for="password-employee">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z" />
-                            </svg>รหัสผ่าน :
+                            </svg>
                         </label>
                         <input type="password" id="password-employee" name="password" placeholder="กรอกรหัสผ่าน" required autocomplete="new-password">
-
-                        <div id="password-strength-text" class="password-strength-text"></div>
-
-                        <div class="password-progress">
-                            <div id="password-progress-bar"></div>
-                        </div>
                     </div>
 
                     <ul id="password-checklist">
@@ -4080,19 +3840,18 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <label for="confirmPassword-employee">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M480-480Zm0 400q-139-35-229.5-159.5T160-516v-244l320-120 320 120v262q0 9-1 19h-81q1-10 1.5-19t.5-18v-189l-240-90-240 90v189q0 121 68 220t172 132v84Zm200 0v-120H560v-80h120v-120h80v120h120v80H760v120h-80ZM420-360h120l-23-129q20-10 40-26.5t34-39.5l-69-51-63 71-55-67-70 55 86 121q-14 52-44 77t-54 25q-14 0-23-8.5t-9-19.5q0-13 13-22t31-9q14 0 26.5 4t22.5 12l35-61Zm0-160Zm0-160Z" />
-                            </svg>ยืนยันรหัสผ่าน :
+                            </svg>
                         </label>
                         <input type="password" id="confirmPassword-employee" name="confirmPassword" placeholder="กรอกยืนยันรหัสผ่าน" required autocomplete="new-password">
                     </div>
 
                     <button type="submit" id="submitEmployeeBtn" class="btn-upload">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
-                        </svg>สมัครพนักงาน
+                        สมัครพนักงาน
                     </button>
                 </form>
             </div>
         </div>
+
     </div>
 
     <!-- ฟอร์มอัปโหลดสินค้า -->
@@ -4196,7 +3955,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                     <div class="form-group">
                         <label for="productImage">
-                            <span class="material-icons" style="vertical-align: middle;">add_photo_alternate</span> รูปภาพสินค้า :
+                            <span class="material-icons" style="vertical-align: middle;">add_photo_alternate</span>
                         </label>
                         <div class="input-clear-wrapper">
                             <input type="text" id="productImage" name="productImage" placeholder="กรอก URL ของรูปภาพ" required autocomplete="on"
@@ -4208,7 +3967,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                     <div class="form-group">
                         <label for="productName">
-                            <span class="material-icons">sell</span> ชื่อสินค้า :
+                            <span class="material-icons">sell</span>
                         </label>
                         <input type="text" id="productName" name="productName" placeholder="กรอกชื่อสินค้า" required>
                     </div>
@@ -4218,7 +3977,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                             </svg>
-                            บาร์โค้ด :
                         </label>
                         <input type="text" id="barcode" name="barcode" placeholder="กรอกบาร์โค้ด" required>
                     </div>
@@ -4226,14 +3984,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="form-container-product">
                         <div class="form-group">
                             <label for="productPrice">
-                                <span class="material-icons">paid</span> ราคาขาย :
+                                <span class="material-icons">paid</span>
                             </label>
                             <input type="number" id="productPrice" name="productPrice" placeholder="กรอกราคาขาย" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productCost">
-                                <span class="material-icons">money</span> ราคาต้นทุน :
+                                <span class="material-icons">money</span>
                             </label>
                             <input type="number" id="productCost" name="productCost" placeholder="กรอกราคาต้นทุน" required>
                         </div>
@@ -4243,14 +4001,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="from-container-stock">
                         <div class="form-group">
                             <label for="productStock">
-                                <span class="material-icons">warehouse</span> จำนวนสต็อก :
+                                <span class="material-icons">warehouse</span>
                             </label>
                             <input type="number" id="productStock" name="productStock" placeholder="กรอกจำนวนสต็อก" required>
                         </div>
 
                         <div class="form-group">
                             <label for="productReorderLevel">
-                                <span class="material-icons">swap_vert</span> สต็อกต่ำสุด :
+                                <span class="material-icons">swap_vert</span>
                             </label>
                             <input type="number" id="productReorderLevel" name="productReorderLevel" placeholder="กรอกจำนวนสต็อกต่ำสุด" required>
                         </div>
@@ -4258,9 +4016,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                     <div>
                         <button type="submit" class="btn-upload">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                                <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                            </svg>
                             อัปโหลดสินค้า
                         </button>
                     </div>
@@ -4272,11 +4027,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <!-- ฟอร์มอัปโหลดไฟล์ Excel -->
 
     <div id="upload_file_excal" class="content">
-        <div class="header-container">
-            <h3 class="h-text-upload">
-                เพิ่มสินค้าใหม่ผ่านไฟล์ Excel
-            </h3>
-        </div>
+        <h3 class="h-text-upload">
+            เพิ่มสินค้าใหม่ผ่านไฟล์ Excel
+            <p>Add Products by Uploading File</p>
+        </h3>
 
         <div class="excel-grid-upload">
             <!-- ประเภทแห้ง -->
@@ -4288,9 +4042,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </svg>อัปโหลดไฟล์</button>
+                    <button type="submit" class="excel-upload-button">อัปโหลดไฟล์</button>
                 </div>
             </form>
 
@@ -4303,9 +4055,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </svg>อัปโหลดไฟล์</button>
+                    <button type="submit" class="excel-upload-button">อัปโหลดไฟล์</button>
                 </div>
             </form>
 
@@ -4318,9 +4068,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </svg>อัปโหลดไฟล์</button>
+                    <button type="submit" class="excel-upload-button">อัปโหลดไฟล์</button>
                 </div>
             </form>
 
@@ -4333,44 +4081,62 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
                 </div>
                 <div class="excel-upload-group">
-                    <button type="submit" class="excel-upload-button"><svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff" stroke="#ffffff" stroke-width="20">
-                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </svg>อัปโหลดไฟล์</button>
+                    <button type="submit" class="excel-upload-button">อัปโหลดไฟล์</button>
+                </div>
+            </form>
+            <!-- ประเภทเครื่องเขียน -->
+            <form action="../../product/upload_product/upload_product_excal/upload_excel_snack.php" method="POST" enctype="multipart/form-data" class="excel-upload-form">
+                <h4 class="excel-type-title"><span class="material-icons">cookie</span>ประเภทเครื่องเขียน
+                </h4>
+                <div class="excel-upload-group">
+                    <input type="file" name="excel_file" class="excel-upload-input" accept=".xlsx, .xls" required onchange="showFileName(this)">
+                    <div class="file-name-text">ยังไม่ได้เลือกไฟล์</div>
+                </div>
+                <div class="excel-upload-group">
+                    <button type="submit" class="excel-upload-button">อัปโหลดไฟล์</button>
                 </div>
             </form>
         </div>
 
         <div class="download-grid">
             <div class="download-template">
-                <h3><span class="material-icons">food_bank</span>ฟอร์ม Excal ของแห้ง</h3>
+                <p>ฟอร์ม Excal ของแห้ง</p>
                 <a href="../../assets/templates/ฟอร์มของแห้ง.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มของแห้ง">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z" />
                     </svg>
                 </a>
             </div>
 
             <div class="download-template">
-                <h3><span class="material-icons">local_drink</span>ฟอร์ม Excal ของเครื่องดื่ม</h3>
+                <p>ฟอร์ม Excal ของเครื่องดื่ม</p>
                 <a href="../../assets/templates/ฟอร์มเครื่องดื่ม.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มเครื่องดื่ม">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z" />
                     </svg>
                 </a>
             </div>
             <div class="download-template">
-                <h3><span class="material-icons">fastfood</span>ฟอร์ม Excal ของแช่แข็ง</h3>
+                <p>ฟอร์ม Excal ของแช่แข็ง</p>
                 <a href="../../assets/templates/ฟอร์มของแช่แข็ง.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มของแช่แข็ง">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z" />
                     </svg>
                 </a>
             </div>
             <div class="download-template">
-                <h3><span class="material-icons">cookie</span>ฟอร์ม Excal ของขนม</h3>
+                <p>ฟอร์ม Excal ของขนม</p>
                 <a href="../../assets/templates/ฟอร์มขนม.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มขนม">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="download-template">
+                <p>ฟอร์ม Excal ของเครื่องเขียน</p>
+                <a href="../../assets/templates/ฟอร์มขนม.xlsx" download class="btn btn-download" data-tooltip="ฟอร์มเครื่องเขียน">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z" />
                     </svg>
                 </a>
             </div>
@@ -4382,7 +4148,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <div class="header-container">
             <h3 class="h-text-upload">
                 รายละเอียดสินค้าประเภทแห้ง
-                <span id="dried-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -4427,7 +4192,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="local_drink_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องดื่ม
-                <span id="soft-drink-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -4471,7 +4235,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="fastfood_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทแช่แข็ง
-                <span id="fresh-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -4515,7 +4278,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="snack_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทขนมขบเคี้ยว
-                <span id="snack-food-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -4559,7 +4321,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="stationery_check" class="content">
         <div class="header-container">
             <h3 class="h-text-upload">รายละเอียดสินค้าประเภทเครื่องเขียน
-                <span id="stationery-selected-count">เลือกแล้ว +0</span>
             </h3>
 
             <div class="btn-container">
@@ -4615,34 +4376,31 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                     <!-- ฟอร์ม -->
                     <div class="modal-fields">
-                        <label for="editName"><span class="material-icons">sell</span>ชื่อสินค้า
-                            <p>*</p>
+                        <label for="editName">ชื่อสินค้า
                         </label>
                         <input type="text" id="editName" required />
 
-                        <label><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#444444">
-                                <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด<p>*</p></label>
+                        <label>บาร์โค้ด</label>
                         <input type="text" id="editBarcode" required />
 
                         <div class="field-row">
                             <div>
-                                <label for="editPrice"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="editPrice">ราคาขาย</label>
                                 <input type="number" id="editPrice" required />
                             </div>
                             <div>
-                                <label for="editCost"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="editCost">ราคาต้นทุน</label>
                                 <input type="number" id="editCost" required />
                             </div>
                         </div>
 
                         <div class="field-row">
                             <div>
-                                <label for="editStock"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="editStock">จำนวนสต็อก</label>
                                 <input type="number" id="editStock" required />
                             </div>
                             <div>
-                                <label for="editReorder"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="editReorder">สต็อกต่ำสุด</label>
                                 <input type="number" id="editReorder" required />
                             </div>
                         </div>
@@ -4654,9 +4412,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <button type="submit" class="modal-btn modal-btn-save"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                     <path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" />
                                 </svg>บันทึกการแก้ไข</button>
-                            <button type="button" id="closeModal" class="modal-btn modal-btn-cancel"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                    <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-                                </svg>ยกเลิก</button>
+                            <button type="button" id="closeModal" class="modal-btn modal-btn-cancel">ยกเลิก</button>
                         </div>
                     </div>
                 </div>
@@ -4675,9 +4431,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     </svg>ลบสินค้า
                 </button>
                 <button id="btnCancelDeleteProduct" class="btn-Confirm btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                    </svg>ยกเลิก
+                    ยกเลิก
                 </button>
             </div>
         </div>
@@ -4692,9 +4446,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 <button id="confirmDeleteBtn" class="btn-Confirm btn-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                     </svg>ลบสินค้า</button>
-                <button id="cancelDeleteBtn" class="btn-Confirm btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                    </svg>ยกเลิก</button>
+                <button id="cancelDeleteBtn" class="btn-Confirm btn-secondary">ยกเลิก</button>
             </div>
         </div>
     </div>
@@ -4705,11 +4457,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <p id="confirmMessage">คุณต้องการเพิ่มสินค้าที่เลือกหรือไม่?</p>
             <div class="modal-actions">
                 <button id="confirmAddProductBtn" class="btn-Confirm btn-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+                        <path d="M467-120q-73-1-136-14t-110-34.5q-47-21.5-74-50T120-280q0 33 27 61.5t74 50Q268-147 331-134t136 14Zm-15-200q-38-2-73.5-6.5t-67.5-12q-32-7.5-60-17.5t-51-23q23 13 51 23t60 17.5q32 7.5 67.5 12T452-320Zm28-279q89 0 179-26.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 27 101.5 53.5T480-599Zm220 479h40v-164l72 72 28-28-120-120-120 120 28 28 72-72v164Zm20 80q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40ZM443-201q3 22 9 42t15 39q-73-1-136-14t-110-34.5q-47-21.5-74-50T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v187q-19-9-39-15t-41-9v-62q-52 29-124 44t-156 15q-85 0-157-15t-123-44v101q51 47 130.5 62.5T480-400h11q-13 18-22.5 38T452-320q-76-4-141-18.5T200-379v99q7 13 30 26.5t56 24q33 10.5 73.5 18T443-201Z" />
                     </svg>เพิ่มสินค้า</button>
-                <button id="cancelAddProductBtn" class="btn-Confirm btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                    </svg>ยกเลิก</button>
+                <button id="cancelAddProductBtn" class="btn-Confirm btn-secondary">ยกเลิก</button>
             </div>
         </div>
     </div>
@@ -4741,9 +4491,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <span id="alertToastIcon" class="icon-container"></span>
         <span id="alertToastMessage"></span>
     </div>
-
-
-
 
 
     <div id="dried_food" class="content">
@@ -4840,41 +4587,41 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <img id="imagePreview" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <label for="product_name"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name" name="product_name" required>
 
                         <label for="barcode">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
                             </svg>บาร์โค้ด
-                            <p>*</p>
+
                         </label>
                         <input type="text" id="barcodeDriedFood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="price"><span class="material-icons">price_change</span>ราคาขาย</label>
                                 <input type="number" id="price" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="cost"><span class="material-icons">money</span>ราคาต้นทุน</label>
                                 <input type="number" id="cost" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="stock"><span class="material-icons">warehouse</span>จำนวนสต็อก</label>
                                 <input type="number" id="stock" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="reorder_level"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด</label>
                                 <input type="number" id="reorder_level" name="reorder_level" required>
                             </div>
                         </div>
 
                         <button type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>
+
                             บันทึกการแก้ไข
                         </button>
                     </form>
@@ -4973,38 +4720,38 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <img id="imagePreviewSoftDrink" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_softdrink"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <label for="product_name_softdrink"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name_softdrink" name="product_name" required>
 
                         <label for="barcode_softdrink">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด<p>*</p></label>
+                            </svg>บาร์โค้ด</label>
                         <input type="text" id="barcode_softdrink" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_softdrink"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="price_softdrink"><span class="material-icons">price_change</span>ราคาขาย</label>
                                 <input type="number" id="price_softdrink" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_softdrink"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="cost_softdrink"><span class="material-icons">money</span>ราคาต้นทุน</label>
                                 <input type="number" id="cost_softdrink" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_softdrink"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="stock_softdrink"><span class="material-icons">warehouse</span>จำนวนสต็อก</label>
                                 <input type="number" id="stock_softdrink" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_softdrink"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="reorder_level_softdrink"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด</label>
                                 <input type="number" id="reorder_level_softdrink" name="reorder_level" required>
                             </div>
                         </div>
 
-                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                        <button type="submit">บันทึกการแก้ไข</button>
                     </form>
                 </div>
             </div>
@@ -5100,37 +4847,37 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <img id="imagePreviewFreshFood" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_freshfood"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <label for="product_name_freshfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name_freshfood" name="product_name" required>
 
                         <label for="barcode_freshfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด<p>*</p></label>
+                            </svg>บาร์โค้ด</label>
                         <input type="text" id="barcode_freshfood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_freshfood"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="price_freshfood"><span class="material-icons">price_change</span>ราคาขาย</label>
                                 <input type="number" id="price_freshfood" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_freshfood"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="cost_freshfood"><span class="material-icons">money</span>ราคาต้นทุน</label>
                                 <input type="number" id="cost_freshfood" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_freshfood"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="stock_freshfood"><span class="material-icons">warehouse</span>จำนวนสต็อก</label>
                                 <input type="number" id="stock_freshfood" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_freshfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="reorder_level_freshfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด</label>
                                 <input type="number" id="reorder_level_freshfood" name="reorder_level" required>
                             </div>
                         </div>
 
-                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                        <button type="submit">บันทึกการแก้ไข</button>
                     </form>
 
                 </div>
@@ -5228,37 +4975,37 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <img id="imagePreviewSnackFood" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_snackfood"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <label for="product_name_snackfood"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name_snackfood" name="product_name" required>
 
                         <label for="barcode_snackfood"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด<p>*</p></label>
+                            </svg>บาร์โค้ด</label>
                         <input type="text" id="barcode_snackfood" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_snackfood"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="price_snackfood"><span class="material-icons">price_change</span>ราคาขาย</label>
                                 <input type="number" id="price_snackfood" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_snackfood"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="cost_snackfood"><span class="material-icons">money</span>ราคาต้นทุน</label>
                                 <input type="number" id="cost_snackfood" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_snackfood"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="stock_snackfood"><span class="material-icons">warehouse</span>จำนวนสต็อก</label>
                                 <input type="number" id="stock_snackfood" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_snackfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="reorder_level_snackfood"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด</label>
                                 <input type="number" id="reorder_level_snackfood" name="reorder_level" required>
                             </div>
                         </div>
 
-                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                        <button type="submit">บันทึกการแก้ไข</button>
                     </form>
 
                 </div>
@@ -5355,37 +5102,37 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <img id="imagePreviewStationery" alt="รูปสินค้า">
                         </div>
 
-                        <label for="product_name_stationery"><span class="material-icons">sell</span>ชื่อสินค้า<p>*</p></label>
+                        <label for="product_name_stationery"><span class="material-icons">sell</span>ชื่อสินค้า</label>
                         <input type="text" id="product_name_stationery" name="product_name" required>
 
                         <label for="barcode_stationery"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#333333">
                                 <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
-                            </svg>บาร์โค้ด<p>*</p></label>
+                            </svg>บาร์โค้ด</label>
                         <input type="text" id="barcode_stationery" name="barcode" maxlength="17" />
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="price_stationery"><span class="material-icons">price_change</span>ราคาขาย<p>*</p></label>
+                                <label for="price_stationery"><span class="material-icons">price_change</span>ราคาขาย</label>
                                 <input type="number" id="price_stationery" name="price" required>
                             </div>
                             <div class="group-item">
-                                <label for="cost_stationery"><span class="material-icons">money</span>ราคาต้นทุน<p>*</p></label>
+                                <label for="cost_stationery"><span class="material-icons">money</span>ราคาต้นทุน</label>
                                 <input type="number" id="cost_stationery" name="cost" required>
                             </div>
                         </div>
 
                         <div class="form-group-row">
                             <div class="group-item">
-                                <label for="stock_stationery"><span class="material-icons">warehouse</span>จำนวนสต็อก<p>*</p></label>
+                                <label for="stock_stationery"><span class="material-icons">warehouse</span>จำนวนสต็อก</label>
                                 <input type="number" id="stock_stationery" name="stock" required>
                             </div>
                             <div class="group-item">
-                                <label for="reorder_level_stationery"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด<p>*</p></label>
+                                <label for="reorder_level_stationery"><span class="material-icons">swap_vert</span>สต็อกต่ำสุด</label>
                                 <input type="number" id="reorder_level_stationery" name="reorder_level" required>
                             </div>
                         </div>
 
-                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" "><path d=" M200-200v-560 454-85 191Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v320h-80v-320H200v560h280v80H200Zm494 40L552-222l57-56 85 85 170-170 56 57L694-80ZM320-440q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 160h240v-80H440v80Zm0-160h240v-80H440v80Z" /></svg>บันทึกการแก้ไข</button>
+                        <button type="submit">บันทึกการแก้ไข</button>
                     </form>
                 </div>
             </div>
@@ -5393,7 +5140,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     </div>
 
     <div id="sci_admin" class="content">
-        <h3 class="h-text">🛠️ การจัดการ Admin</h3>
+        <h2 class="h-text-upload">การจัดการแอดมิน
+            <p>Admin Management</p>
+        </h2>
         <!-- ตารางข้อมูลผู้ใช้ -->
         <table>
             <thead>
@@ -5443,55 +5192,57 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     </div>
 
     <div id="employee" class="content">
-        <h3 class="h-text">🛠️ การจัดการ Admin</h3>
+        <h2 class="h-text-upload">การจัดการพนักงาน
+            <p>Employee Management</p>
+        </h2>
         <!-- ตารางข้อมูลผู้ใช้ -->
-        <table border="1" cellspacing="0" cellpadding="10">
+        <!-- <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th style="width: 150px;">รูปโปรไฟล์</th>
+                    <th style="width: 30%;">Gmail</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>การจัดการ</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($adminUsers as $user): ?>
+                <?php foreach ($admins as $admin): ?>
                     <tr>
-                        <td><?php echo $user['ID']; ?></td>
-                        <td><?php echo $user['USERNAME']; ?></td>
                         <td>
-                            <!-- ปุ่มแก้ไขรหัสผ่าน -->
-                            <form action="edit_password.php" method="POST" id="edit-password-form-<?php echo $user['ID']; ?>" style="display: inline;">
-                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['ID']); ?>">
-                                <button class="btn-edit" type="button" onclick="showEditPasswordForm(<?php echo $user['ID']; ?>)">แก้ไขรหัสผ่าน</button>
-                            </form>
-
-                            <!-- ฟอร์มแก้ไขรหัสผ่านที่แสดงเมื่อคลิกปุ่ม -->
-                            <form action="../admin/update_password_admin/update_password_admin.php" method="POST" id="password-form-<?php echo $user['ID']; ?>" style="display: none;">
-                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['ID']); ?>">
-
-                                <!-- label ใช้ id ที่ไม่ซ้ำกับ input -->
-                                <label for="new_password-<?php echo $user['ID']; ?>">รหัสผ่านใหม่:</label>
-                                <input type="password" id="new_password-<?php echo $user['ID']; ?>" name="new_password" required>
-
-                                <button type="submit">บันทึก</button>
-                                <button type="button" onclick="hideEditPasswordForm(<?php echo $user['ID']; ?>)">ยกเลิก</button>
-                            </form>
+                            <?php if ($admin['profile_image']): ?>
+                                <img src="<?= $admin['profile_image'] ?>" width="80" height="auto" alt="Profile">
+                            <?php else: ?>
+                                ไม่มีภาพ
+                            <?php endif; ?>
                         </td>
-
-                        <td><?php echo $user['ROLE']; ?></td>
+                        <td><?= htmlspecialchars($admin['gmail']) ?></td>
+                        <td><?= htmlspecialchars($admin['first_name']) ?></td>
+                        <td><?= htmlspecialchars($admin['last_name']) ?></td>
                         <td>
-                            <!-- ปุ่มลบ -->
-                            <form action="../admin/delete_admin/delete_admin.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="id" value="<?php echo $user['ID']; ?>">
-                                <button type="submit" class="btn-delete">ลบผู้ดูแลระบบ</button>
-                            </form>
+                            <div class="action-dropdown">
+                                <button onclick="toggleDropdownAdmin(this)">⋮</button>
+                                <div class="dropdown-content">
+                                    <a href="#" onclick="openEditPanelAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
+                                        </svg> แก้ไข
+                                    </a>
+                                    <a href="#" onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg> ลบ
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table> -->
+        <div class="center-screen">
+            <h1>ยังไม่เปิดใช้งาน</h1>
+        </div>
     </div>
 
     <div id="account" class="content">
@@ -5499,41 +5250,47 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <div class="cover"></div>
             <div class="profile-card">
                 <div class="profile-image">
-                    <img id="profile-pic" src="\sci-next\img\pachara.jpg" alt="Admin Profile">
+                    <img id="profile-pic"
+                        src="<?= !empty($currentAdmin['profile_image']) ? $currentAdmin['profile_image'] : '/sci-next/img/default.jpg' ?>"
+                        alt="Admin Profile">
                     <label for="file-input" class="upload-btn">
                         <i class="material-icons">photo_camera</i>
                     </label>
-                    <input id="file-input" type="file" accept="image/*" onchange="previewImage(event)">
+                    <input id="file-input" type="file" name="profile_image" accept="image/*" onchange="previewImage(event)">
                 </div>
 
                 <div class="profile-details">
-                    <form id="profile-form">
+                    <form id="profile-form" method="POST" enctype="multipart/form-data" action="updateProfile.php">
                         <h2 class="profile-title">ข้อมูลโปรไฟล์</h2>
+
                         <div class="profile-row">
                             <div class="profile-info">
                                 <label><span class="material-icons">badge</span> ชื่อ</label>
-                                <input type="text" id="first-name-adminProfile" value="Pachara">
+                                <input type="text" name="first_name" id="first-name-adminProfile"
+                                    value="<?= htmlspecialchars($currentAdmin['first_name']) ?>" required>
                             </div>
                             <div class="profile-info">
                                 <label><span class="material-icons">fingerprint</span> นามสกุล</label>
-                                <input type="text" id="last-name-adminProfile" value="Kalapakdee">
+                                <input type="text" name="last_name" id="last-name-adminProfile"
+                                    value="<?= htmlspecialchars($currentAdmin['last_name']) ?>" required>
                             </div>
                         </div>
 
                         <div class="profile-row">
                             <div class="profile-info">
-                                <label><span class="material-icons">person_outline</span> ชื่อผู้ใช้</label>
-                                <input type="text" id="username-adminProfile" value="pachara">
+                                <label><span class="material-icons">person_outline</span> อีเมล</label>
+                                <input type="text" name="gmail" id="username-adminProfile"
+                                    value="<?= htmlspecialchars($currentAdmin['gmail']) ?>" required>
                             </div>
                             <div class="profile-info">
-                                <label><span class="material-icons">password</span> รหัสผ่าน</label>
-                                <input type="password" id="password-adminProfile" placeholder="********">
+                                <label><span class="material-icons">password</span> รหัสผ่าน (ใหม่)</label>
+                                <input type="password" name="password" id="password-adminProfile" placeholder="********">
                             </div>
                         </div>
 
                         <div class="profile-row">
                             <button type="submit" class="confirm-btn">
-                                <span class="material-icons">done_outline</span> ยืนยันการแก้ไข
+                                ยืนยันการแก้ไข
                             </button>
                         </div>
                     </form>
@@ -5635,7 +5392,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
             // ถ้าผ่านทั้งหมด
             fileNameSpan.textContent = file.name;
-            fileNameSpan.style.color = '#333';
+            fileNameSpan.style.color = '#37B9F1';
         });
 
         document.getElementById('upload-img-employee').addEventListener('change', function() {
@@ -5704,7 +5461,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 datasets: [{
                     label: 'ยอดขาย (บาท)',
                     data: [120000, 135000, 110000, 150000, 175000, 160000],
-                    backgroundColor: '#4A90E2',
+                    backgroundColor: '#8739F9', // เปลี่ยนเป็นสีหลักม่วง
                     borderRadius: 6,
                 }]
             },
@@ -5714,7 +5471,19 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            color: '#565360', // สีตัวเลขแกน Y
                             callback: value => '฿' + value.toLocaleString()
+                        },
+                        grid: {
+                            color: '#E1DFE9' // สีเส้นแกน Y
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#908E9B' // สี label แกน X
+                        },
+                        grid: {
+                            color: '#F2F5F5' // สีเส้นแนวนอน
                         }
                     }
                 },
@@ -5735,7 +5504,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 datasets: [{
                     label: 'ลูกค้า',
                     data: [42, 128],
-                    backgroundColor: ['#50E3C2', '#E0E0E0'],
+                    backgroundColor: ['#37B9F1', '#E1DFE9'], // สีลูกค้าใหม่=ฟ้า, เก่า=เทาอ่อน
                     borderWidth: 1
                 }]
             },
@@ -5743,7 +5512,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            color: '#908E9B' // สีตัวอักษรของ legend
+                        }
                     }
                 }
             }
@@ -8536,7 +8308,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     let errorMsg = "";
 
                     if (options.required && !validators.notEmpty(value)) {
-                        errorMsg = "กรุณากรอกข้อมูล";
+                        errorMsg = "";
                     } else if (options.type === "email" && !validators.email(value)) {
                         errorMsg = "รูปแบบอีเมลไม่ถูกต้อง";
                     } else if (options.minLength && !validators.minLength(value, options.minLength)) {
@@ -8742,6 +8514,30 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         // เริ่มต้นตรวจสอบตอนโหลดหน้า (ถ้ามีค่าใน input)
         toggleClearBtn();
+
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+            formData.append('profile_image', document.getElementById('file-input').files[0]);
+
+            fetch('updateProfile/updateProfileSuperadmin.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.text())
+                .then(data => {
+                    if (data === 'success' || data === 'อัปเดตข้อมูลสำเร็จ') {
+                        showAlertToast("อัพเดตข้อมูลสำเร็จ", icons.success, "success-toast");
+                        // รอ 2-3 วินาที ให้ Toast แสดงก่อน แล้วค่อยรีเฟรช
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showAlertToast('เกิดข้อผิดพลาด: ' + data, icons.error, "error-toast");
+                    }
+                });
+        });
     </script>
 </body>
 
