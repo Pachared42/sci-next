@@ -9,6 +9,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCi_ADMIN</title>
+
+    <link rel="icon" type="image/svg+xml" href="/sci-next/img/sci-next.svg" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap" rel="stylesheet">
@@ -192,7 +195,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .logo {
-        width: 40px;
+        width: 36px;
         height: auto;
         margin-right: 10px;
     }
@@ -670,7 +673,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     td {
         border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-        background: rgba(255, 255, 255, 0.8);
+        background: #ffffff;
         color: #000000;
         padding: 12px;
         max-width: 200px;
@@ -680,10 +683,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     tbody tr {
         cursor: pointer;
-    }
-
-    tbody tr:hover {
-        background: rgba(255, 255, 255, 0.9);
     }
 
     td img {
@@ -708,12 +707,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .card {
-        background: rgba(255, 255, 255, 0.8);
+        background: #ffffff;
         border-radius: 30px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
         transition: transform 0.2s;
+        cursor: pointer;
 
         .label {
             font-weight: 400;
@@ -732,10 +732,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .card:hover {
-        background: rgba(255, 255, 255, 0.9);
     }
 
     .product-image-container {
@@ -768,12 +764,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .product-image {
-        width: 50%;
+        width: 45%;
         height: auto;
         object-fit: cover;
         display: block;
         margin-left: auto;
         margin-right: auto;
+        margin-top: 10px;
+        border-radius: 20px;
     }
 
     .card-content {
@@ -2535,6 +2533,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         z-index: 1000;
     }
 
+    #overlayAdmin {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
     .overlay.show {
         opacity: 1;
         pointer-events: auto;
@@ -3042,6 +3051,85 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         fill: #ffffff;
     }
 
+    #imagePreviewContainerAdmin {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #imagePreviewAdmin {
+        height: 150px;
+        object-fit: cover;
+        border-radius: 20px;
+    }
+
+    #editAdminForm {
+        max-width: 500px;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    #editAdminForm label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-weight: 200;
+        color: #E1DFE9;
+        gap: 4px;
+    }
+
+    #editAdminForm input[type="text"],
+    #editAdminForm input[type="email"],
+    #editAdminForm input[type="password"],
+    #editAdminForm input[type="file"] {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #000000;
+        font-weight: bold;
+        border-radius: 15px;
+        transition: border 0.3s, box-shadow 0.3s;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    #editAdminForm input[type="text"]:focus,
+    #editAdminForm input[type="email"]:focus,
+    #editAdminForm input[type="password"]:focus,
+    #editAdminForm input[type="file"]:focus {
+        border-color: #DC143C;
+        outline: none;
+    }
+
+    #editAdminForm button {
+        width: 100%;
+        font-size: 20px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 20px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #editAdminForm button:hover {
+        background-color: #222222;
+    }
+
+    #editAdminForm button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+    }
+
+
     .excel-grid-upload {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -3324,7 +3412,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         <!-- โลโก้และชื่อ -->
         <div class="logo-name">
-            <img src="\sci-next\img\NEXT.png" alt="Logo" class="logo">
+            <img src="\sci-next\img\sci-next.svg" alt="Logo" class="logo">
             <span class="site-name">SCi_ADMIN</span>
         </div>
     </nav>
@@ -5147,8 +5235,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <table>
             <thead>
                 <tr>
-                    <th style="width: 150px;">รูปโปรไฟล์</th>
-                    <th style="width: 30%;">Gmail</th>
+                    <th>รูปโปรไฟล์</th>
+                    <th>อีเมล</th>
                     <th>ชื่อ</th>
                     <th>นามสกุล</th>
                     <th>การจัดการ</th>
@@ -5159,7 +5247,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <tr>
                         <td>
                             <?php if ($admin['profile_image']): ?>
-                                <img src="<?= $admin['profile_image'] ?>" width="80" height="auto" alt="Profile">
+                                <img src="<?= $admin['profile_image'] ?>" width="100" height="auto" alt="Profile">
                             <?php else: ?>
                                 ไม่มีภาพ
                             <?php endif; ?>
@@ -5171,15 +5259,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                             <div class="action-dropdown">
                                 <button onclick="toggleDropdownAdmin(this)">⋮</button>
                                 <div class="dropdown-content">
-                                    <a href="#" onclick="openEditPanelAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                            <path d="M200-440h240v-160H200v160Zm0-240h560v-80H200v80Zm0 560q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v252q-19-8-39.5-10.5t-40.5.5q-21 4-40.5 13.5T684-479l-39 39-205 204v116H200Zm0-80h240v-160H200v160Zm320-240h125l39-39q16-16 35.5-25.5T760-518v-82H520v160Zm0 360v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-300L643-80H520Zm300-263-37-37 37 37Z" />
-                                        </svg> แก้ไข
-                                    </a>
-                                    <a href="#" onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                        </svg> ลบ
+                                    <a onclick='openEditPanelAdmin(<?= json_encode($admin['gmail']) ?>); return false;'>แก้ไข</a>
+
+                                    <a onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">ลบ
                                     </a>
                                 </div>
                             </div>
@@ -5189,6 +5271,42 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </tbody>
         </table>
 
+        <div id="overlayAdmin" class="overlay" onclick="closeEditPanelAdmin()"></div>
+
+        <div id="editPanelAdmin" class="side-panel">
+            <div class="side-panel-content">
+                <span class="side-panel-close-btn" onclick="closeEditPanelAdmin()">&times;</span>
+
+                <div id="side-panel-form-content-admin">
+                    <!-- ฟอร์มแก้ไขข้อมูลผู้ดูแลระบบ -->
+                    <form id="editAdminForm" enctype="multipart/form-data">
+                        <input type="hidden" id="edit_admin_id" name="id">
+
+                        <div id="imagePreviewContainerAdmin">
+                            <img id="imagePreviewAdmin" alt="รูปโปรไฟล์" style="width: 100px; height: 100px; border-radius: 50%;">
+                        </div>
+
+                        <label for="gmail_admin"><span class="material-icons">email</span> Gmail</label>
+                        <input type="email" id="gmail_admin" name="gmail" required>
+
+                        <label for="password_admin"><span class="material-icons">lock</span> Password</label>
+                        <input type="password" id="password_admin" name="password" placeholder="กรอกถ้าต้องการเปลี่ยน">
+
+                        <div class="form-group-row">
+                            <div class="group-item">
+                                <label for="first_name_admin"><span class="material-icons">badge</span> ชื่อจริง</label>
+                                <input type="text" id="first_name_admin" name="first_name" required>
+                            </div>
+                            <div class="group-item">
+                                <label for="last_name_admin"><span class="material-icons">badge</span> นามสกุล</label>
+                                <input type="text" id="last_name_admin" name="last_name" required>
+                            </div>
+                        </div>
+                        <button type="submit">บันทึกการแก้ไข</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="employee" class="content">
@@ -5982,6 +6100,129 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
             }
         });
+
+        function openEditPanelAdmin(gmail) {
+
+            const overlay = document.getElementById('overlayAdmin');
+            const editPanel = document.getElementById('editPanelAdmin');
+
+            if (!overlay || !editPanel) {
+                console.error('ไม่พบ overlayAdmin หรือ editPanelAdmin ใน DOM');
+                return;
+            }
+
+            // แสดง overlay และ panel แล้วเลื่อน panel เข้ามา
+            overlay.style.display = 'block';
+            editPanel.style.display = 'block';
+            setTimeout(() => {
+                editPanel.style.right = '0';
+            }, 10);
+
+            // ปิด scroll หน้าเว็บขณะเปิด panel
+            document.body.style.overflow = 'hidden';
+
+            // โหลดข้อมูล admin ผ่าน fetch
+            fetch(`manageAdmin/getAdminData.php?gmail=${encodeURIComponent(gmail)}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('ไม่สามารถโหลดข้อมูลผู้ดูแลระบบได้');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+
+                    if (data.error) {
+                        alert(data.error);
+                        closeEditPanelAdmin();
+                        return;
+                    }
+
+                    document.getElementById('edit_admin_id').value = data.id || '';
+                    document.getElementById('gmail_admin').value = data.gmail || '';
+                    document.getElementById('password_admin').value = '';
+                    document.getElementById('first_name_admin').value = data.first_name || '';
+                    document.getElementById('last_name_admin').value = data.last_name || '';
+
+                    if (data.profile_image) {
+                        document.getElementById('imagePreviewAdmin').src = data.profile_image;
+                    } else {
+                        document.getElementById('imagePreviewAdmin').src = '/sci-next/img/default.jpg';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading admin data:', err);
+                    alert('ไม่สามารถโหลดข้อมูลผู้ดูแลระบบได้');
+                    closeEditPanelAdmin();
+                });
+        }
+
+        function closeEditPanelAdmin() {
+            const overlay = document.getElementById('overlayAdmin');
+            const editPanel = document.getElementById('editPanelAdmin');
+
+            if (!overlay || !editPanel) {
+                console.error('ไม่พบ overlayAdmin หรือ editPanelAdmin ใน DOM');
+                return;
+            }
+
+            // เลื่อน panel ออกไปทางขวา
+            editPanel.style.right = '-500px'; // ปรับตามความกว้าง panel จริง
+
+            // ซ่อน overlay และ panel หลังแอนิเมชันเสร็จ (300ms)
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                editPanel.style.display = 'none';
+            }, 300);
+
+            // เปิด scroll หน้าเว็บกลับ
+            document.body.style.overflow = '';
+        }
+
+        function previewAdminImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreviewAdmin').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('editAdminForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('manageAdmin/updateAdmin.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showAlertToast('บันทึกข้อมูลผู้ดูแลระบบสำเร็จแล้ว', icons.success, 'success');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+
+                    // ปิด panel
+                    document.getElementById('editPanelAdmin').style.right = '-100%';
+                    document.getElementById('overlayAdmin').style.display = 'none';
+                    document.body.style.overflow = '';
+                } else {
+                    showAlertToast('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่ทราบสาเหตุ'), icons.error, 'alert-toast');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
+            }
+        });
+
 
         async function openEditPanelStationery(id) {
             const overlay = document.getElementById('overlayStationery');

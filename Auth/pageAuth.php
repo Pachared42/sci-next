@@ -7,10 +7,10 @@ require_once('authSales.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เลือกหน้าจัดการ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="pageAuth.scss">
+    <title>Select Management Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans:ital,wght@0,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/sci-next/img/sci-next.svg" />
+    <link rel="stylesheet" href="pageAuth.scss?v=1">
 </head>
 <body>
     <div class="container">
