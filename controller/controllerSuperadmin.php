@@ -152,6 +152,19 @@ function fetchLoggedInAdmin($conn, $gmail) {
     return null;
 }
 
+function maskEmail($email) {
+    $parts = explode("@", $email);
+    $name = $parts[0];
+    $domain = $parts[1];
+    $len = strlen($name);
+    if ($len <= 2) {
+        $maskedName = str_repeat('*', $len);
+    } else {
+        $maskedName = substr($name, 0, 2) . str_repeat('*', $len - 2);
+    }
+    return $maskedName . '@' . $domain;
+}
+
 
 
 

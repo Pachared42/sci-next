@@ -2437,7 +2437,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .profile-info label .material-icons {
         font-size: 24px;
-        color: #E1DFE9;
+        color: #908E9B;
     }
 
     .profile-info input {
@@ -4638,10 +4638,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 <button id="confirmLogoutBtn" class="btn-Confirm btn-danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
                     </svg>ยืนยันออกจากระบบ</button>
-                <button id="cancelLogoutBtn" class="btn-Confirm btn-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                        <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                    </svg>ยกเลิก
+                <button id="cancelLogoutBtn" class="btn-Confirm btn-secondary">ยกเลิก
                 </button>
             </div>
         </div>
@@ -5489,7 +5486,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </div>
 
                 <div class="profile-details">
-                    <form id="profile-form" method="POST" enctype="multipart/form-data" action="updateProfile.php">
+                    <form id="profile-form" method="POST" enctype="multipart/form-data" action="updateProfile/updateProfileSuperadmin.php">
                         <h2 class="profile-title">ข้อมูลโปรไฟล์</h2>
 
                         <div class="profile-row">
@@ -5516,7 +5513,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                                         type="text"
                                         name="gmail"
                                         id="username-adminProfile"
-                                        required>
+                                        value="<?= htmlspecialchars(maskEmail($currentAdmin['gmail'])) ?>"
+                                        data-masked-email="<?= htmlspecialchars(maskEmail($currentAdmin['gmail'])) ?>"
+                                        required />
+                                    <input type="hidden" id="real-gmail" value="<?= htmlspecialchars($currentAdmin['gmail']) ?>">
 
                                     <button
                                         type="button"
@@ -6374,43 +6374,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 tbody.appendChild(noDataRow);
             }
         }
-
-        const originalEmail = "<?= htmlspecialchars($currentAdmin['gmail']) ?>"; // จาก PHP
-        let emailVisible = false;
-        let maskedEmail = "";
-
-        function maskEmail(email) {
-            const atIndex = email.indexOf("@");
-            if (atIndex <= 2) return "*".repeat(atIndex) + email.slice(atIndex);
-
-            const prefix = email.slice(0, 2);
-            const domain = email.slice(atIndex);
-            const stars = "*".repeat(atIndex - 2);
-
-            return prefix + stars + domain;
-        }
-
-        function toggleEmailVisibility() {
-            const input = document.getElementById("username-adminProfile");
-            const icon = document.getElementById("emailEyeIcon");
-
-            if (emailVisible) {
-                input.value = maskedEmail;
-                icon.textContent = "visibility_off";
-            } else {
-                input.value = originalEmail;
-                icon.textContent = "visibility";
-            }
-
-            emailVisible = !emailVisible;
-        }
-
-        // เริ่มต้นแบบ mask และให้สามารถแก้ไขได้
-        window.addEventListener("DOMContentLoaded", () => {
-            maskedEmail = maskEmail(originalEmail);
-            document.getElementById("username-adminProfile").value = maskedEmail;
-        });
-
 
         function deleteAdmin(gmail) {
             const modal = document.getElementById("confirmDeleteAdminModal");
@@ -8997,28 +8960,100 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         // เริ่มต้นตรวจสอบตอนโหลดหน้า (ถ้ามีค่าใน input)
         toggleClearBtn();
 
-        document.getElementById('profile-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        const originalEmail = "<?= htmlspecialchars($currentAdmin['gmail']) ?>"; // จาก PHP
+        let maskedEmail = "";
 
-            const form = e.target;
-            const formData = new FormData(form);
-            formData.append('profile_image', document.getElementById('file-input').files[0]);
+        // ฟังก์ชัน mask email
+        function maskEmail(email) {
+            const [name, domain] = email.split('@');
+            if (!name || !domain) return email;
 
-            fetch('updateProfile/updateProfileSuperadmin.php', {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.text())
-                .then(data => {
-                    if (data === 'success' || data === 'อัปเดตข้อมูลสำเร็จ') {
-                        showAlertToast("อัพเดตข้อมูลสำเร็จ", icons.success, "success-toast");
-                        // รอ 2-3 วินาที ให้ Toast แสดงก่อน แล้วค่อยรีเฟรช
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        showAlertToast('เกิดข้อผิดพลาด: ' + data, icons.error, "error-toast");
-                    }
-                });
+            if (name.length <= 2) {
+                return '*'.repeat(name.length) + '@' + domain;
+            } else {
+                return name.slice(0, 2) + '*'.repeat(name.length - 2) + '@' + domain;
+            }
+        }
+
+        // สลับแสดง email แบบ masked กับ email จริง
+        function toggleEmailVisibility() {
+            const emailInput = document.getElementById('username-adminProfile');
+            const realEmail = document.getElementById('real-gmail').value;
+            const emailEyeIcon = document.getElementById('emailEyeIcon');
+
+            // อ่าน masked email จาก attribute data-masked-email
+            const maskedEmailAttr = emailInput.dataset.maskedEmail;
+
+            if (emailInput.value === maskedEmailAttr) {
+                // แสดง email จริง
+                emailInput.value = realEmail;
+                emailEyeIcon.textContent = 'visibility';
+            } else {
+                // แสดง masked email
+                emailInput.value = maskedEmailAttr;
+                emailEyeIcon.textContent = 'visibility_off';
+            }
+        }
+
+        // เมื่อโหลดหน้าเว็บ กำหนดค่าเริ่มต้นของ email input เป็น masked พร้อมเก็บไว้ใน attribute data-masked-email
+        window.addEventListener("DOMContentLoaded", () => {
+            maskedEmail = maskEmail(originalEmail);
+            const emailInput = document.getElementById("username-adminProfile");
+            emailInput.value = maskedEmail;
+            emailInput.dataset.maskedEmail = maskedEmail; // เก็บ masked email ไว้ใน attribute เพื่อใช้ toggle
+        });
+
+        // เช็คการ submit form ว่า gmail เปลี่ยนจากค่าจริงไหม
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('profile-form');
+            const emailInput = form.querySelector('input[name="gmail"]');
+            const realEmailInput = document.getElementById('real-gmail');
+
+            const originalEmail = realEmailInput.value.trim();
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // เปิดลูกตาก่อน (ถ้ายังเป็น masked)
+                const emailInput = form.querySelector('input[name="gmail"]');
+                const realEmail = document.getElementById('real-gmail').value;
+                const maskedEmail = emailInput.dataset.maskedEmail;
+
+                if (emailInput.value === maskedEmail) {
+                    emailInput.value = realEmail; // เปลี่ยนเป็น Gmail จริง
+                    document.getElementById('emailEyeIcon').textContent = 'visibility'; // เปลี่ยนไอคอน
+                }
+
+                const currentEmail = emailInput.value.trim();
+
+                // ถ้ายังเป็น masked อยู่ (ยังไม่ได้เปิดลูกตาเอง + แก้) ให้เตือน
+                if (currentEmail === maskedEmail) {
+                    showAlertToast("กรุณาแก้ไข Gmail ก่อนส่ง", icons.error, "error-toast");
+                    return;
+                }
+
+                // ส่ง form ตามปกติ
+                const formData = new FormData(form);
+
+                const fileInput = document.getElementById('file-input');
+                if (fileInput && fileInput.files[0]) {
+                    formData.append('profile_image', fileInput.files[0]);
+                }
+
+                fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(res => res.text())
+                    .then(data => {
+                        if (data === 'success' || data === 'อัปเดตข้อมูลสำเร็จ') {
+                            showAlertToast("อัพเดตข้อมูลสำเร็จ", icons.success, "success-toast");
+                            setTimeout(() => location.reload(), 1000);
+                        } else {
+                            showAlertToast('เกิดข้อผิดพลาด: ' + data, icons.error, "error-toast");
+                        }
+                    });
+            });
         });
     </script>
 </body>
