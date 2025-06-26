@@ -1,0 +1,11 @@
+
+[25-Jun-2025 15:26:54 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_number' in 'where clause' in C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php:45
+Stack trace:
+#0 C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php(45): mysqli->prepare('UPDATE users SE...')
+#1 {main}
+  thrown in C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php on line 45
+[25-Jun-2025 18:16:16 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'pachara.kp@gmail.com' for key 'gmail' in C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php:52
+Stack trace:
+#0 C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php(52): mysqli_stmt->execute(Array)
+#1 {main}
+  thrown in C:\xampp\htdocs\sci-next\admin\dashboard_superadmin\manageAdmin\updateAdmin.php on line 52

@@ -67,7 +67,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: #000000;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 10px;
         border-radius: 15px;
@@ -89,6 +89,21 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .h-text-upload {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: clamp(16px, 4vw, 30px);
+        font-weight: bold;
+        color: #8739F9;
+
+        p {
+            font-size: 14px;
+            color: #E1DFE9;
+        }
+    }
+
+    .h-text-sale {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -128,13 +143,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .tab-divider-category {
         border: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin: 15px 0px 15px 0px;
     }
 
     .tab-divider-admin {
         border: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin: 0px 0px 15px 0px;
     }
 
@@ -264,7 +279,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     /* กำหนดลักษณะของเส้น hr */
     .tab-divider {
         border: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin: 1px;
     }
 
@@ -300,7 +315,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         transition: 0.3s ease;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         position: relative;
         border-radius: 15px;
         margin: 2px 0px;
@@ -308,7 +323,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .tab i,
     .tab span.material-icons {
-        margin-right: 8px;
+        margin-right: 4px;
     }
 
     .tab:hover {
@@ -320,7 +335,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         position: relative;
         border-radius: 15px;
@@ -375,6 +390,32 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .account:hover {
         background: #1789BD;
+    }
+
+    .email-input-wrapper {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .email-input-wrapper input {
+        width: 100%;
+        padding-right: 40px;
+    }
+
+    .toggle-email-btn {
+        position: absolute;
+        top: 40%;
+        right: 20px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #666666;
+        padding: 0;
+        display: flex;
+        align-items: center;
     }
 
     .content {
@@ -778,7 +819,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         padding: 15px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
         color: #000000;
 
         h3 {
@@ -824,7 +865,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         font-size: 16px;
         cursor: pointer;
         font-weight: bold;
-        gap: 8px;
+        gap: 4px;
 
         svg {
             width: 24px;
@@ -892,7 +933,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 12px;
         border-radius: 20px;
@@ -904,7 +945,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .form-group label {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         font-size: 14px;
         color: #777777;
         white-space: nowrap;
@@ -965,7 +1006,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         width: 100%;
         justify-content: center;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         background: #8739F9;
         color: white;
         border: none;
@@ -1043,7 +1084,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         width: 100%;
         position: sticky;
-        top: 62.5px;
+        top: 64px;
         background: #000000;
         z-index: 1000;
         padding: 8px 0 8px 0;
@@ -1056,7 +1097,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         font-size: 16px;
         color: #000000;
         padding: 20px;
-        gap: 8px;
+        gap: 4px;
 
         svg {
             fill: #333333;
@@ -1072,7 +1113,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         background: #ffffff;
         border: 1px solid #dddddd;
-        border-radius: 10px;
+        border-radius: 15px;
         padding: 4px;
         transition: box-shadow 0.2s ease;
     }
@@ -1094,7 +1135,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background: #000000;
         border: none;
         padding: 8px;
-        border-radius: 8px;
+        border-radius: 12.5px;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -1187,7 +1228,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         color: #DC143C;
         font-size: 16px;
         font-weight: bold;
@@ -1240,7 +1281,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 15px;
         border-radius: 30px;
@@ -1251,7 +1292,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         text-align: center;
         margin-bottom: 15px;
         font-size: 26px;
@@ -1301,7 +1342,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         width: 70%;
         background-color: #4CAF50;
         color: #ffffff;
-        gap: 8px;
+        gap: 4px;
         border-radius: 20px;
 
         svg {
@@ -1355,7 +1396,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 25px;
         border-radius: 40px;
@@ -1386,7 +1427,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .btn-Confirm {
         font-size: 16px;
-        gap: 8px;
+        gap: 4px;
         padding: 15px 20px;
         font-weight: bold;
         border: none;
@@ -1450,7 +1491,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         top: 30px;
         right: 20px;
         background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 15px 25px;
         border-radius: 15px;
@@ -1462,7 +1503,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 4px;
 
             span {
                 width: 24px;
@@ -1478,14 +1519,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         top: 8px;
         right: 8px;
         background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 10px 15px;
         border-radius: 15px;
         font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
-        gap: 8px;
+        gap: 4px;
 
         span {
             display: flex;
@@ -1501,14 +1542,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         top: 8px;
         right: 8px;
         background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 10px 15px;
         border-radius: 15px;
         font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
-        gap: 8px;
+        gap: 4px;
 
         span {
             display: flex;
@@ -1524,14 +1565,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         top: 8px;
         right: 8px;
         background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 10px 15px;
         border-radius: 15px;
         font-weight: 600;
         z-index: 9999;
         animation: bounceIn 0.4s ease, fadeOut 4s ease-in-out forwards;
-        gap: 8px;
+        gap: 4px;
 
         span {
             display: flex;
@@ -1633,7 +1674,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         border-radius: 20px;
         padding: 15px;
@@ -1646,7 +1687,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         p {
             justify-content: center;
-            gap: 8px;
+            gap: 4px;
             font-size: 12px;
             font-weight: 500;
             margin-bottom: 50px;
@@ -1676,7 +1717,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         bottom: 110%;
         left: 50%;
         transform: translateX(-50%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         background: #000000;
         color: #ffffff;
         padding: 6px 10px;
@@ -1737,7 +1778,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         width: 100%;
         padding: 8px;
         background-color: #2176FF;
@@ -1763,8 +1804,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .parent {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        gap: 16px;
+        grid-template-rows: auto auto auto auto auto;
+        gap: 20px;
     }
 
     /* กำหนดตำแหน่ง */
@@ -1785,63 +1826,102 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     .div5 {
-        grid-area: 2 / 1 / 5 / 4;
+        grid-area: 2 / 1 / 3 / 2;
+        /* แถว 2 คอลัมน์ 1 */
     }
 
     .div6 {
-        grid-area: 2 / 4 / 5 / 5;
+        grid-area: 2 / 2 / 3 / 3;
+        /* แถว 2 คอลัมน์ 2 */
+    }
+
+    .div7 {
+        grid-area: 2 / 3 / 3 / 4;
+        /* แถว 2 คอลัมน์ 3 */
+    }
+
+    .div8 {
+        grid-area: 2 / 4 / 3 / 5;
+        /* แถว 2 คอลัมน์ 4 */
+    }
+
+    .div9 {
+        grid-area: 3 / 1 / 6 / 5;
+    }
+
+    .div10 {
+        grid-area: 3 / 4 / 6 / 5;
     }
 
     /* Card ยอดขายแต่ละช่อง */
     .stat-card {
+        position: relative;
         background-color: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
         padding: 10px;
+        color: white;
+        overflow: visible;
+        width: 100%;
+        height: 100px;
+        max-width: 300px;
         display: flex;
         align-items: center;
-        transition: transform 0.2s ease;
+        justify-content: space-between;
     }
 
-    .stat-card .icon {
+    .stat-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stat-card span {
+        font-size: 50px;
         color: var(--accent);
-        padding: 10px;
-        margin-right: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
-    .stat-card .icon i {
-        font-size: 40px;
-    }
-
-    .stat-card .info h5 {
+    .stat-card h5 {
+        font-size: 26px;
+        font-weight: 500;
         margin: 0;
-        font-size: 14px;
-        color: #666;
+        opacity: 0.85;
     }
 
-    .stat-card .info p {
-        margin: 4px 0 0;
-        font-size: 18px;
+    .stat-card p {
+        position: absolute;
+        bottom: -30px;
+        right: -10px;
+        font-size: 45px;
         font-weight: bold;
-        color: #ffffff;
+        margin: 0;
+        background: linear-gradient(90deg, #37B9F1, #F2F5F5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    }
+
+
+    .stat-card p .unit {
+        font-size: 20px;
+        margin-left: 4px;
+        color: #ccc;
+        font-weight: bold;
     }
 
     .chart-container {
-        background: #fff;
-        border-radius: 12px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
         padding: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     }
 
     .chart-container h4 {
-        font-size: 16px;
-        color: #333;
-        margin-bottom: 12px;
+        font-size: 26px;
+        color: #E1DFE9;
+        margin-bottom: 10px;
+        text-align: center;
     }
 
     #order {
@@ -1988,17 +2068,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         color: #ffffff;
         padding: 10px 20px 10px 15px;
         border: none;
-        border-radius: 10px;
+        border-radius: 15px;
         cursor: pointer;
         font-size: 16px;
         width: 190px;
         justify-content: space-between;
         background-color: transparent;
         transition: background-color 0.3s ease;
-    }
 
-    button .material-icons {
-        margin-right: 8px;
+        button .material-icons {
+            margin-right: 4px;
+        }
     }
 
     .collapsible-toggle:hover {
@@ -2034,13 +2114,13 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .badge {
         position: absolute;
         top: 2px;
-        right: 138px;
+        right: 145px;
         background-color: #ff4b4b;
         color: #ffffff;
-        font-size: 12px;
+        font-size: 10px;
         font-weight: bold;
-        width: 25px;
-        height: 25px;
+        width: 20px;
+        height: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2175,7 +2255,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 15px;
         transition: background 0.3s;
         overflow: hidden;
@@ -2208,7 +2288,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 10px 14px;
         border-radius: 15px;
@@ -2241,7 +2321,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .profile-container {
         width: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 40px;
         position: relative;
     }
@@ -2260,23 +2340,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .profile-image {
         position: absolute;
-        top: -85px;
-        left: 40px;
+        top: -70px;
+        left: 415px;
     }
 
     .profile-image img {
         width: 160px;
         height: 160px;
         background-color: #ffffff;
-        border-radius: 50%;
+        border-radius: 30px;
         object-fit: cover;
         border: 6px solid #111111;
     }
 
     .upload-btn {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
+        bottom: -5px;
+        right: -10px;
         background: #111111;
         color: #ffffff;
         width: 45px;
@@ -2343,7 +2423,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .profile-info {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
         flex: 1;
         min-width: 45%;
     }
@@ -2558,7 +2638,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
         transition: right 0.3s ease;
@@ -2674,7 +2754,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -2760,7 +2840,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -2850,7 +2930,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -2940,7 +3020,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -3030,7 +3110,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -3109,7 +3189,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         padding: 20px;
         background-color: #000000;
         color: #ffffff;
@@ -3159,7 +3239,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff;
         padding: 15px;
         border-radius: 20px;
@@ -3170,7 +3250,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         align-items: center;
         justify-content: center;
         text-align: center;
-        gap: 8px;
+        gap: 4px;
         font-size: 16px;
         margin-bottom: 16px;
     }
@@ -3183,7 +3263,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         width: 100%;
         padding: 8px;
         font-size: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12.5px;
         display: block !important;
         z-index: 999 !important;
@@ -3202,7 +3282,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 4px;
         background-color: #8739F9;
         color: #ffffff;
         font-size: 16px;
@@ -3235,12 +3315,12 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 12px;
         border-radius: 15px;
         font-size: 12px;
         color: #777;
-        gap: 8px;
+        gap: 4px;
     }
 
     #password-checklist .icon {
@@ -3275,7 +3355,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .file-info-wrapper {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         margin-left: 36px;
         flex-wrap: nowrap;
     }
@@ -3426,7 +3506,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <h3>รายการหลัก</h3>
 
             <div class="tab" data-tab="graph">
-                <span class="material-icons">analytics</span> แดชบอร์ดสถิติ
+                <span class="material-icons">area_chart</span> แดชบอร์ดสถิติ
             </div>
 
             <div class="tab" id="orderTab" data-tab="order">
@@ -3534,44 +3614,40 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <!-- แสดงหน้าของ Tabs -->
     <!-- แสดงข้อมูลสถิติ -->
     <div id="order" class="content">
-        <div style="border-radius: 10px;">
-            <h2 style="text-align:center; margin-bottom:20px; color:#ffffff;">ตารางรายการขายสินค้า</h2>
+        <div>
+            <h2 class="h-text-sale">ตารางรายการขายสินค้า</h2>
 
-            <table style="width: 100%; border-collapse: collapse;">
+            <table>
                 <thead>
-                    <tr style="background: #4CAF50; color: white;">
-                        <th style="padding: 12px;">ชื่อสินค้า</th>
-                        <th style="padding: 12px;">รูปสินค้า</th>
-                        <th style="padding: 12px;">ราคา</th>
-                        <th style="padding: 12px;">คนซื้อ</th>
-                        <th style="padding: 12px;">เวลา</th>
-                        <th style="padding: 12px;">วันที่/เดือน/ปี</th>
+                    <tr>
+                        <th>ชื่อสินค้า</th>
+                        <th>รูปสินค้า</th>
+                        <th>ราคา</th>
+                        <th>เวลา</th>
+                        <th>วันที่/เดือน/ปี</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณสมชาย</td>
-                        <td style="padding: 10px;">14:30</td>
-                        <td style="padding: 10px;">14 เมษายน 2025</td>
+                    <tr>
+                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
+                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td>20฿</td>
+                        <td>14:30</td>
+                        <td>14 เมษายน 2025</td>
                     </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณมณี</td>
-                        <td style="padding: 10px;">10:15</td>
-                        <td style="padding: 10px;">13 เมษายน 2025</td>
+                    <tr>
+                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
+                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td>20฿</td>
+                        <td>10:15</td>
+                        <td>13 เมษายน 2025</td>
                     </tr>
-                    <tr style="text-align: center; border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;">นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td style="padding: 10px;"><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td style="padding: 10px;">20฿</td>
-                        <td style="padding: 10px;">คุณวิชัย</td>
-                        <td style="padding: 10px;">09:00</td>
-                        <td style="padding: 10px;">12 เมษายน 2025</td>
+                    <tr>
+                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
+                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                        <td>20฿</td>
+                        <td>09:00</td>
+                        <td>12 เมษายน 2025</td>
                     </tr>
                 </tbody>
             </table>
@@ -3629,50 +3705,52 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         <!-- สรุปยอดขายรายวัน -->
         <div class="parent">
             <div class="div1 stat-card" style="--accent: #37B9F1;">
-                <div class="icon"><i class="fas fa-calendar-day"></i></div>
-                <div class="info">
-                    <h5>รายวัน</h5>
-                    <p>฿12,500</p>
+                <div class="stat-header">
+                    <span class="material-icons">today</span>
+                    <div class="info">
+                        <h5>รายวัน</h5>
+                    </div>
+                    <p>900<span class="unit">บาท</span></p>
                 </div>
             </div>
 
             <!-- สรุปยอดขายรายเดือน -->
             <div class="div2 stat-card" style="--accent: #8739F9;">
-                <div class="icon"><i class="fas fa-calendar-alt"></i></div>
-                <div class="info">
-                    <h5>รายเดือน</h5>
-                    <p>฿350,000</p>
+                <div class="stat-header">
+                    <span class="material-icons">calendar_month</span>
+                    <div class="info">
+                        <h5>รายเดือน</h5>
+                    </div>
+                    <p>9000<span class="unit">บาท</span></p>
                 </div>
             </div>
 
             <!-- รายปี -->
             <div class="div3 stat-card" style="--accent: #BFA3F9;">
-                <div class="icon"><i class="fas fa-chart-line"></i></div>
-                <div class="info">
-                    <h5>รายปี</h5>
-                    <p>฿4,200,000</p>
+                <div class="stat-header">
+                    <span class="material-icons">equalizer</span>
+                    <div class="info">
+                        <h5>รายปี</h5>
+                    </div>
+                    <p>90000<span class="unit">บาท</span></p>
                 </div>
             </div>
 
             <!-- จำนวนคำสั่งซื้อ -->
             <div class="div4 stat-card" style="--accent: #565360;">
-                <div class="icon"><i class="fas fa-receipt"></i></div>
-                <div class="info">
-                    <h5>คำสั่งซื้อ</h5>
-                    <p>128 รายการ</p>
+                <div class="stat-header">
+                    <span class="material-icons">shopping_bag</span>
+                    <div class="info">
+                        <h5>คำสั่งซื้อ</h5>
+                    </div>
+                    <p>99<span class="unit">รายการ</span></p>
                 </div>
             </div>
 
             <!-- กราฟซ้าย -->
-            <div class="div5 chart-container">
+            <div class="div9 chart-container">
                 <h4>กราฟภาพรวมยอดขาย</h4>
                 <canvas id="mainSalesChart"></canvas>
-            </div>
-
-            <!-- กราฟขวา -->
-            <div class="div6 chart-container">
-                <h4>ลูกค้าใหม่</h4>
-                <canvas id="newCustomerChart"></canvas>
             </div>
         </div>
     </div>
@@ -4591,7 +4669,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </h3>
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInput" oninput="filterProducts()">
-                <button class="search-button" onclick="filterProducts()">
+                <button class="search-button"
+                    onclick="filterProducts()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
                     </svg>
@@ -4729,7 +4808,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 สินค้าเครื่องดื่ม
             </h3>
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputSoftDrink" oninput="filterProductsSoftDrink()">
+                <input type="text" class="search-input" placeholder="ค้นหาสินค้า..." id="searchInputSoftDrink"
+                    oninput="filterProductsSoftDrink()">
                 <button class="search-button" onclick="filterProductsSoftDrink()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                         <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
@@ -5230,6 +5310,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <div id="sci_admin" class="content">
         <h2 class="h-text-upload">การจัดการแอดมิน
             <p>Admin Management</p>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ค้นหา Gmail ผู้ดูแลระบบ..." id="searchAdminInput" oninput="filterAdminsByGmail()">
+                <button class="search-button" onclick="filterAdminsByGmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </button>
+            </div>
         </h2>
         <!-- ตารางข้อมูลผู้ใช้ -->
         <table>
@@ -5239,35 +5327,41 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <th>อีเมล</th>
                     <th>ชื่อ</th>
                     <th>นามสกุล</th>
-                    <th>การจัดการ</th>
+                    <th>จัดการผู้ดูแล</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($admins as $admin): ?>
-                    <tr>
-                        <td>
-                            <?php if ($admin['profile_image']): ?>
-                                <img src="<?= $admin['profile_image'] ?>" width="100" height="auto" alt="Profile">
-                            <?php else: ?>
-                                ไม่มีภาพ
-                            <?php endif; ?>
-                        </td>
-                        <td><?= htmlspecialchars($admin['gmail']) ?></td>
-                        <td><?= htmlspecialchars($admin['first_name']) ?></td>
-                        <td><?= htmlspecialchars($admin['last_name']) ?></td>
-                        <td>
-                            <div class="action-dropdown">
-                                <button onclick="toggleDropdownAdmin(this)">⋮</button>
-                                <div class="dropdown-content">
-                                    <a onclick='openEditPanelAdmin(<?= json_encode($admin['gmail']) ?>); return false;'>แก้ไข</a>
-
-                                    <a onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">ลบ
-                                    </a>
+            <tbody id="adminTableBody">
+                <?php if (!empty($admins)): ?>
+                    <?php foreach ($admins as $admin): ?>
+                        <tr>
+                            <td>
+                                <?php if ($admin['profile_image']): ?>
+                                    <img src="<?= $admin['profile_image'] ?>" width="80" height="auto" alt="Profile">
+                                <?php else: ?>
+                                    ไม่มีภาพ
+                                <?php endif; ?>
+                            </td>
+                            <td><?= htmlspecialchars($admin['gmail']) ?></td>
+                            <td><?= htmlspecialchars($admin['first_name']) ?></td>
+                            <td><?= htmlspecialchars($admin['last_name']) ?></td>
+                            <td>
+                                <div class="action-dropdown">
+                                    <button onclick="toggleDropdownAdmin(this)">⋮</button>
+                                    <div class="dropdown-content">
+                                        <a onclick='openEditPanelAdmin(<?= json_encode($admin['gmail']) ?>); return false;'>แก้ไข</a>
+                                        <a onclick="deleteAdmin('<?= htmlspecialchars($admin['gmail']) ?>'); return false;">ลบ</a>
+                                    </div>
                                 </div>
-                            </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: gray; padding: 20px;">
+                            ไม่มีข้อมูลผู้ดูแลระบบ
                         </td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
 
@@ -5283,7 +5377,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                         <input type="hidden" id="edit_admin_id" name="id">
 
                         <div id="imagePreviewContainerAdmin">
-                            <img id="imagePreviewAdmin" alt="รูปโปรไฟล์" style="width: 100px; height: 100px; border-radius: 50%;">
+                            <img id="imagePreviewAdmin" alt="รูปโปรไฟล์" style="width: 100px; height: 100px; border-radius: 30px;">
                         </div>
 
                         <label for="gmail_admin"><span class="material-icons">email</span> Gmail</label>
@@ -5308,6 +5402,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </div>
         </div>
     </div>
+
+    <div id="confirmDeleteAdminModal" class="custom-modal hidden">
+        <div class="custom-modal-content">
+            <span class="material-icons">feedback</span>
+            <p id="confirmDeleteAdminMessage">คุณแน่ใจหรือไม่ว่าต้องการลบผู้ดูแลระบบนี้?</p>
+            <div class="modal-actions">
+                <button id="btnConfirmDeleteAdmin" class="btn-Confirm btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
+                    ลบผู้ดูแลระบบ
+                </button>
+                <button id="btnCancelDeleteAdmin" class="btn-Confirm btn-secondary">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
 
     <div id="employee" class="content">
         <h2 class="h-text-upload">การจัดการพนักงาน
@@ -5396,9 +5507,25 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
                         <div class="profile-row">
                             <div class="profile-info">
-                                <label><span class="material-icons">person_outline</span> อีเมล</label>
-                                <input type="text" name="gmail" id="username-adminProfile"
-                                    value="<?= htmlspecialchars($currentAdmin['gmail']) ?>" required>
+                                <label>
+                                    <span class="material-icons">person_outline</span> อีเมล
+                                </label>
+
+                                <div class="email-input-wrapper">
+                                    <input
+                                        type="text"
+                                        name="gmail"
+                                        id="username-adminProfile"
+                                        required>
+
+                                    <button
+                                        type="button"
+                                        id="toggleEmailBtn"
+                                        class="toggle-email-btn"
+                                        onclick="toggleEmailVisibility()">
+                                        <span class="material-icons" id="emailEyeIcon">visibility_off</span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="profile-info">
                                 <label><span class="material-icons">password</span> รหัสผ่าน (ใหม่)</label>
@@ -5573,71 +5700,56 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         // กราฟภาพรวมยอดขาย (bar chart)
         const mainSalesCtx = document.getElementById('mainSalesChart').getContext('2d');
         const mainSalesChart = new Chart(mainSalesCtx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
                 datasets: [{
                     label: 'ยอดขาย (บาท)',
-                    data: [120000, 135000, 110000, 150000, 175000, 160000],
-                    backgroundColor: '#8739F9', // เปลี่ยนเป็นสีหลักม่วง
-                    borderRadius: 6,
+                    data: [120000, 135000, 110000, 150000, 175000, 160000, 170000, 180000, 155000, 165000, 190000, 200000],
+                    borderColor: '#8739F9',
+                    backgroundColor: 'rgba(135, 57, 249, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#8739F9',
+                    pointRadius: 6
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#565360', // สีตัวเลขแกน Y
-                            callback: value => '฿' + value.toLocaleString()
-                        },
-                        grid: {
-                            color: '#E1DFE9' // สีเส้นแกน Y
-                        }
+                        display: false // ถ้าไม่อยากโชว์ scales ให้ปิดแบบนี้
                     },
                     x: {
                         ticks: {
-                            color: '#908E9B' // สี label แกน X
+                            color: '#908E9B',
+                            font: {
+                                family: 'Noto Sans Thai',
+                                size: 14,
+                                weight: '600'
+                            }
                         },
                         grid: {
-                            color: '#F2F5F5' // สีเส้นแนวนอน
+                            display: false
                         }
                     }
                 },
                 plugins: {
                     legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // กราฟลูกค้าใหม่ (doughnut chart)
-        const customerCtx = document.getElementById('newCustomerChart').getContext('2d');
-        const newCustomerChart = new Chart(customerCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['ใหม่', 'เก่า'],
-                datasets: [{
-                    label: 'ลูกค้า',
-                    data: [42, 128],
-                    backgroundColor: ['#37B9F1', '#E1DFE9'], // สีลูกค้าใหม่=ฟ้า, เก่า=เทาอ่อน
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
+                        display: false,
                         labels: {
-                            color: '#908E9B' // สีตัวอักษรของ legend
+                            font: {
+                                family: 'Noto Sans Thai',
+                                size: 16
+                            }
                         }
                     }
                 }
             }
         });
+
+
 
         function toggleDropdown(button) {
             // ปิด dropdown อื่นก่อน
@@ -6193,6 +6305,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             e.preventDefault();
 
             const form = e.target;
+            const emailInput = document.getElementById("username-adminProfile");
+
+            // ถ้าผู้ใช้ยังเห็นเป็น masked email ให้ใส่ค่า email จริงก่อน
+            if (emailInput.value === maskedEmail) {
+                emailInput.value = originalEmail;
+            }
+
+            // ✅ ต้องสร้าง FormData หลังเปลี่ยนค่าแล้ว!
             const formData = new FormData(form);
 
             try {
@@ -6201,27 +6321,148 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     body: formData
                 });
 
-                const data = await response.json();
+                const text = await response.text();
 
-                if (response.ok && data.success) {
-                    showAlertToast('บันทึกข้อมูลผู้ดูแลระบบสำเร็จแล้ว', icons.success, 'success');
+                try {
+                    const data = JSON.parse(text);
 
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-
-                    // ปิด panel
-                    document.getElementById('editPanelAdmin').style.right = '-100%';
-                    document.getElementById('overlayAdmin').style.display = 'none';
-                    document.body.style.overflow = '';
-                } else {
-                    showAlertToast('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่ทราบสาเหตุ'), icons.error, 'alert-toast');
+                    if (response.ok && data.success) {
+                        showAlertToast('บันทึกข้อมูลผู้ดูแลระบบสำเร็จแล้ว', icons.success, 'success');
+                        setTimeout(() => location.reload(), 1000);
+                        document.getElementById('editPanelAdmin').style.right = '-100%';
+                        document.getElementById('overlayAdmin').style.display = 'none';
+                        document.body.style.overflow = '';
+                    } else {
+                        showAlertToast('เกิดข้อผิดพลาด: ' + (data.message || 'ไม่ทราบสาเหตุ'), icons.error, 'alert-toast');
+                    }
+                } catch (jsonErr) {
+                    console.error('Response is not valid JSON:', text);
+                    showAlertToast('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์ (ข้อมูลไม่ถูกต้อง)', icons.error, 'alert-toast');
                 }
             } catch (err) {
-                console.error('Error:', err);
+                console.error('Fetch Error:', err);
                 showAlertToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', icons.error, 'alert-toast');
             }
         });
+
+        function filterAdminsByGmail() {
+            const input = document.getElementById("searchAdminInput").value.toLowerCase();
+            const tbody = document.getElementById("adminTableBody");
+            const rows = tbody.getElementsByTagName("tr");
+            let found = false;
+
+            for (let row of rows) {
+                const gmailCell = row.getElementsByTagName("td")[1];
+                if (gmailCell) {
+                    const gmailText = gmailCell.textContent.toLowerCase();
+                    const match = gmailText.includes(input);
+                    row.style.display = match ? "" : "none";
+                    if (match) found = true;
+                }
+            }
+
+            // ลบแถว "ไม่พบข้อมูลผู้ดูแล" เดิมถ้ามี
+            const existingEmptyRow = document.getElementById("noAdminFoundRow");
+            if (existingEmptyRow) {
+                tbody.removeChild(existingEmptyRow);
+            }
+
+            if (!found) {
+                const noDataRow = document.createElement("tr");
+                noDataRow.id = "noAdminFoundRow";
+                noDataRow.innerHTML = `<td colspan="5" style="text-align: center; color: gray; padding: 20px;">ไม่พบข้อมูลผู้ดูแลระบบ</td>`;
+                tbody.appendChild(noDataRow);
+            }
+        }
+
+        const originalEmail = "<?= htmlspecialchars($currentAdmin['gmail']) ?>"; // จาก PHP
+        let emailVisible = false;
+        let maskedEmail = "";
+
+        function maskEmail(email) {
+            const atIndex = email.indexOf("@");
+            if (atIndex <= 2) return "*".repeat(atIndex) + email.slice(atIndex);
+
+            const prefix = email.slice(0, 2);
+            const domain = email.slice(atIndex);
+            const stars = "*".repeat(atIndex - 2);
+
+            return prefix + stars + domain;
+        }
+
+        function toggleEmailVisibility() {
+            const input = document.getElementById("username-adminProfile");
+            const icon = document.getElementById("emailEyeIcon");
+
+            if (emailVisible) {
+                input.value = maskedEmail;
+                icon.textContent = "visibility_off";
+            } else {
+                input.value = originalEmail;
+                icon.textContent = "visibility";
+            }
+
+            emailVisible = !emailVisible;
+        }
+
+        // เริ่มต้นแบบ mask และให้สามารถแก้ไขได้
+        window.addEventListener("DOMContentLoaded", () => {
+            maskedEmail = maskEmail(originalEmail);
+            document.getElementById("username-adminProfile").value = maskedEmail;
+        });
+
+
+        function deleteAdmin(gmail) {
+            const modal = document.getElementById("confirmDeleteAdminModal");
+            const message = document.getElementById("confirmDeleteAdminMessage");
+            const confirmBtn = document.getElementById("btnConfirmDeleteAdmin");
+            const cancelBtn = document.getElementById("btnCancelDeleteAdmin");
+
+            message.textContent = "คุณแน่ใจหรือไม่ว่าต้องการลบผู้ดูแลระบบนี้?";
+            modal.classList.remove("hidden");
+
+            // รีเซ็ต event listener ป้องกันซ้ำ
+            confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+            cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+            const newConfirmBtn = document.getElementById("btnConfirmDeleteAdmin");
+            const newCancelBtn = document.getElementById("btnCancelDeleteAdmin");
+
+            newConfirmBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+
+                fetch("manageAdmin/deleteAdmin.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `gmail=${encodeURIComponent(gmail)}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showAlertToast(data.message || "ลบผู้ดูแลระบบเรียบร้อยแล้ว", icons.success, "success-toast");
+                            setTimeout(() => location.reload(), 1000);
+                        } else {
+                            showAlertToast(data.message || "เกิดข้อผิดพลาด", icons.error, "alert-toast");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Delete failed:", err);
+                        showAlertToast("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้", icons.error, "alert-toast");
+                    });
+            });
+
+            newCancelBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+            });
+
+            window.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    modal.classList.add("hidden");
+                }
+            });
+        }
 
 
         async function openEditPanelStationery(id) {

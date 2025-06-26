@@ -1,68 +1,59 @@
 <?php
-session_start(); // เริ่มต้น session
+session_start();
+require_once(__DIR__ . '/../../../config/db.php');
+header('Content-Type: application/json');
 
-require_once '../../config/db.php'; // เชื่อมต่อฐานข้อมูล
-
-if (!$conn) {
-    $e = oci_error();
-    die("การเชื่อมต่อฐานข้อมูลล้มเหลว: " . $e['message']);
+// ตรวจสอบ session (เฉพาะผู้ดูแลระบบเท่านั้นถึงลบได้)
+if (!isset($_SESSION['gmail'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'คุณไม่ได้รับอนุญาตให้ดำเนินการ']);
+    exit;
 }
 
-// ตรวจสอบว่า admin ได้เข้าสู่ระบบหรือไม่
-if (!isset($_SESSION['admin_id'])) {
-    die("กรุณาเข้าสู่ระบบก่อน");
+$currentGmail = $_SESSION['gmail']; // คนที่ล็อกอินอยู่
+$targetGmail = $_POST['gmail'] ?? '';
+
+// ตรวจสอบว่า parameter ถูกส่งมา
+if (empty($targetGmail)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'ไม่พบ Gmail ที่จะลบ']);
+    exit;
 }
 
-// ตรวจสอบว่า user ที่เข้าสู่ระบบเป็น superadmin หรือไม่
-if ($_SESSION['role'] !== 'superadmin') {
-    die("คุณไม่มีสิทธิ์ในการทำการนี้");
+// ป้องกันไม่ให้ลบตัวเอง
+if ($currentGmail === $targetGmail) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'ไม่สามารถลบบัญชีของตัวเองได้']);
+    exit;
 }
 
-// ตรวจสอบ method ที่ใช้
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // รับค่าจากฟอร์ม (method POST)
-    $user_id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+// ตรวจสอบว่า Gmail นี้มีอยู่จริงในระบบ
+$checkStmt = $conn->prepare("SELECT gmail FROM users WHERE gmail = ?");
+$checkStmt->bind_param("s", $targetGmail);
+$checkStmt->execute();
+$checkResult = $checkStmt->get_result();
 
-    // ตรวจสอบว่าผู้ใช้ที่ต้องการลบมีอยู่จริงในฐานข้อมูล
-    if ($user_id === 0) {
-        die("ID ไม่ถูกต้อง");
-    }
+if ($checkResult->num_rows === 0) {
+    http_response_code(404);
+    echo json_encode(['success' => false, 'message' => 'ไม่พบผู้ดูแลระบบที่ต้องการลบ']);
+    $checkStmt->close();
+    exit;
+}
+$checkStmt->close();
 
-    $check_sql = "SELECT * FROM admins WHERE id = :user_id";
-    $check_stmt = oci_parse($conn, $check_sql);
-    oci_bind_by_name($check_stmt, ":user_id", $user_id);
-    oci_execute($check_stmt);
+// ลบผู้ดูแลระบบ
+$deleteStmt = $conn->prepare("DELETE FROM users WHERE gmail = ?");
+$deleteStmt->bind_param("s", $targetGmail);
 
-    if (!oci_fetch($check_stmt)) {
-        die("ไม่พบผู้ใช้ที่มี ID: " . htmlspecialchars($user_id));
-    }
-    oci_free_statement($check_stmt);
-
-    // SQL สำหรับการลบข้อมูล
-    $sql = "DELETE FROM admins WHERE id = :user_id";
-    $stmt = oci_parse($conn, $sql);
-
-    if (!$stmt) {
-        $e = oci_error($conn);
-        die("เกิดข้อผิดพลาด SQL: " . $e['message']);
-    }
-
-    // ผูกตัวแปรกับ SQL
-    oci_bind_by_name($stmt, ":user_id", $user_id);
-
-    // ทำการลบข้อมูล
-    if (oci_execute($stmt)) {
-        // ถ้าลบสำเร็จ
-        echo "ลบข้อมูลสำเร็จ!";
-        header("Location: ../../dashboard_superadmin/dashboard_superadmin.php"); // รีไดเร็กต์ไปที่หน้า dashboard
-        exit();
-    } else {
-        $e = oci_error($stmt);
-        echo "เกิดข้อผิดพลาด: " . $e['message'];
-    }
-
-    oci_free_statement($stmt);
+if ($deleteStmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'ลบผู้ดูแลระบบสำเร็จ']);
+} else {
+    http_response_code(500);
+    error_log("ลบผู้ดูแลระบบล้มเหลว: " . $deleteStmt->error);
+    echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบ']);
 }
 
-oci_close($conn); // ปิดการเชื่อมต่อฐานข้อมูล
+$deleteStmt->close();
+$conn->close();
+// จบการทำงาน
 ?>
