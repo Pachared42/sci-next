@@ -1,10 +1,11 @@
 let cartCount = 0;
-let html5QrcodeScanner;
 let currentCamera = "environment";
+let html5QrcodeScanner;
 let lastScanned = "";
 let cart = {};
 let previewTimeout;
 
+// เริ่มเมื่อโหลดหน้าเสร็จ
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cart-count').innerText = getTotalItems();
     updateCartUI();
@@ -52,7 +53,6 @@ function showProductPreview(barcodeOrText) {
 
     if (previewTimeout) clearTimeout(previewTimeout);
 
-    // ถ้ามีใน cart ให้แสดงชื่อสินค้า ถ้าไม่มีก็ใช้ข้อความปกติ
     const item = cart[barcodeOrText];
     const text = item ? `เพิ่ม: ${item.name}` : barcodeOrText;
 
@@ -74,17 +74,21 @@ function startScanner() {
     if (!html5QrcodeScanner) {
         html5QrcodeScanner = new Html5Qrcode("reader");
     }
+
     const config = {
-        fps: 30,
+        fps: 15,
         qrbox: { width: 300, height: 150 },
+        aspectRatio: 1.777,
         disableFlip: true,
-        aspectRatio: 1.7,
         videoConstraints: {
-            facingMode: currentCamera,
+            facingMode: { ideal: currentCamera },
             focusMode: "continuous",
-            zoom: 1.5,
             width: { ideal: 1280 },
-            height: { ideal: 720 }
+            height: { ideal: 720 },
+            advanced: [
+                { zoom: 1 },
+                { focusMode: "continuous" }
+            ]
         }
     };
 
@@ -100,8 +104,12 @@ function startScanner() {
                 });
             }
         },
-        (errorMessage) => console.warn("QR Scan Error:", errorMessage)
-    ).catch(err => console.error("ไม่สามารถเริ่มกล้องได้:", err));
+        (errorMessage) => {
+            console.warn("QR Scan Error:", errorMessage);
+        }
+    ).catch(err => {
+        console.error("ไม่สามารถเริ่มกล้องได้:", err);
+    });
 }
 
 async function stopScanner() {
@@ -118,7 +126,8 @@ async function stopScanner() {
 
 function toggleCamera() {
     currentCamera = currentCamera === "environment" ? "user" : "environment";
-    stopScanner().then(() => setTimeout(startScanner, 300));
+    stopScanner();
+    setTimeout(startScanner, 300);
 }
 
 function toggleCart() {
@@ -181,22 +190,22 @@ function updateCartUI() {
         totalPrice += item.price * item.quantity;
 
         cartItems.innerHTML += `
-                <div class="item">
-                    <img src="${item.image}" alt="product">
-                    <div class="item-info">
-                        <b>${item.name}</b>
-                        <small>${item.price} บาท</small>
-                    </div>
-                    <div class="quantity-controls">
-                        <button onclick="changeQty('${code}', -1)"><span class="material-symbols-outlined">remove</span></button>
-                        <span>${item.quantity}</span>
-                        <button onclick="changeQty('${code}', 1)"><span class="material-symbols-outlined">add</span></button>
-                        <button onclick="removeItem('${code}')">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                    </div>
+            <div class="item">
+                <img src="${item.image}" alt="product">
+                <div class="item-info">
+                    <b>${item.name}</b>
+                    <small>${item.price} บาท</small>
                 </div>
-            `;
+                <div class="quantity-controls">
+                    <button onclick="changeQty('${code}', -1)"><span class="material-symbols-outlined">remove</span></button>
+                    <span>${item.quantity}</span>
+                    <button onclick="changeQty('${code}', 1)"><span class="material-symbols-outlined">add</span></button>
+                    <button onclick="removeItem('${code}')">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     if (totalPriceEl) {
@@ -230,14 +239,11 @@ function resetPageState() {
     document.getElementById('cart-count').innerText = 0;
     document.getElementById('checkout-btn').disabled = true;
 
-    // ซ่อน preview หรือ popup
     document.getElementById('product-preview').innerHTML = "";
     document.getElementById('product-preview').style.display = "none";
 
-    // รีเซ็ตปุ่ม payment
     document.querySelectorAll('.payment-button').forEach(btn => btn.disabled = false);
 }
-
 
 function checkout() {
     document.getElementById('cart-count').innerText = 0;
@@ -254,18 +260,13 @@ function checkout() {
     setTimeout(() => {
         toggleCart();
         setTimeout(() => {
-            resetPageState(); // ทำงานก่อน
-
-            // แสดงข้อความ "ชำระเงินสำเร็จ" ก่อนรีเฟรช
+            resetPageState();
             showProductPreview("ชำระเงินสำเร็จ");
-
-            // รอ 2 วินาที ให้ข้อความโชว์ แล้วค่อยรีเฟรช
             setTimeout(() => {
                 location.reload();
-            }, 2000);
-
+            }, 1000);
         }, 500);
-    }, 2000);
+    }, 1000);
 }
 
 function searchProducts(keyword) {
@@ -279,3 +280,54 @@ function searchProducts(keyword) {
         card.style.display = matches ? 'block' : 'none';
     });
 }
+
+function toggleDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('filter-dropdown');
+    const overlay = document.getElementById('dropdown-overlay');
+
+    const isOpen = dropdown.classList.contains('show');
+    dropdown.classList.toggle('show');
+    overlay.style.display = isOpen ? 'none' : 'block';
+}
+
+function closeDropdown() {
+    const dropdown = document.getElementById('filter-dropdown');
+    const overlay = document.getElementById('dropdown-overlay');
+
+    dropdown.classList.remove('show');
+    overlay.style.display = 'none';
+}
+
+// ปิด dropdown เมื่อคลิกที่อื่นบนหน้า
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('filter-dropdown');
+    if (dropdown && dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+    }
+});
+
+function filterByCategory(category) {
+    const cards = document.querySelectorAll('.product-card');
+
+    cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        if (category === 'ทั้งหมด' || cardCategory === category) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function filterCategoryAndClose(category, event) {
+    event.stopPropagation();
+    filterByCategory(category);
+    document.getElementById('filter-dropdown').classList.remove('show');
+    document.getElementById('dropdown-overlay').style.display = 'none';
+}
+
+
+
+
+

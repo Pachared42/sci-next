@@ -2,7 +2,7 @@
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'sci_shop';
+$database = 'sci_next';
 
 try {
     $conn = new mysqli($host, $username, $password, $database);
