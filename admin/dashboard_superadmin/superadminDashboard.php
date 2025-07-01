@@ -1925,8 +1925,30 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     }
 
     #order {
-        margin-top: 68px;
-        padding: 20px;
+        margin-top: 60px;
+        padding: 0 20px 20px 20px;
+    }
+
+    .order-date-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .order-date-label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffffff;
+    }
+
+    #order-date-picker {
+        padding: 6px 10px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 12.5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
     }
 
     #graph {
@@ -3615,42 +3637,16 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <!-- แสดงข้อมูลสถิติ -->
     <div id="order" class="content">
         <div>
-            <h2 class="h-text-sale">ตารางรายการขายสินค้า</h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ชื่อสินค้า</th>
-                        <th>รูปสินค้า</th>
-                        <th>ราคา</th>
-                        <th>เวลา</th>
-                        <th>วันที่/เดือน/ปี</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td>20฿</td>
-                        <td>14:30</td>
-                        <td>14 เมษายน 2025</td>
-                    </tr>
-                    <tr>
-                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td>20฿</td>
-                        <td>10:15</td>
-                        <td>13 เมษายน 2025</td>
-                    </tr>
-                    <tr>
-                        <td>นิสชิน คัพ นูดเดิล รสหมูมะนาว</td>
-                        <td><img src="https://nissinthailand.com/wp-content/uploads/2024/11/NISSIN-CUP-NOODLES-MOO-MANAO-FLAVOUR-New.png" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
-                        <td>20฿</td>
-                        <td>09:00</td>
-                        <td>12 เมษายน 2025</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="header-container">
+                <h3 class="h-text-upload">
+                    ตารางรายการขายสินค้า
+                </h3>
+                <div class="order-date-wrapper">
+                    <label for="order-date-picker" class="order-date-label">เลือกวันที่</label>
+                    <input type="date" id="order-date-picker" />
+                </div>
+            </div>
+            <div id="order-container"></div>
         </div>
     </div>
 
@@ -6812,8 +6808,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             displayProducts();
         }
 
-
-
         function switchView(viewType) {
             currentView = viewType; // บันทึกมุมมองที่เลือก
             localStorage.setItem('viewMode', viewType);
@@ -9053,6 +9047,124 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     });
             });
         });
+
+        document.getElementById('order-date-picker').addEventListener('change', function() {
+            const selectedDate = this.value; // YYYY-MM-DD
+            renderFilteredOrders(selectedDate);
+        });
+
+        let cachedOrdersByDate = {};
+
+        async function loadOrders() {
+            try {
+                const res = await fetch('../../controller/controllerSale/controllerSaleOrder.php');
+                const data = await res.json();
+
+                if (!data.success) {
+                    console.error('โหลดข้อมูลล้มเหลว:', data.message);
+                    return;
+                }
+
+                const orders = data.orders;
+                const ordersByDate = {};
+
+                for (const orderId in orders) {
+                    const order = orders[orderId];
+                    const dateKey = new Date(order.order_date).toISOString().split('T')[0];
+
+                    if (!ordersByDate[dateKey]) ordersByDate[dateKey] = [];
+
+                    ordersByDate[dateKey].push(...order.items.map(item => ({
+                        ...item,
+                        time: new Date(order.order_date).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }),
+                        fullDate: new Date(order.order_date).toLocaleDateString('th-TH', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                        })
+                    })));
+                }
+
+                cachedOrdersByDate = ordersByDate; // เก็บไว้ใช้ภายหลัง
+                renderFilteredOrders(); // แสดงทั้งหมดตอนแรก
+
+            } catch (error) {
+                console.error('เกิดข้อผิดพลาดขณะโหลดข้อมูล:', error);
+            }
+        }
+
+        function renderFilteredOrders(dateFilter = null) {
+            const container = document.getElementById('order-container');
+            container.innerHTML = '';
+
+            const dates = Object.keys(cachedOrdersByDate).sort().reverse();
+
+            dates.forEach(date => {
+                if (dateFilter && date !== dateFilter) return;
+
+                const items = cachedOrdersByDate[date];
+                let dailyTotal = 0;
+
+                const dateHeading = document.createElement('h3');
+                dateHeading.textContent = `วันที่ ${items[0].fullDate}`;
+                dateHeading.style.margin = '20px 0 10px';
+                dateHeading.style.fontSize = '18px';
+                dateHeading.style.color = '#ffffff';
+                dateHeading.style.textAlign = 'center';
+
+                const table = document.createElement('table');
+                table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>ชื่อสินค้า</th>
+                    <th>รูปสินค้า</th>
+                    <th>ราคา</th>
+                    <th>จำนวน</th>
+                    <th>ราคารวม</th>
+                    <th>เวลา</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align:right;"><b>ยอดรวมทั้งวัน</b></td>
+                    <td colspan="3" style="font-weight:bold;" id="total-${date}"></td>
+                </tr>
+            </tfoot>
+        `;
+
+                const tbody = table.querySelector('tbody');
+
+                items.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                <td>${item.name}</td>
+                <td><img src="${item.image_url}" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                <td>${parseFloat(item.price).toFixed(2)} บาท</td>
+                <td>${item.quantity} ชิ้น</td>
+                <td>${item.subtotal.toFixed(2)} บาท</td>
+                <td>${item.time}</td>
+            `;
+                    tbody.appendChild(tr);
+                    dailyTotal += item.subtotal;
+                });
+
+                table.querySelector(`#total-${date}`).innerText = `${dailyTotal.toFixed(2)} บาท`;
+                container.appendChild(dateHeading);
+                container.appendChild(table);
+            });
+
+            if (dateFilter && !cachedOrdersByDate[dateFilter]) {
+                container.innerHTML = `<p style="text-align:center; color:#fff;">ไม่มีรายการในวันที่เลือก</p>`;
+            }
+        }
+
+
+        // เรียกเมื่อหน้าโหลด
+        document.addEventListener('DOMContentLoaded', loadOrders);
     </script>
 </body>
 
