@@ -8921,8 +8921,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             }
         });
 
-
-
         function showLogoutModal(event) {
             event.preventDefault();
             document.getElementById("logoutConfirmModal").classList.remove("hidden");

@@ -73,7 +73,7 @@ body {
     background: #ffffff;
     border-radius: 30px 30px 0 0;
     padding: 16px;
-    transition: bottom 0.3s ease;
+    transition: bottom 0.1s ease;
     z-index: 12;
     display: flex;
     flex-direction: column;
@@ -175,7 +175,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 10px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.1s ease;
     padding: 8px 4px;
 }
 
@@ -215,7 +215,7 @@ body {
     font-size: 1rem;
     z-index: 13;
     opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
 #payment-options {
@@ -235,7 +235,7 @@ body {
     color: #ffffff;
     border: none;
     border-radius: 15px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s ease;
     cursor: pointer;
 }
 
@@ -249,7 +249,7 @@ body {
     font-weight: bold;
     cursor: not-allowed;
     opacity: 0.6;
-    transition: all 0.3s;
+    transition: all 0.1s;
 }
 
 #checkout-btn.enabled {
@@ -306,9 +306,51 @@ body {
     background-color: #ffffff;
     border-radius: 30px;
     padding: 15px;
-    transition: transform 0.2s;
+    transition: transform 0.1s;
     cursor: pointer;
     text-align: center;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px 14px;
+    border-radius: 12.5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #ffffff;
+    white-space: nowrap;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 1;
+}
+
+.low-stock {
+    background-color: rgba(255, 165, 0, 0.8);
+}
+
+.out-of-stock {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+
+.product-card.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .product-card h3 {
@@ -537,7 +579,7 @@ body {
     opacity: 0;
     transform: translateY(-10px);
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.1s ease, transform 0.1s ease;
     min-width: 120px;
     z-index: 1000;
 }
@@ -560,7 +602,7 @@ body {
     border-radius: 12.5px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.1s ease;
 }
 
 .filter-dropdown button:hover {
