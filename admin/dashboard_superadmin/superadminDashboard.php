@@ -3642,8 +3642,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     ตารางรายการขายสินค้า
                 </h3>
                 <div class="order-date-wrapper">
-                    <label for="order-date-picker" class="order-date-label">เลือกวันที่</label>
-                    <input type="date" id="order-date-picker" />
+                    <label for="order-date-picker" class="order-date-label">
+                        เลือกวันที่
+                        <input type="date" id="order-date-picker" class="order-date-input" />
+                    </label>
                 </div>
             </div>
             <div id="order-container"></div>
@@ -9066,15 +9068,15 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 }
 
                 const orders = data.orders;
-                const ordersByDate = {};
+                const grouped = {};
 
                 for (const orderId in orders) {
                     const order = orders[orderId];
-                    const dateKey = new Date(order.order_date).toISOString().split('T')[0];
+                    const dateKey = order.order_date.split(' ')[0]; // yyyy-mm-dd
 
-                    if (!ordersByDate[dateKey]) ordersByDate[dateKey] = [];
+                    if (!grouped[dateKey]) grouped[dateKey] = [];
 
-                    ordersByDate[dateKey].push(...order.items.map(item => ({
+                    grouped[dateKey].push(...order.items.map(item => ({
                         ...item,
                         time: new Date(order.order_date).toLocaleTimeString([], {
                             hour: '2-digit',
@@ -9088,11 +9090,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     })));
                 }
 
-                cachedOrdersByDate = ordersByDate; // เก็บไว้ใช้ภายหลัง
-                renderFilteredOrders(); // แสดงทั้งหมดตอนแรก
-
-            } catch (error) {
-                console.error('เกิดข้อผิดพลาดขณะโหลดข้อมูล:', error);
+                cachedOrdersByDate = grouped;
+                renderFilteredOrders(); // แสดงทั้งหมดตอนโหลด
+            } catch (err) {
+                console.error('เกิดข้อผิดพลาด:', err);
             }
         }
 
@@ -9101,20 +9102,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             container.innerHTML = '';
 
             const dates = Object.keys(cachedOrdersByDate).sort().reverse();
+            const datesToRender = dateFilter ? [dateFilter] : dates;
 
-            dates.forEach(date => {
-                if (dateFilter && date !== dateFilter) return;
-
+            datesToRender.forEach(date => {
                 const items = cachedOrdersByDate[date];
+                if (!items) return;
+
                 let dailyTotal = 0;
 
-                const dateHeading = document.createElement('h3');
-                dateHeading.textContent = `วันที่ ${items[0].fullDate}`;
-                dateHeading.style.margin = '20px 0 10px';
-                dateHeading.style.fontSize = '18px';
-                dateHeading.style.color = '#ffffff';
-                dateHeading.style.textAlign = 'center';
+                // 🔵 หัวตารางแต่ละวัน
+                const heading = document.createElement('h2');
+                heading.textContent = `วันที่ ${items[0].fullDate}`;
+                heading.style.textAlign = 'center';
+                heading.style.margin = '20px 0 10px';
+                heading.style.color = '#fff';
+                container.appendChild(heading);
 
+                // 🔵 สร้าง table ใหม่ต่อวัน
                 const table = document.createElement('table');
                 table.innerHTML = `
             <thead>
@@ -9131,7 +9135,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <tfoot>
                 <tr>
                     <td colspan="4" style="text-align:right;"><b>ยอดรวมทั้งวัน</b></td>
-                    <td colspan="3" style="font-weight:bold;" id="total-${date}"></td>
+                    <td colspan="2" style="font-weight:bold;" id="total-${date}"></td>
                 </tr>
             </tfoot>
         `;
@@ -9142,7 +9146,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                 <td>${item.name}</td>
-                <td><img src="${item.image_url}" alt="รูปสินค้า" style="border-radius: 5px; width: 60px;"></td>
+                <td><img src="${item.image_url}" style="border-radius:5px; width:60px;" alt="รูปสินค้า"></td>
                 <td>${parseFloat(item.price).toFixed(2)} บาท</td>
                 <td>${item.quantity} ชิ้น</td>
                 <td>${item.subtotal.toFixed(2)} บาท</td>
@@ -9153,18 +9157,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 });
 
                 table.querySelector(`#total-${date}`).innerText = `${dailyTotal.toFixed(2)} บาท`;
-                container.appendChild(dateHeading);
                 container.appendChild(table);
             });
 
+            // ถ้าเลือกวันที่แล้วไม่มีรายการ
             if (dateFilter && !cachedOrdersByDate[dateFilter]) {
                 container.innerHTML = `<p style="text-align:center; color:#fff;">ไม่มีรายการในวันที่เลือก</p>`;
             }
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders();
 
-        // เรียกเมื่อหน้าโหลด
-        document.addEventListener('DOMContentLoaded', loadOrders);
+            document.getElementById('order-date-picker').addEventListener('change', e => {
+                const selectedDate = e.target.value;
+                renderFilteredOrders(selectedDate || null);
+            });
+        });
     </script>
 </body>
 
