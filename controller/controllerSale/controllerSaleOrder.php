@@ -2,6 +2,24 @@
 require_once(__DIR__ . '/../../config/db.php');
 header('Content-Type: application/json');
 
+// ตรวจว่ามีการร้องขออะไร (เช่น mode = count หรือ all)
+$mode = $_GET['mode'] ?? 'all';
+
+if ($mode === 'count') {
+    // ========== โค้ดนับ order เฉพาะวันนี้ ==========
+    $today = date('Y-m-d');
+    $sql = "SELECT COUNT(*) AS order_count FROM orders WHERE DATE(order_date) = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $today);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    echo json_encode(['success' => true, 'count' => $row['order_count']]);
+    exit;
+}
+
+// ========== โค้ดดึงรายการ order ทั้งหมด ==========
 $sql = "
 SELECT 
     o.id AS order_id,

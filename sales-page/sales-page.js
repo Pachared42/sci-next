@@ -75,7 +75,6 @@ function renderProducts(products) {
             <p>${parseFloat(product.price).toFixed(2)} บาท</p>
         `;
 
-        // ✅ เพิ่ม event กดเพื่อเพิ่มตะกร้า
         card.addEventListener('click', () => {
             addToCart(product.barcode);
         });

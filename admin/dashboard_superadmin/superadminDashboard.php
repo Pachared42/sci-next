@@ -2136,7 +2136,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     .badge {
         position: absolute;
         top: 2px;
-        right: 145px;
+        right: 140px;
         background-color: #ff4b4b;
         color: #ffffff;
         font-size: 10px;
@@ -3533,7 +3533,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
             <div class="tab" id="orderTab" data-tab="order">
                 <span class="material-icons">shopping_cart</span>
-                <span class="badge">99+</span> <!-- ตัวเลขแจ้งเตือน -->
+                <span id="order-badge" class="badge"></span>
                 รายการขาย
             </div>
 
@@ -9174,6 +9174,23 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 renderFilteredOrders(selectedDate || null);
             });
         });
+
+        function fetchOrderCount() {
+            fetch('../../controller/controllerSale/controllerSaleOrder.php?mode=count')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('order-badge');
+                    const count = data.count;
+
+                    badge.textContent = count > 99 ? '99+' : count;
+                })
+                .catch(error => {
+                    console.error('Error fetching order count:', error);
+                });
+        }
+
+        fetchOrderCount();
+        setInterval(fetchOrderCount, 5000);
     </script>
 </body>
 
