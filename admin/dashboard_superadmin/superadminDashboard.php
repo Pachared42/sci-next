@@ -18,8 +18,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- <link rel="stylesheet" href="superadminDashboard.css"> -->
 
 </head>
@@ -1803,125 +1801,78 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
     .parent {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: auto auto auto auto auto;
         gap: 20px;
-    }
-
-    /* กำหนดตำแหน่ง */
-    .div1 {
-        grid-area: 1 / 1 / 2 / 2;
-    }
-
-    .div2 {
-        grid-area: 1 / 2 / 2 / 3;
-    }
-
-    .div3 {
-        grid-area: 1 / 3 / 2 / 4;
-    }
-
-    .div4 {
-        grid-area: 1 / 4 / 2 / 5;
-    }
-
-    .div5 {
-        grid-area: 2 / 1 / 3 / 2;
-        /* แถว 2 คอลัมน์ 1 */
-    }
-
-    .div6 {
-        grid-area: 2 / 2 / 3 / 3;
-        /* แถว 2 คอลัมน์ 2 */
-    }
-
-    .div7 {
-        grid-area: 2 / 3 / 3 / 4;
-        /* แถว 2 คอลัมน์ 3 */
-    }
-
-    .div8 {
-        grid-area: 2 / 4 / 3 / 5;
-        /* แถว 2 คอลัมน์ 4 */
-    }
-
-    .div9 {
-        grid-area: 3 / 1 / 6 / 5;
-    }
-
-    .div10 {
-        grid-area: 3 / 4 / 6 / 5;
-    }
-
-    /* Card ยอดขายแต่ละช่อง */
-    .stat-card {
-        position: relative;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 30px;
-        padding: 10px;
-        color: white;
-        overflow: visible;
+        padding: 20px;
         width: 100%;
-        height: 100px;
-        max-width: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        max-width: 1440px;
+        margin: 0 auto;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
-    .stat-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .stat-card span {
-        font-size: 50px;
-        color: var(--accent);
-    }
-
-    .stat-card h5 {
-        font-size: 26px;
-        font-weight: 500;
-        margin: 0;
-        opacity: 0.85;
-    }
-
-    .stat-card p {
-        position: absolute;
-        bottom: -30px;
-        right: -10px;
-        font-size: 45px;
-        font-weight: bold;
-        margin: 0;
-        background: linear-gradient(90deg, #37B9F1, #F2F5F5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
-    }
-
-
-    .stat-card p .unit {
-        font-size: 20px;
-        margin-left: 4px;
-        color: #ccc;
-        font-weight: bold;
-    }
-
-    .chart-container {
+    /* Card */
+    .stat-card {
         background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 30px;
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Card content */
+    .stat-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stat-header .material-icons {
+        background-color: var(--accent, #000);
+        color: white;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 24px;
+    }
+
+    /* Info */
+    .stat-header .info h5 {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .stat-header p {
+        margin-left: auto;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .unit {
+        font-size: 14px;
+        margin-left: 4px;
+        color: #666;
+    }
+
+    /* Chart container */
+    .chart-container {
+        grid-column: 1 / -1;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 24px;
     }
 
     .chart-container h4 {
-        font-size: 26px;
-        color: #E1DFE9;
-        margin-bottom: 10px;
-        text-align: center;
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: #ffffff;
     }
 
     #order {
@@ -3537,9 +3488,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 รายการขาย
             </div>
 
-            <div class="tab" data-tab="update_product">
+            <!-- <div class="tab" data-tab="update_product">
                 <span class="material-icons">analytics</span> ประวัติการอัปเดต
-            </div>
+            </div> -->
 
         </div>
         <hr class="tab-divider">
@@ -3551,17 +3502,17 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 <span class="material-icons">group_add</span> สมัครแอดมิน
             </div>
 
-            <div class="tab" data-tab="employee_signup">
+            <!-- <div class="tab" data-tab="employee_signup">
                 <span class="material-icons">group_add</span> สมัครพนักงาน
-            </div>
+            </div> -->
 
             <div class="tab" data-tab="upload_prodect">
                 <span class="material-icons">add_shopping_cart</span> อัพโหลดสินค้า
             </div>
 
-            <div class="tab" data-tab="upload_file_excal">
+            <!-- <div class="tab" data-tab="upload_file_excal">
                 <span class="material-icons">upload_file</span> อัปโหลดไฟล์สินค้า
-            </div>
+            </div> -->
 
             <button type="button" is="toggle-button" class="collapsible-toggle text-strong" aria-controls="menu" aria-expanded="false">
                 <span class="material-icons">checklist</span> ตรวจสอบสินค้า
@@ -3617,9 +3568,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             <div class="tab" data-tab="sci_admin">
                 <span class="material-icons">manage_accounts</span> จัดการแอดมิน
             </div>
-            <div class="tab" data-tab="employee">
+            <!-- <div class="tab" data-tab="employee">
                 <span class="material-icons">manage_accounts</span> จัดการพนักงาน
-            </div>
+            </div> -->
         </div>
         <hr class="tab-divider">
 
@@ -3652,11 +3603,9 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
-    <div id="update_product" class="content">
-        <!-- ส่วนหัว -->
+    <!-- <div id="update_product" class="content">
         <h2 class="update-dashboard-title">แดชบอร์ดอัปเดตสินค้า</h2>
 
-        <!-- ตัวกรอง -->
         <div class="update-filters">
             <input type="text" placeholder="ค้นหาชื่อสินค้า..." class="filter-input">
             <input type="text" placeholder="ค้นหาผู้ใช้งาน..." class="filter-input">
@@ -3668,7 +3617,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             </select>
         </div>
 
-        <!-- ตารางประวัติ -->
         <table class="update-history-table">
             <thead>
                 <tr>
@@ -3696,13 +3644,14 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
     <div id="graph" class="content">
         <!-- สรุปยอดขายรายวัน -->
         <div class="parent">
-            <div class="div1 stat-card" style="--accent: #37B9F1;">
+            <!-- การ์ดยอดขายเดิม -->
+            <div class="stat-card" style="--accent: #37B9F1;">
                 <div class="stat-header">
                     <span class="material-icons">today</span>
                     <div class="info">
@@ -3711,9 +3660,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <p>900<span class="unit">บาท</span></p>
                 </div>
             </div>
-
-            <!-- สรุปยอดขายรายเดือน -->
-            <div class="div2 stat-card" style="--accent: #8739F9;">
+            <div class="stat-card" style="--accent: #8739F9;">
                 <div class="stat-header">
                     <span class="material-icons">calendar_month</span>
                     <div class="info">
@@ -3722,9 +3669,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <p>9000<span class="unit">บาท</span></p>
                 </div>
             </div>
-
-            <!-- รายปี -->
-            <div class="div3 stat-card" style="--accent: #BFA3F9;">
+            <div class="stat-card" style="--accent: #BFA3F9;">
                 <div class="stat-header">
                     <span class="material-icons">equalizer</span>
                     <div class="info">
@@ -3733,9 +3678,7 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <p>90000<span class="unit">บาท</span></p>
                 </div>
             </div>
-
-            <!-- จำนวนคำสั่งซื้อ -->
-            <div class="div4 stat-card" style="--accent: #565360;">
+            <div class="stat-card" style="--accent: #565360;">
                 <div class="stat-header">
                     <span class="material-icons">shopping_bag</span>
                     <div class="info">
@@ -3745,12 +3688,50 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                 </div>
             </div>
 
-            <!-- กราฟซ้าย -->
-            <div class="div9 chart-container">
+            <!-- เพิ่มการ์ดคลังสินค้า -->
+            <div class="stat-card" style="--accent: #4CAF50;">
+                <div class="stat-header">
+                    <span class="material-icons">inventory_2</span>
+                    <div class="info">
+                        <h5>สินค้าคงเหลือทั้งหมด</h5>
+                    </div>
+                    <p>12,345<span class="unit">ชิ้น</span></p>
+                </div>
+            </div>
+
+            <div class="stat-card" style="--accent: #FF5722;">
+                <div class="stat-header">
+                    <span class="material-icons">warning</span>
+                    <div class="info">
+                        <h5>สินค้าหมดสต็อก</h5>
+                    </div>
+                    <p>15<span class="unit">รายการ</span></p>
+                </div>
+            </div>
+
+            <div class="stat-card" style="--accent: #FFC107;">
+                <div class="stat-header">
+                    <span class="material-icons">hourglass_bottom</span>
+                    <div class="info">
+                        <h5>สินค้ากำลังจะหมด</h5>
+                    </div>
+                    <p>30<span class="unit">รายการ</span></p>
+                </div>
+            </div>
+
+            <!-- กราฟภาพรวมยอดขาย -->
+            <div class="chart-container">
                 <h4>กราฟภาพรวมยอดขาย</h4>
-                <canvas id="mainSalesChart"></canvas>
+                <div id="mainSalesChart"></div>
+            </div>
+
+            <!-- กราฟสินค้าเข้า-ออก -->
+            <div class="chart-container">
+                <h4>กราฟสินค้าเข้า-ออกรายเดือน</h4>
+                <div id="stockInOutChart"></div>
             </div>
         </div>
+
     </div>
 
     <!-- ฟอร์มสมัครสมาชิก admin พร้อมแอททริบิวต์ autocomplete -->
@@ -5542,6 +5523,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         let toastTimeoutId = null;
 
@@ -5695,58 +5678,195 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             }
         }
 
-        // กราฟภาพรวมยอดขาย (bar chart)
-        const mainSalesCtx = document.getElementById('mainSalesChart').getContext('2d');
-        const mainSalesChart = new Chart(mainSalesCtx, {
-            type: 'line',
-            data: {
-                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
-                datasets: [{
-                    label: 'ยอดขาย (บาท)',
-                    data: [120000, 135000, 110000, 150000, 175000, 160000, 170000, 180000, 155000, 165000, 190000, 200000],
-                    borderColor: '#8739F9',
-                    backgroundColor: 'rgba(135, 57, 249, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#8739F9',
-                    pointRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        display: false // ถ้าไม่อยากโชว์ scales ให้ปิดแบบนี้
-                    },
-                    x: {
-                        ticks: {
-                            color: '#908E9B',
-                            font: {
-                                family: 'Noto Sans Thai',
-                                size: 14,
-                                weight: '600'
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
-                    }
+        // กราฟยอดขาย
+        const salesChartOptions = {
+            chart: {
+                type: 'line',
+                height: 350,
+                toolbar: {
+                    show: false
                 },
-                plugins: {
-                    legend: {
-                        display: false,
-                        labels: {
-                            font: {
-                                family: 'Noto Sans Thai',
-                                size: 16
-                            }
-                        }
+                zoom: {
+                    enabled: false
+                },
+                fontFamily: 'Noto Sans Thai, sans-serif',
+                foreColor: '#000000',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 1000,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
+                    },
+                    dynamicAnimation: {
+                        enabled: true,
+                        speed: 600
                     }
                 }
+            },
+            series: [{
+                name: 'ยอดขาย (บาท)',
+                data: [120000, 135000, 110000, 150000, 175000, 160000, 170000, 180000, 155000, 165000, 190000, 200000]
+            }],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight',
+                width: 5,
+                colors: ['#5419B5']
+            },
+            grid: {
+                row: {
+                    colors: ['#111111', 'transparent'],
+                    opacity: 0.3
+                },
+                xaxis: {
+                    lines: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
+            },
+            xaxis: {
+                categories: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        colors: '#ffffff'
+                    }
+                },
+                axisTicks: {
+                    show: true,
+                    color: '#ccc'
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#ccc'
+                }
+            },
+            yaxis: {
+                show: false
+            },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: val => val.toLocaleString('th-TH') + ' บาท'
+                }
+            },
+            legend: {
+                show: false
             }
-        });
+        };
 
+        const salesChart = new ApexCharts(document.querySelector("#mainSalesChart"), salesChartOptions);
+        salesChart.render();
+
+        // กราฟสินค้าเข้า-ออก
+        const stockInOutOptions = {
+            chart: {
+                type: 'line',
+                height: 350,
+                fontFamily: 'Noto Sans Thai, sans-serif',
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                },
+                foreColor: '#ffffff',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 1000,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
+                    },
+                    dynamicAnimation: {
+                        enabled: true,
+                        speed: 600
+                    }
+                }
+            },
+            series: [{
+                    name: 'สินค้าเข้า',
+                    data: [50, 60, 55, 70, 65, 80, 75, 90, 95, 100, 105, 110]
+                },
+                {
+                    name: 'สินค้าออก',
+                    data: [30, 45, 40, 50, 60, 70, 65, 85, 80, 95, 100, 105]
+                }
+            ],
+            stroke: {
+                curve: 'straight',
+                width: 5
+            },
+            colors: ['#42A5F5', '#EF5350'],
+            dataLabels: {
+                enabled: false
+            },
+            grid: {
+                row: {
+                    colors: ['#111111', 'transparent'],
+                    opacity: 0.3
+                },
+                xaxis: {
+                    lines: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
+            },
+            xaxis: {
+                categories: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+                labels: {
+                    style: {
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        colors: '#ffffff'
+                    }
+                },
+                axisTicks: {
+                    show: true,
+                    color: '#ccc'
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#ccc'
+                }
+            },
+            yaxis: {
+                show: false
+            },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: val => val.toLocaleString('th-TH') + ' ชิ้น'
+                }
+            },
+            legend: {
+                show: true,
+                position: 'top',
+                horizontalAlign: 'left',
+                labels: {
+                    colors: '#ffffff'
+                }
+            }
+        };
+
+        const stockInOutChart = new ApexCharts(document.querySelector("#stockInOutChart"), stockInOutOptions);
+        stockInOutChart.render();
 
 
         function toggleDropdown(button) {
