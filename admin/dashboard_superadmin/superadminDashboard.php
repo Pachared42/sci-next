@@ -14,11 +14,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wdth,wght@62.5..100,100..900&family=Noto+Sans:ital,wdth,wght@0,62.5..100,100..900;1,62.5..100,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<<<<<<< Updated upstream
-=======
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
->>>>>>> Stashed changes
 
     <!-- <link rel="stylesheet" href="superadminDashboard.css"> -->
 
@@ -3622,25 +3617,10 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
-<<<<<<< Updated upstream
     <!-- <div id="update_product" class="content">
         <h2 class="update-dashboard-title">แดชบอร์ดอัปเดตสินค้า</h2>
 
         <div class="update-filters">
-=======
-    <div id="calendar" class="content">
-        <div id="fullcalendar"></div>
-    </div>
-
-    <div id="update_product" class="content">
-        <div class="header-container">
-            <h3 class="h-text-upload">
-                แดชบอร์ดอัปเดตสินค้า
-            </h3>
-        </div>
-
-        <!-- <div class="update-filters">
->>>>>>> Stashed changes
             <input type="text" placeholder="ค้นหาชื่อสินค้า..." class="filter-input">
             <input type="text" placeholder="ค้นหาผู้ใช้งาน..." class="filter-input">
             <select class="filter-input">
@@ -3677,17 +3657,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
                     <td>ลบสินค้าถาวร</td>
                 </tr>
             </tbody>
-<<<<<<< Updated upstream
         </table>
     </div> -->
-=======
-        </table> -->
-
-        <div class="center-screen">
-            <h1>ยังไม่เปิดใช้งาน</h1>
-        </div>
-    </div>
->>>>>>> Stashed changes
 
     <!-- สรุปยอดขายเป็นตัวเลข -->
     <div id="graph" class="content">
@@ -5566,13 +5537,8 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
         </div>
     </div>
 
-<<<<<<< Updated upstream
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-=======
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
-
->>>>>>> Stashed changes
     <script>
         let toastTimeoutId = null;
 
@@ -9343,7 +9309,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
             });
         });
 
-<<<<<<< Updated upstream
         function fetchOrderCount() {
             fetch('../../controller/controllerSale/controllerSaleOrder.php?mode=count')
                 .then(response => response.json())
@@ -9360,30 +9325,6 @@ require_once __DIR__ . '/../../controller/controllerSuperadmin.php';
 
         fetchOrderCount();
         setInterval(fetchOrderCount, 5000);
-=======
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('fullcalendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth', // มุมมองแบบเดือน
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                },
-                events: [{
-                        title: 'ประชุมทีม',
-                        start: '2025-07-03T10:00:00',
-                        end: '2025-07-03T11:30:00',
-                    },
-                    {
-                        title: 'ออกแบบระบบ',
-                        start: '2025-07-05',
-                    }
-                ]
-            });
-            calendar.render();
-        });
->>>>>>> Stashed changes
     </script>
 </body>
 
