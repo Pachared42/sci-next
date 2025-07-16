@@ -165,9 +165,6 @@ function maskEmail($email) {
     return $maskedName . '@' . $domain;
 }
 
-
-
-
 // ดึงข้อมูลจากหลายๆ ตาราง
 $dried_food = fetchProducts($conn, 'dried_food');
 $soft_drink = fetchProducts($conn, 'soft_drink');
