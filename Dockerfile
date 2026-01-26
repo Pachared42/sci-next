@@ -1,8 +1,12 @@
 FROM dunglas/frankenphp:php8.2
 
-# ติดตั้ง mysqli (วิธีที่ถูกต้องกับ FrankenPHP)
 RUN install-php-extensions mysqli
 
-# copy project
-COPY . /app
 WORKDIR /app
+COPY . /app
+
+# Railway จะส่ง PORT มาให้
+ENV PORT=8080
+
+# บังคับให้ FrankenPHP listen ที่ PORT
+CMD ["frankenphp", "run", "--listen", "0.0.0.0:${PORT}", "--root", "/app"]
