@@ -4,8 +4,6 @@ RUN install-php-extensions mysqli
 
 WORKDIR /app
 COPY . /app
+COPY Caddyfile /etc/caddy/Caddyfile
 
-# บอก Caddy/FrankenPHP ให้ฟัง port ของ Railway
-ENV CADDY_SERVER_ADDR=0.0.0.0:${PORT}
-
-CMD ["frankenphp", "run"]
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
