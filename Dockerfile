@@ -5,8 +5,7 @@ RUN install-php-extensions mysqli
 WORKDIR /app
 COPY . /app
 
-# Railway จะส่ง PORT มาให้
-ENV PORT=8080
+# บอก Caddy/FrankenPHP ให้ฟัง port ของ Railway
+ENV CADDY_SERVER_ADDR=0.0.0.0:${PORT}
 
-# บังคับให้ FrankenPHP listen ที่ PORT
-CMD ["frankenphp", "run", "--listen", "0.0.0.0:${PORT}", "--root", "/app"]
+CMD ["frankenphp", "run"]
