@@ -1,15 +1,19 @@
 FROM php:8.2-apache
 
-# ปิด mpm อื่น ๆ ก่อน (กันชน)
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork
+# === ล้าง MPM ทุกตัวแบบบังคับ ===
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.conf
 
-# ติดตั้ง mysqli
+# === เปิด MPM แค่ prefork ตัวเดียว ===
+RUN ln -s /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load \
+    && ln -s /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+
+# === PHP extension ===
 RUN docker-php-ext-install mysqli
 
-# เปิด rewrite
+# === Apache modules ===
 RUN a2enmod rewrite
 
-# copy project
+# === App files ===
 COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html
