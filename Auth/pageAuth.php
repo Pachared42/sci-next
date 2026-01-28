@@ -9,8 +9,8 @@ require_once('authSales.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Management Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Noto+Sans:ital,wght@0,100..900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/sci-next/img/sci-next.svg" />
-    <link rel="stylesheet" href="pageAuth.css?v=1">
+    <link rel="icon" type="image/svg+xml" href="/sci-next/img/sci-next.svg">
+    <link rel="stylesheet" href="/sci-next/Auth/pageAuth.css?v=1">
 </head>
 <body>
     <div class="container">
