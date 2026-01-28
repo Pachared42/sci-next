@@ -44,5 +44,5 @@ $_SESSION['gmail']     = $user['gmail'];
 $_SESSION['role']      = $user['role_name'];
 $_SESSION['full_name'] = $user['first_name'] . ' ' . $user['last_name'];
 
-header("Location: /sci-next/Auth/pageAuth.php");
+header("Location: /sci-next/admin/dashboard_superadmin/superadminDashboard.php");
 exit;
