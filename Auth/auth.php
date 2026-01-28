@@ -7,8 +7,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /sci-next/index.php");
-    exit;
+    return;
 }
 
 $gmail = trim($_POST['gmail'] ?? '');
@@ -26,7 +25,6 @@ $sql = "
     LEFT JOIN roles ON users.role_id = roles.id
     WHERE users.gmail = ?
 ";
-
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $gmail);
 $stmt->execute();
@@ -48,4 +46,3 @@ $_SESSION['full_name'] = $user['first_name'] . ' ' . $user['last_name'];
 
 header("Location: /sci-next/Auth/pageAuth.php");
 exit;
-?>
