@@ -1,5 +1,10 @@
 <?php
-require_once('authSales.php');
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /sci-next/index.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
